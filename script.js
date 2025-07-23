@@ -56,6 +56,11 @@ function toggleAcessibilidadeMenu() {
   menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
 }
 
+function toggleHelpMenu() {
+  const menu = document.getElementById('help-options');
+  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+}
+
 // Exibe o boneco e começa as falas após 2 segundos
 window.onload = function () {
   setTimeout(() => {
