@@ -1,6 +1,17 @@
 function toggleMenu() {
   const menu = document.getElementById('menuOptions');
-  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+
+  if (menu.classList.contains('menu-visible')) {
+    menu.classList.remove('menu-visible');
+    menu.classList.add('menu-hiding');
+
+    // Espera 300ms (igual à duração da transição no CSS)
+    setTimeout(() => {
+      menu.classList.remove('menu-hiding');
+    }, 300);
+  } else {
+    menu.classList.add('menu-visible');
+  }
 }
 
 function closeAssistant() {
