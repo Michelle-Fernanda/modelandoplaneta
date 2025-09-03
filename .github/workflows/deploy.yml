@@ -3,7 +3,7 @@ name: Deploy na Produção
 on:
   push:
     branches:
-      - main # Mude para 'master' se for sua branch principal
+      - main
 
 jobs:
   deploy:
@@ -16,14 +16,14 @@ jobs:
       - name: Instalar chave SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ
 
       - name: Adicionar host do servidor aos conhecidos
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.IP_SERVER }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H  >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       - name: Fazer o deploy
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.IP_SERVER }} "cd /var/www/html && git pull origin main"
+          ssh SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ@147.93.70.17 "cd /var/www/html && git pull origin main"
