@@ -1,0 +1,21 @@
+name: Deploy Automático
+
+on:
+  push:
+    branches: [ "main" ]  # troque se usar outra branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Conectar no servidor e atualizar
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/modelandooplaneta
+            git pull origin main
+            php index.php
