@@ -16,14 +16,14 @@ jobs:
       - name: Instalar chave SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: "b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZWQyNTUxOQAAACDQV2m6DvAPknQfpcbmaaCx0HyUilo1B1jwpjZMiban7AAAAJgAy2dLAMtnSwAAAAtzc2gtZWQyNTUxOQAAACDQV2m6DvAPknQfpcbmaaCx0HyUilo1B1jwpjZMiban7AAAAEAErYbWkZD27Rx1QP3eNM6K09SMPOX/W/WnxBMI6yjV+9BXaboO8A+SdB+lxuZpoLHQfJSKWjUHWPCmNkyJtqfsAAAAFGFyaXNsZXljZHNAZ21haWwuY29tAQ=="
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Adicionar host do servidor aos conhecidos
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H  >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.IP_SERVER }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       - name: Fazer o deploy
         run: |
-          ssh b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZWQyNTUxOQAAACDQV2m6DvAPknQfpcbmaaCx0HyUilo1B1jwpjZMiban7AAAAJgAy2dLAMtnSwAAAAtzc2gtZWQyNTUxOQAAACDQV2m6DvAPknQfpcbmaaCx0HyUilo1B1jwpjZMiban7AAAAEAErYbWkZD27Rx1QP3eNM6K09SMPOX/W/WnxBMI6yjV+9BXaboO8A+SdB+lxuZpoLHQfJSKWjUHWPCmNkyJtqfsAAAAFGFyaXNsZXljZHNAZ21haWwuY29tAQ==@147.93.70.17 "cd /var/www/html && git pull origin main"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.IP_SERVER }} "cd /var/www/html && git pull origin main"
