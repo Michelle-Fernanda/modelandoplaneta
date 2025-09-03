@@ -16,7 +16,7 @@ jobs:
       - name: Instalar chave SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ
+          ssh-private-key: "SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ"
 
       - name: Adicionar host do servidor aos conhecidos
         run: |
@@ -26,4 +26,4 @@ jobs:
 
       - name: Fazer o deploy
         run: |
-          ssh SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ@147.93.70.17 "cd /var/www/html && git pull origin main"
+          ssh "SHA256:c6/a040J2J3TuUt7dkWsJ96va8Wisol1kunjNKEd9lQ@147.93.70.17" "cd /var/www/html && git pull origin main"
