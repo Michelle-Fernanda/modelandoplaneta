@@ -326,8 +326,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           body: formData,
       });
 
-      form.clear();
-
       let tabela = document.getElementById("tabelaUsuários");
 
       tabela.innerHTML += `
