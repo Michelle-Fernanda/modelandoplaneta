@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
   salvarUsuarios($jsonFile, $usuarios);
 
-  header("Location: " . $_SERVER['PHP_SELF']);
+  header("Location: lixo");
   exit;
 }
 ?>
