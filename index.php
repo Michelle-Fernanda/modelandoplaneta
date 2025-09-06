@@ -9,29 +9,29 @@ $path = trim(parse_url($request_uri, PHP_URL_PATH), '/');
 // Exemplo de roteamento manual
 switch ($path) {
     case '': // Rota para a página inicial
-        require 'home.php';
+        require 'view/home.php';
         break;
     case 'agua':
-        require 'public/agua.php';
+        require 'view/agua.php';
         break;
     case 'arborizacao':
-        require 'arborizacao.php';
+        require 'view/arborizacao.php';
         break;
     case 'lixo':
-        require 'lixo.php';
+        require 'view/lixo.php';
         break;
     case 'petroleo.php':
-        require 'petroleo.php';
+        require 'view/petroleo.php';
         break;
     case 'sobre': // Rota para a página "Sobre Nós"
-        require 'sobre.php';
+        require 'view/sobre.php';
         break;
     case 'contato': // Rota para a página de contato
-        require 'contato.php';
+        require 'view/contato.php';
         break;
     default: // Se a rota não for encontrada
         http_response_code(404);
-        require '404.php';
+        require 'view/404.php';
         break;
 }
 
