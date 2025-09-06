@@ -311,6 +311,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </tbody>
     </table>
   </section>
+  <script>
+  document.getElementById('formResultados').addEventListener('submit', function(event) {
+    // 1. Previne a recarga da página
+    event.preventDefault();
+
+    // 2. Coleta os dados do formulário
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // 3. Envia os dados para o PHP via POST usando fetch
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        // 4. Se a resposta for um HTML, insere na tabela
+        document.getElementById('tabelaResultadosBody').innerHTML += data;
+        
+        // 5. Limpa os campos do formulário
+        form.reset();
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Ocorreu um erro ao adicionar o resultado. Tente novamente.');
+    });
+  });
+  </script>
 
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
