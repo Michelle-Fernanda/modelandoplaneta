@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modelando o Planeta</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/ns/bootstrap.min.css" rel="stylesheet">
 
