@@ -262,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
     <h2 class="font-semibold mb-2">📋 Anote seus Resultados</h2>
-    <form id="formResultados" method="post">
+    <form id="formResultados" method="post" action="lixo">
       <section>
         <label for="tipoLixo">Tipo de lixo:</label>
         <select id="tipoLixo" name="tipoLixo" required>
