@@ -1,6 +1,6 @@
 <?php
 // Caminho do arquivo JSON
-$jsonFile = 'usuarios.json';
+$jsonFile = 'view/lixo.json';
 
 // Função para ler os dados do arquivo JSON
 function lerUsuarios($jsonFile) {
