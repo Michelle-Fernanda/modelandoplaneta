@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modelando o Planeta</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="styles.css">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/ns/bootstrap.min.css" rel="stylesheet">
 
@@ -45,28 +45,28 @@
   </div>
 
   <div class="sections">
-    <div class="activity" onclick="window.location.href='lixo.php'">
+    <div class="activity" onclick="window.location.href='lixo'">
       <div class="section">
         <img src="img/Lixo.png" alt="Lixo na Escola">
       </div>
       <p class="section-title">Lixo na Escola</p>
     </div>
 
-    <div class="activity" onclick="window.location.href='petroleo.php'">
+    <div class="activity" onclick="window.location.href='petroleo'">
       <div class="section">
         <img src="img/Petróleo.png" alt="Problemas com Petróleo">
       </div>
       <p class="section-title">Problemas com Petróleo</p>
     </div>
 
-    <div class="activity" onclick="window.location.href='agua.php'">
+    <div class="activity" onclick="window.location.href='agua'">
       <div class="section">
         <img src="img/Desperdício.png" alt="Desperdício de Água">
       </div>
       <p class="section-title">Desperdício de Água</p>
     </div>
 
-    <div class="activity" onclick="window.location.href='arborizacao.php'">
+    <div class="activity" onclick="window.location.href='arborizacao'">
       <div class="section">
         <img src="img/Reflorestamento.png" alt="Arborização">
       </div>
@@ -138,12 +138,12 @@
   </section>
   <div class="floating-menu">
     <div class="menu-options" id="menuOptions">
-      <a href="lixo.php" title="Lixo na Escola">🗑️</a>
-      <a href="petroleo.php" title="Petróleo">⛽</a>
-      <a href="agua.php" title="Desperdício de Água">💧</a>
-      <a href="arborizacao.php" title="Arborização">🌳</a>
-      <a href="sobre.php" title="Quem Somos">👩‍🏫</a>
-      <a href="home.php" title="Início">🏠</a>
+      <a href="lixo" title="Lixo na Escola">🗑️</a>
+      <a href="petroleo" title="Petróleo">⛽</a>
+      <a href="agua" title="Desperdício de Água">💧</a>
+      <a href="arborizacao" title="Arborização">🌳</a>
+      <a href="sobre" title="Quem Somos">👩‍🏫</a>
+      <a href="home" title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
