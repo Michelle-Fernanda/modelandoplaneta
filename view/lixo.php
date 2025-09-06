@@ -296,7 +296,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <th>Data</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tabelaUsuários">
         <?php
           $usuarios = lerUsuarios($jsonFile);
 
@@ -312,32 +312,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </table>
   </section>
   <script>
-  document.getElementById('formResultados').addEventListener('submit', function(event) {
-    // 1. Previne a recarga da página
-    event.preventDefault();
+    document.getElementById('formResultados').addEventListener('submit', function(event) {
+      // 1. Previne a recarga da página
+      event.preventDefault();
 
-    // 2. Coleta os dados do formulário
-    const form = event.target;
-    const formData = new FormData(form);
+      // 2. Coleta os dados do formulário
+      const form = event.target;
+      const formData = new FormData(form);
 
-    // 3. Envia os dados para o PHP via POST usando fetch
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
+      // 3. Envia os dados para o PHP via POST usando fetch
+      fetch(form.action, {
+          method: 'POST',
+          body: formData,
+      });
+
+      form.clear();
+
+      let tabela = document.getElementById("tabelaUsuários");
+
+      tabela.innerHTML += `
+      <tr>
+        <td>${document.getElementById("tipoLixo")}</td>
+        <td>${document.getElementById("quantidade")}</td>
+        <td>${document.getElementById("data")}</td>
+      </tr>
+      `;
     })
-    .then(response => response.text())
-    .then(data => {
-        // 4. Se a resposta for um HTML, insere na tabela
-        document.getElementById('tabelaResultadosBody').innerHTML += data;
-        
-        // 5. Limpa os campos do formulário
-        form.reset();
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        alert('Ocorreu um erro ao adicionar o resultado. Tente novamente.');
-    });
-  });
   </script>
 
   <footer>
