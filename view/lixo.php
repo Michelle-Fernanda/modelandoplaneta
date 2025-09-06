@@ -330,9 +330,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       tabela.innerHTML += `
       <tr>
-        <td>${document.getElementById("tipoLixo")}</td>
-        <td>${document.getElementById("quantidade")}</td>
-        <td>${document.getElementById("data")}</td>
+        <td>${document.getElementById("tipoLixo").value}</td>
+        <td>${document.getElementById("quantidade").value}</td>
+        <td>${document.getElementById("data").value}</td>
       </tr>
       `;
     })
