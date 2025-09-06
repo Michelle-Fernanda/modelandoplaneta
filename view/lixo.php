@@ -1,6 +1,6 @@
 <?php
 // Caminho do arquivo JSON
-$jsonFile = 'view/lixo.json';
+$jsonFile = __DIR__ . '/lixo.json';
 
 // Função para ler os dados do arquivo JSON
 function lerUsuarios($jsonFile) {
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
   <header>
-    <a href="index.html">
+    <a href="">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
     <h1>Lixo na Escola</h1>
