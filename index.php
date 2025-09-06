@@ -3,9 +3,6 @@
 // Obtém a URL requisitada
 $request_uri = $_SERVER['REQUEST_URI'];
 
-// Exibe o valor final de $path
-echo "Path tratado: " . $path . "<br>";
-
 // Remove a barra inicial e o qualquer parâmetro da query string
 $path = trim(parse_url($request_uri, PHP_URL_PATH), '/');
 
@@ -23,7 +20,7 @@ switch ($path) {
     case 'lixo':
         require 'view/lixo.php';
         break;
-    case 'petroleo.php':
+    case 'petroleo':
         require 'view/petroleo.php';
         break;
     case 'sobre': // Rota para a página "Sobre Nós"
