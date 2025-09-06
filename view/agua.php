@@ -165,12 +165,12 @@
 
   <div class="floating-menu">
     <div class="menu-options" id="menuOptions">
-      <a href="lixo.php" title="Lixo na Escola">🗑️</a>
-      <a href="petroleo.php" title="Petróleo">⛽</a>
-      <a href="agua.php" title="Desperdício de Água">💧</a>
-      <a href="arborizacao.php" title="Arborização">🌳</a>
-      <a href="sobre.php" title="Quem Somos">👩‍🏫</a>
-      <a href="home.php" title="Início">🏠</a>
+      <a href="lixo" title="Lixo na Escola">🗑️</a>
+      <a href="petroleo" title="Petróleo">⛽</a>
+      <a href="agua" title="Desperdício de Água">💧</a>
+      <a href="arborizacao" title="Arborização">🌳</a>
+      <a href="sobre" title="Quem Somos">👩‍🏫</a>
+      <a href="home" title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
