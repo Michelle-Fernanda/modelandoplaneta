@@ -11,22 +11,22 @@ switch ($path) {
     case '': // Rota para a página inicial
         require 'home.php';
         break;
-    case '/agua':
+    case 'agua':
         require 'agua.php';
         break;
-    case '/arborizacao':
+    case 'arborizacao':
         require 'arborizacao.php';
         break;
-    case '/lixo':
+    case 'lixo':
         require 'lixo.php';
         break;
-    case '/petroleo.php':
+    case 'petroleo.php':
         require 'petroleo.php';
         break;
-    case '/sobre': // Rota para a página "Sobre Nós"
+    case 'sobre': // Rota para a página "Sobre Nós"
         require 'sobre.php';
         break;
-    case '/contato': // Rota para a página de contato
+    case 'contato': // Rota para a página de contato
         require 'contato.php';
         break;
     default: // Se a rota não for encontrada
