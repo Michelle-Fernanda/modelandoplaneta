@@ -12,7 +12,7 @@ switch ($path) {
         require 'home.php';
         break;
     case 'agua':
-        require 'agua.php';
+        require 'public/agua.php';
         break;
     case 'arborizacao':
         require 'arborizacao.php';
@@ -31,7 +31,7 @@ switch ($path) {
         break;
     default: // Se a rota não for encontrada
         http_response_code(404);
-        require 'views/404.php';
+        require '404.php';
         break;
 }
 
