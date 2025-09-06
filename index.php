@@ -14,7 +14,7 @@ switch ($path) {
     case 'agua':
         require 'agua.php';
         break;
-    case 'arborizacao':
+    case 'arvore':
         require 'arborizacao.php';
         break;
     case 'lixo':
