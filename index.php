@@ -18,7 +18,11 @@ switch ($path) {
         require 'view/arborizacao.php';
         break;
     case 'lixo':
-        require 'view/lixo.php';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require 'view/lixo.php';
+        } else {
+            require 'view/lixo.php';
+        }
         break;
     case 'petroleo':
         require 'view/petroleo.php';
