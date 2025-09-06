@@ -11,7 +11,7 @@
 <body>
 
   <header>
-    <a href="index.html">
+    <a href="">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
     <h1>Quem Somos?</h1>
@@ -89,7 +89,7 @@
 
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
-    <a href="5.html" class="link-somos">Quem somos?</a>
+    <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
   <script src="script.js"></script>
 </body>

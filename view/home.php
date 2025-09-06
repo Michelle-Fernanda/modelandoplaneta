@@ -14,7 +14,7 @@
 
 <body>
   <header>
-    <a href="index.html">
+    <a href="">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
   </header>
@@ -166,7 +166,7 @@
       Contato: mifeh25@gmail.com |
       Sobre: Este site foi criado para incentivar a criatividade matemática de crianças do Ensino Fundamental 1.
     </p>
-    <a href="5.html" class="link-somos">Quem somos?</a>
+    <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
 
   <script src="script.js"></script>

@@ -11,7 +11,7 @@
 <body>
 
   <header>
-    <a href="index.html">
+    <a href="">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
     <h1>Arborização</h1>
@@ -231,7 +231,7 @@
 
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <a href="5.html" class="link-somos">Quem somos?</a>
+  <a href="sobre" class="link-somos">Quem somos?</a>
 </body>
 
 </html>
