@@ -207,7 +207,7 @@
       <a href="agua" title="Desperdício de Água">💧</a>
       <a href="arborizacao" title="Arborização">🌳</a>
       <a href="sobre" title="Quem Somos">👩‍🏫</a>
-      <a href="home" title="Início">🏠</a>
+      <a href="" title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
