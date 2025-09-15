@@ -11,7 +11,7 @@
 <body>
 
   <header>
-    <a href="../">
+    <a href=".">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
     <h1>Quem Somos?</h1>
@@ -72,7 +72,7 @@
       <a href="agua" title="Desperdício de Água">💧</a>
       <a href="arborizacao" title="Arborização">🌳</a>
       <a href="sobre" title="Quem Somos">👩‍🏫</a>
-      <a href="../" title="Início">🏠</a>
+      <a href="." title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
