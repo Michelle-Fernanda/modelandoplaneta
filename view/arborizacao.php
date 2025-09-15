@@ -11,7 +11,7 @@
 <body>
 
   <header>
-    <a href="">
+    <a href="../">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
     <h1>Arborização</h1>
