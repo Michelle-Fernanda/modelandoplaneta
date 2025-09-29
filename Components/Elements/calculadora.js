@@ -57,14 +57,15 @@ class Calculadora extends HTMLElement {
 
       <menu-modal title="Calculadora">
         <div class="calc-wrapper">
-          <input type="number" class="n1" placeholder="Número 1">
-          <input type="number" class="n2" placeholder="Número 2">
+          Escolha uma operação:
           <div class="buttons">
             <button data-op="+">+</button>
             <button data-op="-">−</button>
             <button data-op="*">×</button>
             <button data-op="/">÷</button>
           </div>
+          <input type="number" class="n1" placeholder="Número 1">
+          <input type="number" class="n2" placeholder="Número 2">
           <p>Resultado: <span class="resultado">-</span></p>
         </div>
       </menu-modal>

@@ -1,3 +1,5 @@
+import "../Classes/menuModal.js"
+
 class Conversor extends HTMLElement {
   constructor() {
     super();

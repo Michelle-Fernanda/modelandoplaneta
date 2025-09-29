@@ -7,8 +7,13 @@ body {
   
   header {
     text-align: center;
+    width: 100%;
     background-color: #dcffcf;
     padding: 1rem;
+  }
+  
+  header img {
+    width: 100%
   }
   
   .intro {
