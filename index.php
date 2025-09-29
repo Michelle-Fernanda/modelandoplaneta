@@ -29,6 +29,9 @@ switch ($path) {
     case 'contato': // Rota para a página de contato
         require 'view/contato.php';
         break;
+    case 'teste':
+        require 'view/teste.php';
+        break;
     default: // Se a rota não for encontrada
         http_response_code(404);
         require 'view/404.php';

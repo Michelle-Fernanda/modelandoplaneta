@@ -10,6 +10,8 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/ns/bootstrap.min.css" rel="stylesheet">
 
+  <script type="module" src="Components/Elements/calculadora.js"></script>
+  <script type="module" src="Components/Elements/conversor.js"></script>
 </head>
 
 <body>
@@ -18,6 +20,18 @@
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
   </header>
+
+  <calc-modal></calc-modal>
+
+  <conversor-modal></conversor-modal>
+
+   <script> // Teste
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelector("calc-modal").open();
+
+      document.querySelector("conversor-modal").open();
+    })
+  </script>
 
   <div class="acessibilidade-menu">
     <button class="acessibilidade-toggle" onclick="toggleAcessibilidadeMenu()">🧩</button>
