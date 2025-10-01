@@ -14,6 +14,7 @@
   <script type="module" src="Components/Elements/conversor.js"></script>
   <script type="module" src="Components/Elements/teste.js"></script>
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
+  <script type="module" src="Components/Elements/menu.js"></script>
 </head>
 
 <body>
@@ -28,35 +29,9 @@
   <calc-modal></calc-modal>
 
   <conversor-modal></conversor-modal>
-
-   <script> // Teste
-    window.addEventListener("DOMContentLoaded", () => {
-      document.querySelector("calc-modal").open();
-
-      // document.querySelector("teste-x").addOption()
-
-      // document.querySelector("conversor-modal").open();
-    })
-  </script>
   <acessibilidade-x></acessibilidade-x>
-<!-- 
-  <div class="acessibilidade-menu">
-    <button class="acessibilidade-toggle" onclick="toggleAcessibilidadeMenu()">🧩</button>
-    <div id="acessibilidade-options" class="acessibilidade-options">
-      <button onclick="aumentarFonte()" title="Aumentar fonte">A+</button>
-      <button onclick="diminuirFonte()" title="Diminuir fonte">A-</button>
-      <button onclick="alternarContraste()" title="Alto contraste">🔲</button>
-    </div>
-  </div>
-
-  <div class="help-menu">
-    <button class="help-toggle" onclick="toggleHelpMenu()">⚒️</button>
-    <div id="help-options" class="help-options">
-      <button onclick="aumentarFonte()" title="Aumentar fonte">A+</button>
-      <button onclick="diminuirFonte()" title="Diminuir fonte">A-</button>
-      <button onclick="alternarContraste()" title="Alto contraste">🔲</button>
-    </div>
-  </div> -->
+  <fixed-content-menu></fixed-content-menu>
+  
 
   <div class="intro">
     <h1>🌿🌍 EI, SEJA BEM-VINDO! 🌍🌿</h1>
