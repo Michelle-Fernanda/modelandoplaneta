@@ -1,10 +1,10 @@
-class RightExpandingMenu extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
+import { FloatingMenu } from "../Classes/FloatingMenu.js";
 
-        this.isOpen = false;
+class CalcMenu extends FloatingMenu {
+  constructor() {
+    super({ top: "20px", right: "20px", direction: "down"});
 
+<<<<<<< HEAD
         const style = document.createElement("style");
         style.textContent = `
             :host {
@@ -159,6 +159,12 @@ class RightExpandingMenu extends HTMLElement {
         // === MUDANÇA AQUI: Alterna entre '✕' e o ícone de ferramenta ===
         this.toggleButton.textContent = this.isOpen ? "✕" : "🛠️"; 
     }
+=======
+    this.addToggleButton("v"); // botão principal do menu
+    this.addOption("C", () => alert("Abrir calculadora"));
+    this.addOption("U", () => alert("Abrir conversor de unidades"));
+  }
+>>>>>>> parent of f7a2931 (Menu adicionado)
 }
 
-customElements.define("teste-x", RightExpandingMenu);
+customElements.define("teste-x", CalcMenu);
