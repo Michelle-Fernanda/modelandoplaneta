@@ -24,69 +24,125 @@ export class FloatingMenu extends HTMLElement {
         // Container de opções
         const options = document.createElement("div");
         options.className = "menu-options";
-        // Ocultamos usando classes e opacity/transform para a animação, não 'display: none'
         options.style.flexDirection = this.getFlexDirection(config.direction);
-        options.setAttribute('aria-hidden', 'true'); // Inicialmente escondido para leitores de tela
+        options.setAttribute('aria-hidden', 'true');
         container.appendChild(options);
         this.optionsContainer = options;
 
-        // Variável de estado para controle
         this.isVisible = false;
         
-        // Estilo base com as classes de animação integradas
+        // Estilo base com as classes de animação e cores padrão
         const style = document.createElement("style");
         style.textContent = `
             .floating-menu { display: flex; flex-direction: column; align-items: center; gap: 10px; }
             
+            /* -- Variáveis de Cor Padrão -- */
+            :host {
+                --main-bg: #4CAF50;
+                --main-color: white;
+                --hover-bg: #388e3c;
+                --contraste-bg: #000;
+                --contraste-color: #fff;
+            }
+
             /* Toggle Button */
-            .menu-toggle { display: flex; align-items: center; justify-content: center; background-color: #4CAF50; color: white; font-size: 1.6rem; border: none; border-radius: 50%; width: 55px; height: 55px; cursor: pointer; box-shadow: 2px 2px 8px rgba(0,0,0,0.3); transition: transform 0.3s; }
-            .menu-toggle:hover { transform: scale(1.1); }
+            .menu-toggle { 
+                display: flex; align-items: center; justify-content: center; 
+                background-color: var(--main-bg); 
+                color: var(--main-color); 
+                font-size: 1.6rem; border: none; border-radius: 50%; width: 55px; height: 55px; cursor: pointer; 
+                box-shadow: 2px 2px 8px rgba(0,0,0,0.3); transition: transform 0.3s, background-color 0.3s, color 0.3s; 
+            }
+            .menu-toggle:hover { 
+                transform: scale(1.1); 
+                background-color: var(--main-bg); /* Adicione esta linha */
+            }
 
             /* Options Container - BASE */
             .menu-options { 
-                display: flex; /* Mantemos flex para que os itens sejam renderizados */
-                gap: 10px; 
-                margin: 0; 
-                align-items: center; 
-                
-                /* Estado Inicial (Escondido) */
-                opacity: 0;
-                pointer-events: none; /* Desabilita clique quando invisível */
+                display: flex; gap: 10px; margin: 0; align-items: center; 
+                opacity: 0; pointer-events: none; 
                 transition: opacity 0.3s ease, transform 0.3s ease;
-                
-                /* Ponto de partida para a animação de deslizamento */
-                transform: translateY(10px); /* Padrão: desliza para cima (direction: 'up') */
             }
 
-            /* Modificadores de Direção para o Transform (slide) */
+            /* Configura o ponto de partida do deslize (estado inicial 'escondido') */
             .menu-options[data-direction="up"] { transform: translateY(10px); }
-            .menu-options[data-direction="down"] { transform: translateY(-10px); }
-            .menu-options[data-direction="left"] { transform: translateX(10px); }
-            .menu-options[data-direction="right"] { transform: translateX(-10px); }
+            .menu-options[data-direction="down"] { transform: translateY(-10px); flex-direction: column; }
+            .menu-options[data-direction="left"] { transform: translateX(10px); align-items: flex-end; }
+            .menu-options[data-direction="right"] { transform: translateX(-10px); align-items: flex-start; flex-direction: row; }
             
             /* Estado VISÍVEL (Ativo) */
-            .menu-options.menu-visible {
-                opacity: 1;
-                transform: translate(0, 0); /* Volta à posição original (0,0) */
-                pointer-events: auto; /* Permite cliques */
-            }
+            .menu-options.menu-visible { opacity: 1; transform: translate(0, 0); pointer-events: auto; }
 
             /* Menu Items */
             .menu-options a { 
-                background-color: #4CAF50; color: white; font-size: 1.4rem; width: 45px; height: 45px; 
+                background-color: var(--main-bg); color: var(--main-color); 
+                font-size: 1.4rem; width: 45px; height: 45px; 
                 border-radius: 50%; text-align: center; line-height: 45px; text-decoration: none; 
-                box-shadow: 2px 2px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; 
+                box-shadow: 2px 2px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s, color 0.3s; 
             }
-            .menu-options a:hover { background-color: #388e3c; transform: scale(1.1); }
+            .menu-options a:hover { background-color: var(--hover-bg); transform: scale(1.1); }
+
+            /* ======================================= */
+            /* ESTILOS DE ALTO CONTRASTE (APLICADOS VIA CLASSE) */
+            /* ======================================= */
+            .contraste-active .menu-toggle,
+            .contraste-active .menu-options a {
+                background-color: var(--contraste-bg) !important;
+                color: var(--contraste-color) !important;
+                border: 2px solid var(--contraste-color) !important;
+            }
+
+            .contraste-active .menu-options a:hover {
+                background-color: #333 !important; /* Um cinza escuro para hover */
+                color: var(--contraste-color) !important;
+            }
         `;
         this.shadowRoot.append(style, container);
         this.container = container;
         
         // Define o atributo de direção para usar no CSS
         this.optionsContainer.setAttribute('data-direction', config.direction);
+
+        // --- Lógica de Observação do Contraste ---
+        this.initializeContrasteObserver();
+        
+        // Aplica o contraste inicial se o body já tiver a classe
+        this.applyContrasteStyles(document.body.classList.contains("contraste"));
     }
 
-    // Converte a direção em flex-direction para o container de opções
+    // Método que aplica as classes CSS de contraste ao container do Shadow DOM
+    applyContrasteStyles(isContrasteActive) {
+        if (isContrasteActive) {
+            this.container.classList.add("contraste-active");
+        } else {
+            this.container.classList.remove("contraste-active");
+        }
+    }
+
+    // Configura o observador de mutação no body
+    initializeContrasteObserver() {
+        // A função que será chamada quando a classe do body mudar
+        const updateContraste = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isContrasteActive = document.body.classList.contains("contraste");
+                    this.applyContrasteStyles(isContrasteActive);
+                }
+            }
+        };
+
+        // Cria e inicia o observador
+        const observer = new MutationObserver(updateContraste);
+        observer.observe(document.body, { 
+            attributes: true, 
+            attributeFilter: ["class"] // Foca apenas em mudanças na classe
+        });
+    }
+
+    // Restante dos métodos (getFlexDirection, addToggleButton, toggleMenu, addOption) permanecem como estavam
+    // ...
+
     getFlexDirection(direction) {
         switch (direction) {
             case "up": return "column-reverse";
@@ -97,13 +153,11 @@ export class FloatingMenu extends HTMLElement {
         }
     }
 
-    // Adiciona botão toggle flutuante
     addToggleButton(iconText = "☰") {
         const btn = document.createElement("button");
         btn.className = "menu-toggle";
         btn.textContent = iconText;
 
-        // A ordem dos elementos no container é crucial para a direção
         if (["up", "left"].includes(this.config.direction)) {
             this.container.appendChild(btn);
         } else {
@@ -113,31 +167,30 @@ export class FloatingMenu extends HTMLElement {
         btn.addEventListener("click", () => this.toggleMenu());
 
         this.toggleButton = btn;
+        
+        // Aplica o contraste inicial se o botão for adicionado depois do constructor
+        this.applyContrasteStyles(document.body.classList.contains("contraste"));
+        
         return btn;
     }
 
-    // Novo método para alternar o menu com animação
     toggleMenu() {
         if (this.isVisible) {
-            // Escondendo
             this.optionsContainer.classList.remove("menu-visible");
             this.optionsContainer.setAttribute('aria-hidden', 'true');
         } else {
-            // Mostrando
             this.optionsContainer.classList.add("menu-visible");
             this.optionsContainer.setAttribute('aria-hidden', 'false');
         }
         this.isVisible = !this.isVisible;
     }
     
-    // Adiciona opção
     addOption(label = "O", onClick = () => {}) {
         const a = document.createElement("a");
         a.href = "#";
         a.textContent = label;
         a.addEventListener("click", (e) => {
             e.preventDefault();
-            // Adicionalmente, podemos fechar o menu ao clicar em uma opção
             this.toggleMenu(); 
             onClick();
         });

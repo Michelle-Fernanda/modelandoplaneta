@@ -1,4 +1,4 @@
-import { FloatingMenu } from "../Classes/floatingMenu.js";
+import { FloatingMenu } from "../Classes/FloatingMenu.js";
 
 class FixedContentFloatingMenu extends FloatingMenu {
   constructor() {
