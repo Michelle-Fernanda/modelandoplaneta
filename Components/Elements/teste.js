@@ -8,24 +8,28 @@ class CalcMenu extends FloatingMenu {
         const style = document.createElement("style");
         style.textContent = `
             :host {
+                /* POSICIONAMENTO: Fixado no canto superior DIREITO */
                 position: fixed;
                 top: 20px;
                 right: 20px; 
-                z-index: 9999;
+                z-index: 1000;
                 font-family: system-ui, sans-serif;
             }
 
             .menu-container {
                 display: flex;
+                /* FLUXO: row-reverse faz o toggle ficar à direita das opções */
                 flex-direction: row-reverse; 
                 align-items: center;
                 gap: 10px;
             }
 
+            /* Botão Principal */
             .menu-toggle {
                 width: 50px;
                 height: 50px;
                 border-radius: 8px;
+                /* NOVO ESTILO: Degradê de fundo */
                 background: linear-gradient(135deg, #65bf68, #008905);
                 color: #fff;
                 font-size: 1.5rem;
@@ -33,16 +37,14 @@ class CalcMenu extends FloatingMenu {
                 cursor: pointer;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
                 transition: opacity 0.2s, transform 0.2s;
-                /* Centraliza o ícone */
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
 
             .menu-toggle:hover {
+                /* Ajuste o hover para dar um feedback visual (esmaecendo um pouco) */
                 opacity: 0.9;
             }
             
+            /* Container das Opções */
             .options-wrapper {
                 display: flex;
                 gap: 8px;
@@ -59,12 +61,13 @@ class CalcMenu extends FloatingMenu {
                 pointer-events: auto;
             }
 
+            /* Estilo dos Botões de Opção */
             .menu-option {
                 padding: 10px 15px;
+                /* Ajustamos a borda para contrastar melhor com o degradê principal */
                 border: 1px solid #008905;
-                border-radius: 4px;
-                background-color: #E8F5E9; 
-                color: #008905;
+                background-color: #E8F5E9; /* Fundo claro para o botão de opção */
+                color: #008905; /* Cor de texto que combina com o degradê */
                 text-decoration: none;
                 font-size: 0.95rem;
                 cursor: pointer;
@@ -74,15 +77,13 @@ class CalcMenu extends FloatingMenu {
                 text-align: center;
             }
             
-            .first-option {
-                order: -1; 
-            }
-            
             .menu-option:hover {
+                /* Cor de hover levemente mais escura */
                 background-color: #DCEADF;
                 transform: translateY(-1px);
             }
             
+            /* Ajuste responsivo */
             @media (max-width: 600px) {
                 :host {
                     right: 16px;
@@ -92,6 +93,7 @@ class CalcMenu extends FloatingMenu {
             }
         `;
         
+        // Estrutura HTML
         const container = document.createElement("div");
         container.classList.add("menu-container");
 
@@ -100,16 +102,11 @@ class CalcMenu extends FloatingMenu {
         
         this.toggleButton = document.createElement("button");
         this.toggleButton.classList.add("menu-toggle");
-        // === MUDANÇA AQUI: ÍCONE DE FERRAMENTA ===
-        this.toggleButton.textContent = "🛠️"; 
-        
-        // Adiciona um flexbox para centralizar o ícone caso ele tenha tamanho variável
-        this.toggleButton.style.display = 'flex';
-        this.toggleButton.style.alignItems = 'center';
-        this.toggleButton.style.justifyContent = 'center';
+        this.toggleButton.textContent = "☰";
         
         this.toggleButton.addEventListener("click", this.toggleMenu.bind(this));
         
+        // Ordem: optionsWrapper (esquerda), toggleButton (direita)
         container.append(this.optionsWrapper, this.toggleButton);
         this.shadowRoot.append(style, container);
 
@@ -117,35 +114,36 @@ class CalcMenu extends FloatingMenu {
     }
 
     addOptions() {
+        // A estrutura de dados agora usa 'action' (função) em vez de 'href'
         const menuOptions = [
             { 
                 label: "🔢 Calculadora", 
                 action: () => { 
+                    // Assume que 'calc-modal' tem um método open()
                     document.querySelector("calc-modal")?.open();
                 } 
             },
             { 
                 label: "📏 Unidades", 
                 action: () => { 
+                    // Assume que 'conversor-modal' tem um método open()
                     document.querySelector("conversor-modal")?.open();
                 } 
             }
         ];
 
-        menuOptions.forEach((opt, index) => {
+        menuOptions.forEach(opt => {
             const button = document.createElement("button"); 
             button.classList.add("menu-option");
             button.textContent = opt.label;
             
-            if (index === 0) {
-                button.classList.add("first-option");
-            }
-            
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 
+                // Executa a função definida na estrutura de dados
                 opt.action(); 
                 
+                // Fecha o menu após a ação
                 this.toggleMenu(); 
             });
 
@@ -156,8 +154,7 @@ class CalcMenu extends FloatingMenu {
     toggleMenu() {
         this.isOpen = !this.isOpen;
         this.optionsWrapper.classList.toggle("open", this.isOpen);
-        // === MUDANÇA AQUI: Alterna entre '✕' e o ícone de ferramenta ===
-        this.toggleButton.textContent = this.isOpen ? "✕" : "🛠️"; 
+        this.toggleButton.textContent = this.isOpen ? "✕" : "☰";
     }
 =======
     this.addToggleButton("v"); // botão principal do menu

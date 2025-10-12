@@ -19,7 +19,7 @@
 <body>
   <header>
     <a href=".">
-      <img src="img/3.gif" alt="Imagem animada de boas-vindas">
+      <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
   </header>
 
