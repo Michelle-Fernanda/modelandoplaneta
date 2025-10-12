@@ -4,7 +4,6 @@ class CalcMenu extends FloatingMenu {
   constructor() {
     super({ top: "20px", right: "20px", direction: "down"});
 
-<<<<<<< HEAD
         const style = document.createElement("style");
         style.textContent = `
             :host {
@@ -156,12 +155,6 @@ class CalcMenu extends FloatingMenu {
         this.optionsWrapper.classList.toggle("open", this.isOpen);
         this.toggleButton.textContent = this.isOpen ? "✕" : "☰";
     }
-=======
-    this.addToggleButton("v"); // botão principal do menu
-    this.addOption("C", () => alert("Abrir calculadora"));
-    this.addOption("U", () => alert("Abrir conversor de unidades"));
-  }
->>>>>>> parent of f7a2931 (Menu adicionado)
 }
 
-customElements.define("teste-x", CalcMenu);
+customElements.define("help-x", CalcMenu);

@@ -14,6 +14,7 @@
   <script type="module" src="Components/Elements/conversor.js"></script>
   <script type="module" src="Components/Elements/teste.js"></script>
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
+  <script type="module" src="Components/Elements/menu.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,9 @@
     </a>
   </header>
 
-  <teste-x></teste-x>
+  <menu-x></menu-x>
+
+  <help-x></help-x>
 
   <calc-modal></calc-modal>
 
