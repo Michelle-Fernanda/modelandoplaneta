@@ -1,9 +1,17 @@
 export class FloatingMenu extends HTMLElement {
+  /**
+   * @param {Object} config
+   *  {
+   *    top, bottom, left, right,      // posições opcionais
+   *    direction: "up"|"down"|"left"|"right" // direção das opções
+   *  }
+   */
   constructor(config = { bottom: "20px", right: "20px", direction: "up" }) {
     super();
     this.attachShadow({ mode: "open" });
     this.config = config;
 
+    // Container principal
     const container = document.createElement("div");
     container.classList.add("floating-menu");
     container.style.position = "fixed";
@@ -13,125 +21,29 @@ export class FloatingMenu extends HTMLElement {
     if (config.right !== undefined) container.style.right = config.right;
     container.style.zIndex = "1000";
 
+    // Container de opções
     const options = document.createElement("div");
-    options.className = `menu-options dir-${config.direction}`;
+    options.className = "menu-options";
+    options.style.display = "none"; // escondido inicialmente
     options.style.flexDirection = this.getFlexDirection(config.direction);
     container.appendChild(options);
     this.optionsContainer = options;
 
+    // Estilo base
     const style = document.createElement("style");
     style.textContent = `
-:host {
-  --toggle-size: 60px;
-  --option-size: 48px;
-  --gap: 10px;
-  --anim-duration: 260ms;
-  --anim-ease: cubic-bezier(.2,.9,.25,1);
-}
-
-.floating-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--gap);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-
-.menu-toggle {
-  background: linear-gradient(135deg, #65bf68, #008905);
-  font-size: 1.6rem;
-  border-radius: 50%;
-  width: var(--toggle-size);
-  height: var(--toggle-size);
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-  transition: transform 0.18s var(--anim-ease), box-shadow 0.18s var(--anim-ease);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-toggle:hover { transform: scale(1.06); box-shadow: 0 8px 22px rgba(0,0,0,0.22); }
-
-.menu-options {
-  display: flex;
-  gap: var(--gap);
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.menu-options:not(.show) {
-  pointer-events: none;
-}
-
-.menu-option {
-  --delay: 0ms;
-  width: var(--option-size);
-  height: var(--option-size);
-  min-width: var(--option-size);
-  min-height: var(--option-size);
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4CAF50, #2e7d32);
-  color: #fff;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
-  transition:
-    transform var(--anim-duration) var(--anim-ease),
-    opacity calc(var(--anim-duration) - 60ms) var(--anim-ease);
-  transition-delay: var(--delay);
-  opacity: 0;
-  transform: translateY(0) scale(0.92);
-  user-select: none;
-  outline-offset: 2px;
-}
-
-.menu-options.dir-up .menu-option    { transform: translateY(18px) scale(0.92); }
-.menu-options.dir-down .menu-option  { transform: translateY(-18px) scale(0.92); }
-.menu-options.dir-left .menu-option  { transform: translateX(18px) scale(0.92); }
-.menu-options.dir-right .menu-option { transform: translateX(-18px) scale(0.92); }
-
-.menu-options.show {
-  pointer-events: auto;
-}
-.menu-options.show .menu-option {
-  opacity: 1;
-  transform: translateX(0) translateY(0) scale(1);
-}
-
-.menu-options .menu-option:hover {
-  transform: translateX(0) translateY(0) scale(1.08);
-  box-shadow: 0 10px 28px rgba(0,0,0,0.22);
-  background: linear-gradient(135deg, #66bb6a, #388e3c);
-}
-
-@media (max-width: 420px) {
-  :host { --toggle-size: 52px; --option-size: 40px; --gap: 8px; }
-  .menu-toggle { font-size: 1.3rem; }
-  .menu-option { font-size: 0.9rem; }
-}
-`;
+      .floating-menu { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+      .menu-toggle { display: flex; align-items: center; justify-content: center; background-color: #4CAF50; color: white; font-size: 1.6rem; border: none; border-radius: 50%; width: 55px; height: 55px; cursor: pointer; box-shadow: 2px 2px 8px rgba(0,0,0,0.3); transition: transform 0.3s; }
+      .menu-toggle:hover { transform: scale(1.1); }
+      .menu-options { display: flex; flex-direction: column; gap: 10px; margin: 0; align-items: flex-start; }
+      .menu-options a { background-color: #4CAF50; color: white; font-size: 1.4rem; width: 45px; height: 45px; border-radius: 50%; text-align: center; line-height: 45px; text-decoration: none; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; }
+      .menu-options a:hover { background-color: #388e3c; transform: scale(1.1); }
+    `;
     this.shadowRoot.append(style, container);
     this.container = container;
-
-    this._hideTimeout = null;
   }
 
-  disconnectedCallback() {
-    if (this._hideTimeout) {
-      clearTimeout(this._hideTimeout);
-      this._hideTimeout = null;
-    }
-  }
-
+  // Converte a direção em flex-direction para o container de opções
   getFlexDirection(direction) {
     switch (direction) {
       case "up": return "column-reverse";
@@ -142,13 +54,13 @@ export class FloatingMenu extends HTMLElement {
     }
   }
 
+  // Adiciona botão toggle flutuante
   addToggleButton(iconText = "+") {
     const btn = document.createElement("button");
     btn.className = "menu-toggle";
-    btn.type = "button";
-    btn.setAttribute("aria-expanded", "false");
     btn.textContent = iconText;
 
+    // Se for up/left, coloca depois das opções para subir/ir para esquerda
     if (["up", "left"].includes(this.config.direction)) {
       this.container.appendChild(btn);
     } else {
@@ -156,55 +68,24 @@ export class FloatingMenu extends HTMLElement {
     }
 
     btn.addEventListener("click", () => {
-      const isShown = this.optionsContainer.classList.contains("show");
-      if (!isShown) {
-        if (this._hideTimeout) {
-          clearTimeout(this._hideTimeout);
-          this._hideTimeout = null;
-        }
-
-        const children = Array.from(this.optionsContainer.children);
-        children.forEach((el, i) => {
-          const delay = i * 60;
-          el.style.setProperty("--delay", `${delay}ms`);
-        });
-
-        requestAnimationFrame(() => {
-          this.optionsContainer.classList.add("show");
-        });
-
-        btn.setAttribute("aria-expanded", "true");
-      } else {
-        this.optionsContainer.classList.remove("show");
-        btn.setAttribute("aria-expanded", "false");
-        btn.focus();
-
-        const children = Array.from(this.optionsContainer.children);
-        const lastDelay = (children.length - 1) * 60;
-        const base = 260;
-        const total = base + lastDelay + 40;
-
-        this._hideTimeout = setTimeout(() => {
-          children.forEach((el) => el.style.removeProperty("--delay"));
-          this._hideTimeout = null;
-        }, total);
-      }
+      const isVisible = this.optionsContainer.style.display === "flex";
+      this.optionsContainer.style.display = isVisible ? "none" : "flex";
+      this.optionsContainer.style.flexDirection = this.getFlexDirection(this.config.direction);
     });
 
     this.toggleButton = btn;
     return btn;
   }
 
+  // Adiciona opção
   addOption(label = "O", onClick = () => {}) {
-    const button = document.createElement("button");
-    button.className = "menu-option";
-    button.type = "button";
-    button.setAttribute("role", "button");
-    button.textContent = label;
-
-    button.addEventListener("click", (e) => onClick());
-
-    this.optionsContainer.appendChild(button);
-    return button;
+    const a = document.createElement("a");
+    a.href = "#";
+    a.textContent = label;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      onClick();
+    });
+    this.optionsContainer.appendChild(a);
   }
 }

@@ -7,25 +7,22 @@ class Calculadora extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>
-        /* CSS MINIMALISTA */
         .calc-wrapper {
           display: flex;
           flex-direction: column;
-          gap: 12px; /* Aumentei um pouco o gap para espaçamento */
-          padding: 10px; /* Adiciona um padding interno, se necessário */
-          font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          gap: 10px;
         }
 
         input {
           padding: 8px 10px;
-          font-size: 15px;
+          font-size: 14px;
           border: 1px solid #ccc;
-          border-radius: 4px; /* Mantém um pequeno raio para os inputs */
+          border-radius: 8px;
           transition: border 0.3s;
         }
 
         input:focus {
-          border-color: #008905; /* Cor verde para combinar com o FloatingMenu */
+          border-color: #007bff;
           outline: none;
         }
 
@@ -35,33 +32,26 @@ class Calculadora extends HTMLElement {
           flex-wrap: wrap;
         }
 
-        /* OPÇÕES EM FORMATO QUADRADO */
-        .buttons button {
+        button {
           flex: 1;
-          /* Garante que o botão seja quadrado e se estenda */
-          min-width: 40px; 
-          height: 40px; 
-          
-          padding: 0; /* Remove padding que interfere na altura */
-          border: 1px solid #ccc;
-          background: #f0f0f0; /* Fundo cinza suave */
-          color: #333;
-          border-radius: 4px; /* QUASE QUADRADO: Raio menor ou 0 */
+          padding: 8px 12px;
+          border: none;
+          background: #007bff;
+          color: white;
+          border-radius: 8px;
           cursor: pointer;
-          font-size: 18px; /* Texto maior para os operadores */
-          font-weight: bold;
-          transition: background 0.2s, box-shadow 0.2s;
+          font-size: 14px;
+          transition: background 0.3s;
         }
 
-        .buttons button:hover {
-          background: #e0e0e0;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        button:hover {
+          background: #0056b3;
         }
 
         p {
           margin-top: 10px;
           font-weight: bold;
-          font-size: 16px;
+          font-size: 15px;
         }
       </style>
 
@@ -87,7 +77,6 @@ class Calculadora extends HTMLElement {
     const n2 = this.shadowRoot.querySelector(".n2");
     const resultado = this.shadowRoot.querySelector(".resultado");
 
-    // Adiciona o listener de click aos botões de operação
     this.shadowRoot.querySelectorAll("button[data-op]").forEach(btn => {
       btn.addEventListener("click", () => {
         let a = parseFloat(n1.value) || 0;
@@ -99,8 +88,7 @@ class Calculadora extends HTMLElement {
           case "*": r = a * b; break;
           case "/": r = b !== 0 ? a / b : "Erro"; break;
         }
-        // Formata o número para exibir apenas duas casas decimais se for float
-        resultado.textContent = (typeof r === 'number') ? r.toFixed(2).replace(/\.00$/, '') : r;
+        resultado.textContent = r;
       });
     });
 
@@ -110,6 +98,8 @@ class Calculadora extends HTMLElement {
     this.open = () => modal.open();
     this.close = () => modal.close();
   }
+
+
 }
 
 customElements.define("calc-modal", Calculadora);
