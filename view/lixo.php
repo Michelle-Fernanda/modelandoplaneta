@@ -47,9 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <script type="module" src="Components/Elements/calculadora.js"></script>
   <script type="module" src="Components/Elements/conversor.js"></script>
-  <script type="module" src="Components/Elements/help.js"></script>
+
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
   <script type="module" src="Components/Elements/menu.js"></script>
+  <script type="module" src="Components/Elements/ferramentas.js"></script>
 </head>
 
 <body>
@@ -60,17 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1>Lixo na Escola</h1>
   </header>
 
-  
-  <menu-x></menu-x>
+  <ferramentas-x></ferramentas-x>
 
-  <help-x></help-x>
+  <menu-x></menu-x>
 
   <calc-modal></calc-modal>
 
   <conversor-modal></conversor-modal>
 
   <acessibilidade-x></acessibilidade-x>
-
 
   <section class="intro"
     style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; align-items: flex-start; text-align: justify;">
@@ -232,10 +231,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     #formResultados select,
     #formResultados input[type="number"],
     #formResultados input[type="date"] {
-      padding: 0.5rem;
-      border-radius: 8px;
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
       border: 1px solid #4caf50;
       font-size: 1rem;
+      box-sizing: border-box;
     }
 
     #formsResultados input[type="number"] {
@@ -254,6 +255,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       transition: background-color 0.3s;
       width: 100%;
       max-width: 160px;
+      
     }
 
     #formResultados button:hover {
@@ -277,11 +279,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       background-color: #dcffcf;
       color: #2e7d32;
     }
+
+    #formResultados label {
+      display: flex;
+      align-items: center;
+      font-size: 120%;
+      
+    }
   </style>
 
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
     <h2 class="font-semibold mb-2">📋 Anote seus Resultados</h2>
-    <form id="formResultados" method="post" action="lixo">
+    <form id="formResultados" method="post" action="enviar_email.php" method="POST" enctype="multipart/form-data">
       <section>
         <label for="tipoLixo">Tipo de lixo:</label>
         <select id="tipoLixo" name="tipoLixo" required>
@@ -303,7 +312,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="date" name="data" id="data" required>
       </section>
 
-      <button type="submit">Adicionar Resultado</button>
+      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem;">
+        <button class="menu-toggle" onclick="adicionarResultado()">
+          Adicionar Resultado
+        </button>
+        <label for="file-upload" class="menu-toggle"
+          style="background-color: #4CAF50; color: white; cursor: pointer; width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+          📎
+          <input id="file-upload" type="file" style="display: none;" onchange="anexarArquivo(event)">
+        </label>
+      </div>
     </form>
 
     <h3>Resultados Anotados</h3>
@@ -316,17 +334,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </tr>
       </thead>
       <tbody id="tabelaUsuários">
-        <?php
-          $usuarios = lerUsuarios($jsonFile);
-
-          for( $i = 0; $i < count($usuarios); $i++ ) {
-            echo "<tr>";
-            echo "<td>" . $usuarios[$i]['tipoLixo'] . "</td>";
-            echo "<td>" . $usuarios[$i]['quantidade'] . "</td>";
-            echo "<td>" . $usuarios[$i]['data'] . "</td>";
-            echo "</tr>";
-          }
-        ?>
       </tbody>
     </table>
   </section>

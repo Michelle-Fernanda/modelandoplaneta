@@ -12,9 +12,10 @@
 
   <script type="module" src="Components/Elements/calculadora.js"></script>
   <script type="module" src="Components/Elements/conversor.js"></script>
-  <script type="module" src="Components/Elements/help.js"></script>
+
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
   <script type="module" src="Components/Elements/menu.js"></script>
+  <script type="module" src="Components/Elements/ferramentas.js"></script>
 </head>
 
 <body>
@@ -24,9 +25,9 @@
     </a>
   </header>
 
-  <menu-x></menu-x>
+  <ferramentas-x></ferramentas-x>
 
-  <help-x></help-x>
+  <menu-x></menu-x>
 
   <calc-modal></calc-modal>
 

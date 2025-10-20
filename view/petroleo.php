@@ -6,6 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Derramamento de Petróleo no Mar</title>
   <link rel="stylesheet" href="styles.css">
+
+  <script type="module" src="Components/Elements/calculadora.js"></script>
+  <script type="module" src="Components/Elements/conversor.js"></script>
+
+  <script type="module" src="Components/Elements/acessibilidade.js"></script>
+  <script type="module" src="Components/Elements/menu.js"></script>
+  <script type="module" src="Components/Elements/ferramentas.js"></script>
 </head>
 
 <body>
@@ -16,6 +23,17 @@
     </a>
     <h1>Derramamento de Petróleo no Mar</h1>
   </header>
+
+  
+  <ferramentas-x></ferramentas-x>
+
+  <menu-x></menu-x>
+
+  <calc-modal></calc-modal>
+
+  <conversor-modal></conversor-modal>
+
+  <acessibilidade-x></acessibilidade-x>
 
   <section class="intro">
     <h1>Você sabe o que é o petróleo?</h1>
@@ -192,7 +210,7 @@
     </p>
   </section>
 
-  <div class="floating-menu">
+  <!-- <div class="floating-menu">
     <div class="menu-options" id="menuOptions">
       <a href="lixo" title="Lixo na Escola">🗑️</a>
       <a href="petroleo" title="Petróleo">⛽</a>
@@ -202,7 +220,7 @@
       <a href="." title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  </div>
+  </div> -->
 
   <div class="fala-container">
     <button id="close-assistant" onclick="closeAssistant()">×</button>

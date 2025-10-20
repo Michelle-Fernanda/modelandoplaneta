@@ -5,7 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desperdício de Água</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+
+  <script type="module" src="Components/Elements/calculadora.js"></script>
+  <script type="module" src="Components/Elements/conversor.js"></script>
+
+  <script type="module" src="Components/Elements/acessibilidade.js"></script>
+  <script type="module" src="Components/Elements/menu.js"></script>
+  <script type="module" src="Components/Elements/ferramentas.js"></script>
 </head>
 
 <body>
@@ -15,6 +23,16 @@
     </a>
     <h1>Desperdício de Água</h1>
   </header>
+  
+  <ferramentas-x></ferramentas-x>
+
+  <menu-x></menu-x>
+
+  <calc-modal></calc-modal>
+
+  <conversor-modal></conversor-modal>
+
+  <acessibilidade-x></acessibilidade-x>
 
   <section class="intro">
     <h1>VAMOS FALAR SOBRE O DESPERDÍCIO DE ÁGUA?</h1>
@@ -163,7 +181,7 @@
     </p>
   </section>
 
-  <div class="floating-menu">
+  <!-- <div class="floating-menu">
     <div class="menu-options" id="menuOptions">
       <a href="lixo" title="Lixo na Escola">🗑️</a>
       <a href="petroleo" title="Petróleo">⛽</a>
@@ -173,7 +191,7 @@
       <a href="." title="Início">🏠</a>
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  </div>
+  </div> -->
 
   <div class="fala-container">
     <button id="close-assistant" onclick="closeAssistant()">×</button>
