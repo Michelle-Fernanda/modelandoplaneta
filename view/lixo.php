@@ -338,31 +338,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </table>
   </section>
   <script>
-    document.getElementById('formResultados').addEventListener('submit', function(event) {
-      // 1. Previne a recarga da página
-      event.preventDefault();
+document.getElementById('formResultados').addEventListener('submit', async function(event) {
+  event.preventDefault(); // Impede o reload
 
-      // 2. Coleta os dados do formulário
-      const form = event.target;
-      const formData = new FormData(form);
+  const form = event.target;
+  const formData = new FormData(form);
 
-      // 3. Envia os dados para o PHP via POST usando fetch
-      fetch(form.action, {
-          method: 'POST',
-          body: formData,
-      });
+  try {
+    // Envia os dados para o PHP
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData
+    });
 
-      let tabela = document.getElementById("tabelaUsuários");
+    const result = await response.text(); // pega o retorno do PHP
+    alert(result); // mostra o resultado (✅ ou ❌)
 
-      tabela.innerHTML += `
+    // Atualiza a tabela com os novos dados
+    const tabela = document.getElementById("tabelaUsuários");
+    tabela.innerHTML += `
       <tr>
         <td>${document.getElementById("tipoLixo").value}</td>
         <td>${document.getElementById("quantidade").value}</td>
         <td>${document.getElementById("data").value}</td>
       </tr>
-      `;
-    })
-  </script>
+    `;
+
+    // Limpa os campos do formulário
+    form.reset();
+
+      } catch (error) {
+        alert("❌ Erro de rede ou servidor: " + error.message);
+      }
+    });
+    </script>
+
 
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>

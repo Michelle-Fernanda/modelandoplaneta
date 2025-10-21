@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'seuemail@gmail.com';
-        $mail->Password = 'sua_senha_ou_app_password'; // use senha de app
+        $mail->Username = 'kodelandooplaneta@gmail.com';
+        $mail->Password = 'uocg czem ylgk dnqf'; // use senha de app
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
         // Remetente e destinatário
-        $mail->setFrom('seuemail@gmail.com', 'Coleta de Lixo');
-        $mail->addAddress('destinatario@exemplo.com', 'Admin');
+        $mail->setFrom('kodelandooplaneta@gmail.com', 'Coleta de Lixo');
+        $mail->addAddress('arisleycds@gmail.com', 'Admin');
 
         // Anexo (se existir)
         if (!empty($_FILES['anexo']['tmp_name'])) {
@@ -55,6 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Subject = 'Novo envio de coleta de lixo';
         $mail->Body    = "<h3>Dados enviados pelo formulário:</h3>" . $tabela;
         $mail->AltBody = "Tipo: $tipoLixo | Quantidade: $quantidade | Data: $data";
+
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
 
         $mail->send();
         echo '✅ E-mail enviado com sucesso!';
