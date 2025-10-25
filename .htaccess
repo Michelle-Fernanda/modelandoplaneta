@@ -1,7 +1,14 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Bloqueia acesso direto a qualquer arquivo PHP (exceto index.php)
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?([^/]+\.php)[\s?] [NC]
+  RewriteCond %2 !^index\.php$ [NC]
+  RewriteRule ^ - [F,L]
+
+  # Redireciona tudo para index.php, exceto arquivos/diretórios existentes
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ index.php [QSA,L]
+  RewriteRule ^ index.php [QSA,L]
 </IfModule>

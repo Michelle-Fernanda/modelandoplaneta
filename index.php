@@ -18,7 +18,7 @@ switch ($path) {
         require 'view/arborizacao.php';
         break;
     case 'lixo':
-        require 'view/lixo.php';
+        require 'view/lixo/lixo.php';
         break;
     case 'petroleo':
         require 'view/petroleo.php';

@@ -319,7 +319,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="file-upload" class="menu-toggle"
           style="background-color: #4CAF50; color: white; cursor: pointer; width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
           📎
-          <input id="file-upload" type="file" style="display: none;" onchange="anexarArquivo(event)">
+          <input name="anexo" id="file-upload" type="file" style="display: none;">
         </label>
       </div>
     </form>
