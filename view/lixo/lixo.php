@@ -1,40 +1,3 @@
-<?php
-// Caminho do arquivo JSON
-$jsonFile = __DIR__ . '/lixo.json';
-
-// Função para ler os dados do arquivo JSON
-function lerUsuarios($jsonFile) {
-  if (!file_exists($jsonFile)) {
-    return [];
-  }
-  $json = file_get_contents($jsonFile);
-  return json_decode($json, true) ?: [];
-}
-
-// Função para salvar os dados no arquivo JSON
-function salvarUsuarios($jsonFile, $usuarios) {
-  file_put_contents($jsonFile, json_encode($usuarios, JSON_PRETTY_PRINT));
-}
-
-// Processa o formulário
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $tipo = $_POST["tipoLixo"];
-  $quantidade = $_POST["quantidade"];
-  $data = $_POST["data"];
-
-  $usuarios = lerUsuarios($jsonFile);
-  $usuarios[] = [
-    'tipoLixo' => $tipo,
-    'quantidade' => $quantidade,
-    'data' => $data
-  ];
-  salvarUsuarios($jsonFile, $usuarios);
-
-  header("Location: lixo");
-  exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -44,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Lixo na Escola</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="view/lixo/lixo.css">
 
   <script type="module" src="Components/Elements/calculadora.js"></script>
   <script type="module" src="Components/Elements/conversor.js"></script>
@@ -191,186 +155,209 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
 
-  <style>
-    .resultados {
-      max-width: 700px;
-      margin: 2rem auto;
-      background-color: #fff5e6;
-      border-radius: 16px;
-      padding: 1.5rem 2rem;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-      font-family: 'Fredoka One', cursive;
-    }
-
-    .resultados h2,
-    .resultados h3 {
-      text-align: center;
-      color: #4caf50;
-      margin-bottom: 1rem;
-    }
-
-    #formResultados {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #formResultados label {
-      flex-basis: 100%;
-      font-weight: bold;
-      color: #289728;
-    }
-
-    #formResultados section {
-      width: 60%;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    #formResultados select,
-    #formResultados input[type="number"],
-    #formResultados input[type="date"] {
-      width: 100%;
-      padding: 0.7rem 1rem;
-      border-radius: 10px;
-      border: 1px solid #4caf50;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    #formsResultados input[type="number"] {
-      width: 200px;
-    }
-
-    #formResultados button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      padding: 0.7rem 1.2rem;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-      width: 100%;
-      max-width: 160px;
-      
-    }
-
-    #formResultados button:hover {
-      background-color: #388e3c;
-    }
-
-    #tabelaResultados {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    #tabelaResultados th,
-    #tabelaResultados td {
-      border: 1px solid #4caf50;
-      padding: 0.5rem;
-      text-align: center;
-    }
-
-    #tabelaResultados thead {
-      background-color: #dcffcf;
-      color: #2e7d32;
-    }
-
-    #formResultados label {
-      display: flex;
-      align-items: center;
-      font-size: 120%;
-      
-    }
-  </style>
-
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
     <h2 class="font-semibold mb-2">📋 Anote seus Resultados</h2>
-    <form id="formResultados" method="post" action="enviar_email.php" method="POST" enctype="multipart/form-data">
-      <section>
-        <label for="tipoLixo">Tipo de lixo:</label>
-        <select id="tipoLixo" name="tipoLixo" required>
-          <option value="">Selecione</option>
-          <option value="Orgânico">Orgânico</option>
-          <option value="Reciclável">Reciclável</option>
-          <option value="Restos do Pátio">Restos do Pátio</option>
-          <option value="Outros">Outros</option>
-        </select>
-      </section>
+    <form id="formResultados" method="POST" action="enviar_email.php" enctype="multipart/form-data" rel="noopener">
+        
+        <section>
+            <label for="gmail">Gmail do Professor:</label>
+            <input type="text" name="gmail" id="gmail" min="0" step="0.01" placeholder="nome@gmail.com" required>
+        </section>
 
-      <section>
-        <label for="quantidade">Quantidade (kg):</label>
-        <input type="number" name="quantidade" id="quantidade" min="0" step="0.01" placeholder="Ex: 1.5" required>
-      </section>
+        <section>
+            <label for="teste2">Gmail do Professor:</label>
+            <select id="teste2" name="teste2" required>
+                <option value="">Selecione</option>
+                <option value="Orgânico">Ariel C. da Silva</option>
+                <option value="Inorgânico">Michelle F. da Silva</option>
+            </select>
+        </section>
+    
+        <section>
+            <label for="tipoLixo">Tipo de lixo:</label>
+            <select id="tipoLixo" name="tipoLixo" required>
+                <option value="">Selecione</option>
+                <option value="Orgânico">Orgânico</option>
+                <option value="Inorgânico">Inorgânico</option>
+                <option value="Rejeitos">Rejeitos</option>
+            </select>
+        </section>
 
-      <section>
-        <label for="data">Data da coleta:</label>
-        <input type="date" name="data" id="data" required>
-      </section>
+        <section>
+            <label for="quantidade">Quantidade (kg):</label>
+            <input type="number" name="quantidade" id="quantidade" min="0" step="0.01" placeholder="Ex: 1.5" required>
+        </section>
 
-      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem;">
-        <button class="menu-toggle" onclick="adicionarResultado()">
-          Adicionar Resultado
-        </button>
-        <label for="file-upload" class="menu-toggle"
-          style="background-color: #4CAF50; color: white; cursor: pointer; width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-          📎
-          <input name="anexo" id="file-upload" type="file" style="display: none;">
-        </label>
-      </div>
+        <section>
+            <label for="data">Data da coleta:</label>
+            <input type="date" name="data" id="data" required>
+        </section>
+
+        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
+          <button class="menu-toggle" type="button" onclick="" id="btnSubmit">
+              Adicionar Resultado
+          </button>
+          
+          <label for="file-upload" class="labelAnexo"
+          >
+            <span id="anexoIcone">📎</span>
+            
+
+            <input name="anexo[]" id="file-upload" type="file" style="display: none;" multiple accept="image/*">
+          </label>
+
+        </div>
+        <div id="previsualizacoes" 
+          style="width: 100%; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center;">
+        </div>
     </form>
 
     <h3>Resultados Anotados</h3>
     <table id="tabelaResultados">
       <thead>
         <tr>
+          <th>Gmail</th>
           <th>Tipo de Lixo</th>
           <th>Quantidade (kg)</th>
           <th>Data</th>
         </tr>
       </thead>
-      <tbody id="tabelaUsuários">
+      <tbody id="tabelaUsuarios">
       </tbody>
     </table>
   </section>
-  <script>
-document.getElementById('formResultados').addEventListener('submit', async function(event) {
-  event.preventDefault(); // Impede o reload
+  <script src="script.js"></script>
+ <script>
+    // É MELHOR DECLARAR O LISTENER DEPOIS QUE O DOM CARREGA.
+    document.addEventListener('DOMContentLoaded', () => {
 
-  const form = event.target;
-  const formData = new FormData(form);
+        const form = document.getElementById('formResultados');
+        const submitButtonElement = document.getElementById('btnSubmit'); 
+        const tabela = document.getElementById("tabelaUsuarios");
+        
+        // --- 1. Verificação de Elementos ---
+        if (!submitButtonElement || !form || !tabela) {
+            console.error("ERRO JS: Elementos essenciais (Botão, Formulário ou Tabela) não encontrados.");
+            // Não anexa o listener se elementos críticos estiverem faltando
+            return; 
+        }
 
-  try {
-    // Envia os dados para o PHP
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: formData
+        // --- 2. Listener do Botão (type="button" no HTML!) ---
+        submitButtonElement.addEventListener('click', async function(event) {
+            event.preventDefault(); // Impede qualquer comportamento padrão do click
+
+            // 3. Validação - Usa a validação do formulário HTML
+            if(!form.reportValidity()) {
+                return // Sai se a validação do navegador falhar
+            }
+            
+            // 4. Captura dos valores (antes do envio)
+            const formsData = {
+                gmail: document.getElementById("gmail").value,
+                tipo: document.getElementById("tipoLixo").value,
+                quantidade: document.getElementById("quantidade").value,
+                data: document.getElementById("data").value
+            }
+
+            // 5. BLOQUEIO
+            submitButtonElement.disabled = true;
+            submitButtonElement.textContent = 'Enviando...';
+            
+            const formData = new FormData(form);
+
+            try {
+                // Envia os dados
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.text(); 
+                
+                if (response.ok) {
+                    // SUCESSO: Adiciona a linha na tabela
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${formsData.gmail}</td>
+                            <td>${formsData.tipo}</td>
+                            <td>${formsData.quantidade}</td>
+                            <td>${formsData.data}</td>
+                        </tr>
+                    `;
+                    
+                    form.reset(); // Limpa os campos visíveis
+
+                    document.getElementById('previsualizacoes').innerHTML = '';
+
+                    alert("Sucesso: " + result); 
+                    
+                } else {
+                    // FALHA: Se o PHP retornou erro (ex: 500)
+                    alert("Erro do Servidor PHP: " + result); 
+                }
+
+            } catch (error) {
+                alert("❌ Erro de rede ou servidor: " + error.message);
+            } finally {
+                // 6. DESBLOQUEIO
+                submitButtonElement.disabled = false;
+                submitButtonElement.textContent = 'Adicionar Resultado';
+                // AQUI, a página não é mais redirecionada, pois o comportamento padrão foi cortado no início.
+            }
+        });
+
+        // --- 1. Feedback Visual do Anexo ---
+      document.getElementById('file-upload').addEventListener('change', function() {
+        const previsualizacoesContainer = document.getElementById('previsualizacoes');
+
+        // Limpa a visualização anterior
+        previsualizacoesContainer.innerHTML = '';
+
+        // Processa cada arquivo selecionado
+        Array.from(this.files).forEach(file => {
+            
+            // 1. Cria o contêiner do item de miniatura
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'miniatura-item';
+
+            // 2. Cria o span para o nome do arquivo
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'nome-arquivo';
+            nameSpan.textContent = file.name;
+
+            // 3. Adiciona o nome ao contêiner
+            itemDiv.appendChild(nameSpan);
+
+            // Verifica se é uma imagem para criar a miniatura
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                
+                // Quando a leitura do arquivo estiver completa
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Miniatura de imagem';
+                    
+                    // Insere a imagem ANTES do nome (para que fique na esquerda)
+                    itemDiv.insertBefore(img, nameSpan); 
+                };
+                
+                // Inicia a leitura do arquivo como URL de dados (necessário para a miniatura)
+                reader.readAsDataURL(file);
+            
+            } else {
+                // Se não for imagem, adiciona um ícone genérico ou texto
+                const iconSpan = document.createElement('span');
+                iconSpan.style.marginRight = '8px';
+                iconSpan.textContent = '📄'; // Ícone de documento genérico
+                itemDiv.insertBefore(iconSpan, nameSpan);
+            }
+
+            // Adiciona o item de miniatura ao contêiner principal
+            previsualizacoesContainer.appendChild(itemDiv);
+        });
     });
-
-    const result = await response.text(); // pega o retorno do PHP
-    alert(result); // mostra o resultado (✅ ou ❌)
-
-    // Atualiza a tabela com os novos dados
-    const tabela = document.getElementById("tabelaUsuários");
-    tabela.innerHTML += `
-      <tr>
-        <td>${document.getElementById("tipoLixo").value}</td>
-        <td>${document.getElementById("quantidade").value}</td>
-        <td>${document.getElementById("data").value}</td>
-      </tr>
-    `;
-
-    // Limpa os campos do formulário
-    form.reset();
-
-      } catch (error) {
-        alert("❌ Erro de rede ou servidor: " + error.message);
-      }
-    });
+  });
     </script>
 
 
@@ -378,8 +365,6 @@ document.getElementById('formResultados').addEventListener('submit', async funct
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
     <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
-
-  <script src="script.js"></script>
 
   
 </body>

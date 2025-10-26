@@ -1,0 +1,143 @@
+    .resultados {
+      max-width: 700px;
+      margin: 2rem auto;
+      background-color: #fff5e6;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .resultados h2,
+    .resultados h3 {
+      text-align: center;
+      color: #4caf50;
+      margin-bottom: 1rem;
+    }
+
+    #formResultados {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #formResultados section label {
+      flex-basis: 100%;
+      font-weight: bold;
+      color: #289728;
+    }
+
+    #formResultados section {
+      width: 60%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #formResultados select,
+    #formResultados input[type="text"],
+    #formResultados input[type="number"],
+    #formResultados input[type="date"] {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      border: 1px solid #4caf50;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    #formsResultados input[type="number"] {
+      width: 200px;
+    }
+
+    #formResultados button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      width: 100%;
+      max-width: 160px;
+      
+    }
+
+    #formResultados button:hover {
+      background-color: #388e3c;
+    }
+
+    #tabelaResultados {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    #tabelaResultados th,
+    #tabelaResultados td {
+      border: 1px solid #4caf50;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    #tabelaResultados thead {
+      background-color: #dcffcf;
+      color: #2e7d32;
+    }
+
+    #formResultados section label {
+      display: flex;
+      align-items: center;
+      font-size: 120%;
+      
+    }
+    
+    .labelAnexo {
+      flex-basis: 0px;
+      background-color: #4CAF50; 
+      color: white; 
+      cursor: pointer; 
+      width: 55px; 
+      height: 55px; 
+      border-radius: 16px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 2rem;
+      margin-top: 10px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      white-space: nowrap; /* Impede que o texto quebre linha */  
+  }
+
+  /* Estilo para cada miniatura (item individual de arquivo) */
+.miniatura-item {
+    display: flex;
+    align-items: center;
+    background-color: #e0ffe0; /* Fundo claro para destacar o item */
+    border: 1px solid #4caf50;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    color: #333;
+    max-width: 100%;
+    overflow: hidden; /* Garante que o texto seja cortado se for muito longo */
+}
+
+/* Estilo para a imagem dentro da miniatura */
+.miniatura-item img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+/* Estilo para o nome do arquivo */
+.miniatura-item span.nome-arquivo {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." ao nome longo */
+    max-width: 150px; /* Limita a largura do nome para evitar que o item fique enorme */
+}

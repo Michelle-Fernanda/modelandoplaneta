@@ -76,3 +76,4 @@ window.onload = function () {
 };
 
 ScrollReveal().reveal('#contato', { delay: 500 });
+

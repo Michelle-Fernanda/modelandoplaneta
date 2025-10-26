@@ -175,20 +175,20 @@ class FerramentasMenu extends HTMLElement {
       </style>
       <div class="menu-container">
         <button class="menu-toggle" data-tooltip="Ferramentas">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
-            <path d="M7 7L3 3M3 3L7 7M3 3L10 10M21 21L17 17M21 21L17 17M21 21L14 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="12" r="4.5" stroke="#fff" stroke-width="2"/>
-                <path d="M12 8V12L14 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+            <!-- <div> Ícones feitos por <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik"> Freepik </a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com'</a></div> -->
+          <img width="40px" height="40px" src="img/chave-inglesa.png" wi alt="caixa de ferramentas ícones">
         </button>
         <div class="menu-box">
           <div class="menu-title">
             <span class="menu-title-icon">
-              <svg viewBox="0 0 24 24" fill="none">
+              <!-- <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7 7L3 3M3 3L7 7M3 3L10 10M21 21L17 17M21 21L17 17M21 21L14 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
                 <circle cx="12" cy="12" r="4.5" stroke="#fff" stroke-width="2"/>
                 <path d="M12 8V12L14 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+              </svg> -->
+              
+        
+              <!-- <img width="24" height="24" src="img/chave-inglesa.png" wi alt="caixa de ferramentas ícones"> -->
             </span>
             <span class="menu-title-text">Ferramentas</span>
           </div>

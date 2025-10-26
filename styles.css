@@ -258,6 +258,8 @@ body {
     cursor: pointer;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s;
+
+    
   }
 
   .menu-toggle:hover {
@@ -563,6 +565,11 @@ body.contraste .gallery-images img {
   max-width: 900px;
   margin: 2rem auto;
 }
+
+form section {
+  margin-bottom: 5px;
+}
+
 iframe {
   width: 100%;
   height: 800px;
