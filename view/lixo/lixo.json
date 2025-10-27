@@ -303,5 +303,35 @@
         "tipoLixo": "Org\u00e2nico",
         "quantidade": "2",
         "data": "2025-10-02"
+    },
+    {
+        "tipoLixo": "ffete",
+        "quantidade": "0245",
+        "data": "0054-12-14"
+    },
+    {
+        "tipoLixo": "Org\u00e2nico",
+        "quantidade": "20",
+        "data": "2025-01-18"
+    },
+    {
+        "tipoLixo": "asda",
+        "quantidade": "12",
+        "data": "2025-10-23"
+    },
+    {
+        "tipoLixo": "Org\u00e2nico",
+        "quantidade": "21",
+        "data": "2025-10-15"
+    },
+    {
+        "tipoLixo": "Org\u00e2nico",
+        "quantidade": "20",
+        "data": "2025-10-15"
+    },
+    {
+        "tipoLixo": "Or",
+        "quantidade": "21",
+        "data": "2025-10-23"
     }
 ]

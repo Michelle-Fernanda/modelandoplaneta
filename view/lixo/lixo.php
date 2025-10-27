@@ -160,27 +160,13 @@
     <form id="formResultados" method="POST" action="enviar_email.php" enctype="multipart/form-data" rel="noopener">
         
         <section>
-            <label for="gmail">Gmail do Professor:</label>
-            <input type="text" name="gmail" id="gmail" min="0" step="0.01" placeholder="nome@gmail.com" required>
-        </section>
-
-        <section>
-            <label for="teste2">Gmail do Professor:</label>
-            <select id="teste2" name="teste2" required>
-                <option value="">Selecione</option>
-                <option value="Orgânico">Ariel C. da Silva</option>
-                <option value="Inorgânico">Michelle F. da Silva</option>
-            </select>
+            <label for="gmail">E-mail do Professor:</label>
+            <input type="text" name="gmail" id="gmail" placeholder="prof@gmail.com" required>
         </section>
     
         <section>
             <label for="tipoLixo">Tipo de lixo:</label>
-            <select id="tipoLixo" name="tipoLixo" required>
-                <option value="">Selecione</option>
-                <option value="Orgânico">Orgânico</option>
-                <option value="Inorgânico">Inorgânico</option>
-                <option value="Rejeitos">Rejeitos</option>
-            </select>
+            <input type="text" name="tipoLixo" id="tipoLixo" placeholder="Orgânico" required>
         </section>
 
         <section>
@@ -193,15 +179,35 @@
             <input type="date" name="data" id="data" required>
         </section>
 
-        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
+        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem; margin-top: 1rem;" id="addResult">
           <button class="menu-toggle" type="button" onclick="" id="btnSubmit">
               Adicionar Resultado
           </button>
           
           <label for="file-upload" class="labelAnexo"
-          >
-            <span id="anexoIcone">📎</span>
-            
+          id="labelAnexo">
+            <span id="anexoIcone" >
+              
+              <div id="clipe-container">
+                <img id="clipe-aberto" class="clipe-icone" 
+                  src="img/clip-de-papel.png" 
+                  alt="Clipe com Olhos Abertos">
+                  
+                <img id="clipe-fechado" class="clipe-icone" 
+                  src="img/clip-de-papel-fechado.png" 
+                  alt="Clipe com Olhos Abertos">
+
+                <img id="clipe-espera-joinha" class="clipe-icone" 
+                  src="img/clip-de-papel-joia.png"  
+                  alt="Clipe com Joinha e Cara Engraçada">
+
+                <img id="clipe-click" class="clipe-icone" 
+                  src="img/clip-de-papel-click.png"  
+                  alt="Clipe Piscando">
+                <!-- <span class="emoji-fallback clipe-icone">📎</span> -->
+              </div>
+            </span>
+ 
 
             <input name="anexo[]" id="file-upload" type="file" style="display: none;" multiple accept="image/*">
           </label>
@@ -216,7 +222,6 @@
     <table id="tabelaResultados">
       <thead>
         <tr>
-          <th>Gmail</th>
           <th>Tipo de Lixo</th>
           <th>Quantidade (kg)</th>
           <th>Data</th>
@@ -227,138 +232,214 @@
     </table>
   </section>
   <script src="script.js"></script>
- <script>
-    // É MELHOR DECLARAR O LISTENER DEPOIS QUE O DOM CARREGA.
-    document.addEventListener('DOMContentLoaded', () => {
+  <script>document.addEventListener('DOMContentLoaded', () => {
 
-        const form = document.getElementById('formResultados');
-        const submitButtonElement = document.getElementById('btnSubmit'); 
-        const tabela = document.getElementById("tabelaUsuarios");
+    // Elementos do DOM do assistente visual
+    const clipeAberto = document.getElementById('clipe-aberto');
+    const clipeFechado = document.getElementById('clipe-fechado');
+    const clipeJoinha = document.getElementById('clipe-espera-joinha');
+    const clipeClick = document.getElementById('clipe-click');
+    const labelAnexo = document.getElementById('labelAnexo');
+
+    // Elementos do DOM do formulário
+    const form = document.getElementById('formResultados');
+    const submitButtonElement = document.getElementById('btnSubmit'); 
+    const tabelaBody = document.getElementById("tabelaUsuarios");
+    const fileInput = document.getElementById('file-upload');
+    const previsualizacoesContainer = document.getElementById('previsualizacoes');
+
+    // Variável para controlar o loop de piscar
+    let blinkInterval;
+
+
+    // --- FUNÇÕES DO ASSISTENTE VISUAL (CLIP) ---
+
+    /**
+     * Define a opacidade dos três estados do clipe.
+     * @param {boolean} aberto - Se o clipe aberto deve ser visível.
+     * @param {boolean} fechado - Se o clipe fechado deve ser visível.
+     * @param {boolean} joinha - Se o clipe de joinha deve ser visível.
+     * * @param {boolean} click - Se o clipe de click deve ser visível.
+     */
+    function showState(aberto, fechado, joinha, click) {
+        clipeAberto.style.opacity = aberto ? 1 : 0;
+        clipeFechado.style.opacity = fechado ? 1 : 0;
+        clipeJoinha.style.opacity = joinha ? 1 : 0;
+        clipeClick.style.opacity = click ? 1 : 0;
+    }
+
+    /**
+     * Inicia a animação de piscar do clipe.
+     */
+    function startBlinking() {
+        // Garante o estado inicial (aberto)
+        showState(true, false, false, false); 
+        clearInterval(blinkInterval); // Limpa qualquer loop anterior
+        blink(); // Inicia o novo loop
+    }
+
+    /**
+     * Realiza um único ciclo de piscar e agenda o próximo.
+     */
+    function blink() {
+        // 1. Fecha o olho
+        showState(false, true, false, false);
+        const tempoFechado = 100;
+
+        blinkInterval = setTimeout(() => {
+            // 2. Abre o olho
+            showState(true, false, false, false);
+            // 3. Define um tempo de espera aleatório antes do próximo piscar (2s a 6s)
+            const tempoEspera = Math.random() * 4000 + 2000;
+            setTimeout(blink, tempoEspera);
+        }, tempoFechado);
+    }
+
+    /**
+     * Exibe o clipe de joinha e agenda o retorno ao piscar.
+     */
+    function showJoinha() {
+        clearInterval(blinkInterval); // Para o piscar
+        showState(false, false, true, false); // Mostra o Joinha
+        // NOTA: O retorno ao piscar é feito no bloco 'finally' do handleSubmit.
+        // Se a chamada for feita aqui (setTimeout(startBlinking, 2000)), o clipe pode
+        // voltar a piscar antes do fetch() terminar. Mantenha a chamada no finally.
+    }
+
+    function showClick() {
+        clearInterval(blinkInterval); // Para o piscar
+        showState(false, false, false, true); // Mostra o Clipe de Click
         
-        // --- 1. Verificação de Elementos ---
-        if (!submitButtonElement || !form || !tabela) {
-            console.error("ERRO JS: Elementos essenciais (Botão, Formulário ou Tabela) não encontrados.");
-            // Não anexa o listener se elementos críticos estiverem faltando
-            return; 
-        }
+        // Volta a piscar imediatamente após um micro-atraso, simulando o "soltar" o clique
+        // setTimeout(startBlinking, 2000); 
+    }
 
-        // --- 2. Listener do Botão (type="button" no HTML!) ---
-        submitButtonElement.addEventListener('click', async function(event) {
-            event.preventDefault(); // Impede qualquer comportamento padrão do click
+    // Inicia a animação de piscar no carregamento
+    startBlinking();
 
-            // 3. Validação - Usa a validação do formulário HTML
-            if(!form.reportValidity()) {
-                return // Sai se a validação do navegador falhar
-            }
-            
-            // 4. Captura dos valores (antes do envio)
-            const formsData = {
-                gmail: document.getElementById("gmail").value,
-                tipo: document.getElementById("tipoLixo").value,
-                quantidade: document.getElementById("quantidade").value,
-                data: document.getElementById("data").value
-            }
 
-            // 5. BLOQUEIO
-            submitButtonElement.disabled = true;
-            submitButtonElement.textContent = 'Enviando...';
-            
-            const formData = new FormData(form);
+    // --- FUNÇÕES DE MANIPULAÇÃO DO FORMULÁRIO E TABELA ---
 
-            try {
-                // Envia os dados
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                });
+    /**
+     * Adiciona uma nova linha à tabela de resultados.
+     * @param {object} data - Os dados a serem exibidos.
+     */
+    function addRowToTable(data) {
+        const newRow = tabelaBody.insertRow();
 
-                const result = await response.text(); 
-                
-                if (response.ok) {
-                    // SUCESSO: Adiciona a linha na tabela
-                    tabela.innerHTML += `
-                        <tr>
-                            <td>${formsData.gmail}</td>
-                            <td>${formsData.tipo}</td>
-                            <td>${formsData.quantidade}</td>
-                            <td>${formsData.data}</td>
-                        </tr>
-                    `;
-                    
-                    form.reset(); // Limpa os campos visíveis
+        alert(data.data);
 
-                    document.getElementById('previsualizacoes').innerHTML = '';
+        newRow.innerHTML = `
+            <td>${data.tipo}</td>
+            <td>${data.quantidade}</td>
+            <td>${data.data}</td>
+        `;
+    }
 
-                    alert("Sucesso: " + result); 
-                    
-                } else {
-                    // FALHA: Se o PHP retornou erro (ex: 500)
-                    alert("Erro do Servidor PHP: " + result); 
-                }
+    /**
+     * Processa a pré-visualização de arquivos anexados.
+     */
+    function handleFileChange() {
+        previsualizacoesContainer.innerHTML = ''; // Limpa anterior
 
-            } catch (error) {
-                alert("❌ Erro de rede ou servidor: " + error.message);
-            } finally {
-                // 6. DESBLOQUEIO
-                submitButtonElement.disabled = false;
-                submitButtonElement.textContent = 'Adicionar Resultado';
-                // AQUI, a página não é mais redirecionada, pois o comportamento padrão foi cortado no início.
-            }
-        });
+          // 2. Feedback e Bloqueio
+        showJoinha(); // <-- GARANTE QUE O JOINHA É MOSTRADO
 
-        // --- 1. Feedback Visual do Anexo ---
-      document.getElementById('file-upload').addEventListener('change', function() {
-        const previsualizacoesContainer = document.getElementById('previsualizacoes');
+        setTimeout(startBlinking, 1000);
 
-        // Limpa a visualização anterior
-        previsualizacoesContainer.innerHTML = '';
-
-        // Processa cada arquivo selecionado
         Array.from(this.files).forEach(file => {
-            
-            // 1. Cria o contêiner do item de miniatura
             const itemDiv = document.createElement('div');
-            itemDiv.className = 'miniatura-item';
+            // Adiciona um estilo básico para visualização
+            itemDiv.style.cssText = 'display: flex; align-items: center; gap: 5px; border: 1px solid #ccc; padding: 5px; border-radius: 5px; max-width: 100%; overflow: hidden;';
 
-            // 2. Cria o span para o nome do arquivo
             const nameSpan = document.createElement('span');
-            nameSpan.className = 'nome-arquivo';
             nameSpan.textContent = file.name;
+            nameSpan.style.cssText = 'flex-shrink: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
 
-            // 3. Adiciona o nome ao contêiner
-            itemDiv.appendChild(nameSpan);
-
-            // Verifica se é uma imagem para criar a miniatura
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                
-                // Quando a leitura do arquivo estiver completa
                 reader.onload = function(e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.alt = 'Miniatura de imagem';
-                    
-                    // Insere a imagem ANTES do nome (para que fique na esquerda)
-                    itemDiv.insertBefore(img, nameSpan); 
+                    img.style.cssText = 'width: 40px; height: 40px; object-fit: cover; border-radius: 3px; flex-shrink: 0;';
+                    itemDiv.appendChild(img);
+                    itemDiv.appendChild(nameSpan);
                 };
-                
-                // Inicia a leitura do arquivo como URL de dados (necessário para a miniatura)
                 reader.readAsDataURL(file);
-            
             } else {
-                // Se não for imagem, adiciona um ícone genérico ou texto
                 const iconSpan = document.createElement('span');
-                iconSpan.style.marginRight = '8px';
-                iconSpan.textContent = '📄'; // Ícone de documento genérico
-                itemDiv.insertBefore(iconSpan, nameSpan);
+                iconSpan.textContent = '📄';
+                iconSpan.style.cssText = 'font-size: 1.5rem; flex-shrink: 0;';
+                itemDiv.appendChild(iconSpan);
+                itemDiv.appendChild(nameSpan);
             }
 
-            // Adiciona o item de miniatura ao contêiner principal
             previsualizacoesContainer.appendChild(itemDiv);
         });
-    });
-  });
-    </script>
+    }
+
+    /**
+     * Lida com a submissão assíncrona do formulário.
+     */
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        // 1. Validação
+        if(!form.reportValidity()) {
+            return;
+        }
+        
+        submitButtonElement.disabled = true;
+        submitButtonElement.textContent = 'Enviando...';
+        
+        // 3. Captura dos valores
+        const formsData = {
+            gmail: document.getElementById("gmail").value,
+            tipo: document.getElementById("tipoLixo").value,
+            quantidade: document.getElementById("quantidade").value,
+            data: document.getElementById("data").value
+        };
+        
+        const formData = new FormData(form);
+
+        try {
+            // 4. Envio Assíncrono
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.text(); 
+            
+            if (response.ok) {
+                // 5. Sucesso: Atualiza Tabela e Limpa Formulário
+                addRowToTable(formsData);
+                form.reset();
+                previsualizacoesContainer.innerHTML = '';
+                alert("Sucesso: " + result); 
+            } else {
+                // 6. Falha do Servidor
+                alert("Erro do Servidor PHP: " + result); 
+            }
+
+        } catch (error) {
+            // 7. Erro de Rede
+            alert("❌ Erro de rede ou servidor: " + error.message);
+        } finally {
+            // 8. Desbloqueio e Restauração da Animação
+            submitButtonElement.disabled = false;
+            submitButtonElement.textContent = 'Adicionar Resultado';
+        }
+    }
+
+    labelAnexo.addEventListener('click', showClick);
+
+    // --- Anexação de Listeners ---
+    submitButtonElement.addEventListener('click', handleSubmit);
+    fileInput.addEventListener('change', handleFileChange);
+
+});</script>
 
 
   <footer>
