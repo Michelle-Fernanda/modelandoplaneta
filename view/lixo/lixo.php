@@ -1,3 +1,53 @@
+<?php
+  // Inclua o código das funções de manipulação de JSON do seu arquivo anterior (post.php)
+// Se você está incluindo este código dentro de uma estrutura maior, ajuste o include/require.
+
+// Caminho do arquivo JSON
+$jsonFile = __DIR__ . '/lixo.json';
+  // Funções para ler os dados do arquivo JSON
+  function lerUsuarios($jsonFile) {
+      if (!file_exists($jsonFile)) {
+          return [];
+      }
+      $json = file_get_contents($jsonFile);
+      return json_decode($json, true) ?: [];
+  }
+
+  // -------------------------------------------------------------------------
+  // LÓGICA PARA LER O JSON E GERAR AS LINHAS DA TABELA
+  // -------------------------------------------------------------------------
+
+  $usuarios = lerUsuarios($jsonFile);
+  $tabela_html = '';
+
+  if (!empty($usuarios)) {
+      // Itera sobre cada registro no JSON
+      foreach ($usuarios as $registro) {
+          $tipoLixo = htmlspecialchars($registro['tipoLixo'] ?? 'N/A');
+          $quantidade = htmlspecialchars($registro['quantidade'] ?? 'N/A');
+          $data = htmlspecialchars($registro['data'] ?? 'N/A');
+
+          // Formata a data para exibir no formato DD/MM/AAAA, mas mantém o formato YYYY-MM-DD para o input type="date"
+          $dataDisplay = date('d/m/Y', strtotime($data));
+          
+          // Constrói a linha da tabela (tr)
+          // Nota: Removi os inputs da tabela de resultados, pois ela deve ser apenas para visualização. 
+          // Manter inputs em uma tabela gerada dinamicamente pelo PHP que não tem função de edição
+          // no frontend causa problemas de formatação e lógica. Se precisar de edição, o JS/PHP precisa ser mais complexo.
+          $tabela_html .= "
+              <tr>
+                  <td>{$tipoLixo}</td>
+                  <td>{$quantidade}</td>
+                  <td>{$dataDisplay}</td>
+              </tr>
+          ";
+      }
+  } else {
+      $tabela_html = '<tr><td colspan="3" style="text-align: center;">Nenhum resultado anotado ainda.</td></tr>';
+  }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -228,6 +278,7 @@
         </tr>
       </thead>
       <tbody id="tabelaUsuarios">
+        <?php echo $tabela_html; ?>
       </tbody>
     </table>
   </section>
@@ -318,23 +369,6 @@
     startBlinking();
 
 
-    // --- FUNÇÕES DE MANIPULAÇÃO DO FORMULÁRIO E TABELA ---
-
-    /**
-     * Adiciona uma nova linha à tabela de resultados.
-     * @param {object} data - Os dados a serem exibidos.
-     */
-    function addRowToTable(data) {
-        const newRow = tabelaBody.insertRow();
-
-        alert(data.data);
-
-        newRow.innerHTML = `
-            <td>${data.tipo}</td>
-            <td>${data.quantidade}</td>
-            <td>${data.data}</td>
-        `;
-    }
 
     /**
      * Processa a pré-visualização de arquivos anexados.
@@ -414,10 +448,11 @@
             
             if (response.ok) {
                 // 5. Sucesso: Atualiza Tabela e Limpa Formulário
-                addRowToTable(formsData);
                 form.reset();
                 previsualizacoesContainer.innerHTML = '';
                 alert("Sucesso: " + result); 
+
+                window.location.reload();
             } else {
                 // 6. Falha do Servidor
                 alert("Erro do Servidor PHP: " + result); 
