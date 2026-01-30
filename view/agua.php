@@ -7,6 +7,7 @@
   <title>Desperdício de Água</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script type="module" src="Components/Elements/calculadora.js"></script>
   <script type="module" src="Components/Elements/conversor.js"></script>
@@ -17,6 +18,34 @@
 </head>
 
 <body>
+  <style>
+    :root{--accent:#0ea5a4;--bg:#f8fafc}
+body{font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;padding:0;background:var(--bg);color:#0f172a}
+header{background:#ffffff;padding:1rem 1.25rem;border-bottom:1px solid #e6eef0}
+header h1{margin:0;font-family:'Fredoka One',sans-serif}
+main{max-width:1100px;margin:1.25rem auto;padding:1rem}
+
+
+/* Form e inputs estilo lixo.php */
+.form-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.06);margin-bottom:1rem}
+label{display:block;margin-bottom:6px;font-weight:600}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+input[type=text], input[type=number], input[type=date]{width:100%;padding:10px;border:1px solid #d1e8e6;border-radius:8px;font-size:0.95rem}
+.menu-toggle{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+.menu-toggle:disabled{opacity:0.6;cursor:not-allowed}
+
+
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+th,td{padding:10px;border-bottom:1px solid #eef6f6;text-align:center}
+thead th{background:#e6f6f5;font-weight:700}
+
+
+.row-actions{display:flex;gap:8px;justify-content:center}
+
+
+/* Chart container */
+.chart-card{background:#fff;padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+  </style>
   <header>
     <a href=".">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
@@ -130,7 +159,7 @@
   </section>
 
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-4">💧 Vamos Usar a Matemática para Investigar o Uso da Água?</h2>
+    <h2 class="text-2xl font-bold text-center mb-4">💧 Agora vamos usar a Matemática para Investigar o Uso da Água?</h2>
 
     <p class="mb-4 text-justify">
       Observar, anotar, medir e calcular! A matemática pode ajudar a entender melhor como usamos (ou desperdiçamos!) a
@@ -201,12 +230,120 @@
   </div>
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
 
+        <section class="form-card">
+<h2>Adicionar Resultado</h2>
+<form id="formAgua" method="post" action="<?php echo basename(__FILE__); ?>" autocomplete="off">
+<div class="grid-3">
+<div>
+<label for="dia">Dia / Observação</label>
+<input type="text" id="dia" name="dia" placeholder="Ex: Segunda / Refeição" required>
+</div>
+
+
+<div>
+<label for="ingerido">Quantidade ingerida (ml)</label>
+<input type="number" id="ingerido" name="ingerido" min="0" step="0.1" placeholder="Ex: 250" required>
+</div>
+
+
+<div>
+<label for="desperdicado">Quantidade desperdiçada (ml)</label>
+<input type="number" id="desperdicado" name="desperdicado" min="0" step="0.1" placeholder="Ex: 50" required>
+</div>
+
+
+<div>
+<label for="data">Data</label>
+<input type="date" id="data" name="data" required>
+</div>
+</div>
+
+
+<div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+<button type="button" id="btnAdd" class="menu-toggle">Adicionar Resultado</button>
+<button type="button" id="btnExportPDF" class="menu-toggle" style="background:#2563eb">Exportar PDF</button>
+</div>
+</form>
+</section>
+
+
+<section style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start">
+<div class="form-card" id="tabelaResultados">
+<h3>Resultados Anotados</h3>
+<table>
+<thead>
+<tr><th>Dia</th><th>Ingerido (ml)</th><th>Desperdiçado (ml)</th><th>Data</th></tr>
+</thead>
+<tbody id="tabelaUsuarios">
+<?php echo $tabela_html; ?>
+</tbody>
+</table>
+</div>
+
+
+<div class="chart-card">
+<h3 style="margin-top:0">Gráfico: Ingerido x Desperdiçado</h3>
+<canvas id="chartAgua" width="400" height="300"></canvas>
+</div>
+</section>
+
+  <section class="atividade">
+    <h2>Registro de Uso da Água</h2>
+
+    <table id="tabela-agua" border="1" style="width:100%; text-align:center;">
+      <thead>
+        <tr>
+          <th>Dia</th>
+          <th>Quantidade ingerida (ml)</th>
+          <th>Quantidade desperdiçada (ml)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" placeholder="Segunda"></td>
+          <td><input type="number" min="0"></td>
+          <td><input type="number" min="0"></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="Terça"></td>
+          <td><input type="number" min="0"></td>
+          <td><input type="number" min="0"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button id="add-row">+ Adicionar Linha</button>
+    <button id="baixar-pdf">📄 Baixar PDF</button>
+</section>
+
+
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
     <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    document.getElementById("add-row").addEventListener("click", () => {
+      const tbody = document.querySelector("#tabela-agua tbody");
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" placeholder="Dia"></td>
+        <td><input type="number" min="0"></td>
+        <td><input type="number" min="0"></td>`;
+      tbody.appendChild(row);
+    });
+
+    // PDF
+    document.getElementById("baixar-pdf").addEventListener("click", () => {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+      pdf.html(document.querySelector(".atividade"), {
+        callback: () => pdf.save("relatorio_agua.pdf")
+      });
+});
+</script>
+
 </body>
 
 </html>

@@ -39,7 +39,7 @@
     <h1>🌱 VOCÊ SABIA?</h1>
     <p>Árvores no perímetro urbano podem trazer muitos benefícios! Veja só:</p>
     <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2rem;">
-
+      
       <!-- Coluna do vídeo -->
       <div style="flex: 1 1 45%; min-width: 300px;">
         <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px;">
@@ -241,6 +241,125 @@
     <div class="fala">Será que cabe uma floresta em miniatura perto da escola? Vamos investigar! 🔍🏫</div>
   </div>
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
+  
+  <section class="intro" style="margin-top: 3rem; text-align: center;">
+  <h2>🗺️ Vamos usar o Google Maps?</h2>
+
+  <p style="font-size: 1.2rem;">
+    Descubra no mapa onde podemos plantar árvores na escola! 🌳  
+    Depois, volte aqui e faça o cálculo!
+  </p>
+
+  <a href="https://www.google.com/maps" target="_blank" 
+     style="display:inline-block; background:#4CAF50; color:white; padding:12px 20px; border-radius:10px; font-size:1.4rem; text-decoration:none; margin:1rem;">
+    📍 Abrir Google Maps
+  </a>
+
+  <hr style="margin: 2rem 0;">
+
+  <h2>🧮 Quantas árvores cabem?</h2>
+
+  <p style="font-size: 1.2rem;">
+    Digite o tamanho do espaço que vocês mediram e escolha o espaço para cada árvore:
+  </p>
+
+  <div style="margin: 2rem auto; max-width: 400px; padding: 1rem; background: #f0fff0; border-radius: 12px;">
+    <label>📏 Tamanho do espaço (em metros):</label>
+    <input id="espaco" type="number" placeholder="Ex: 30" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
+    
+    <br><br>
+
+    <label>🌳 Espaço para cada árvore (em metros):</label>
+    <input id="distancia" type="number" value="3" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
+    
+    <br><br>
+
+    <button onclick="calcularArvores()" 
+      style="background:#28a745; color:white; border:none; padding:12px; width:100%; font-size:1.3rem; border-radius:10px;">
+      ✨ Calcular
+    </button>
+
+    <h3 id="resultado" style="margin-top:1.5rem; font-size:1.8rem;"></h3>
+  </div>
+
+  <hr style="margin: 2rem 0;">
+
+  <h2>💡 Sua Resposta!</h2>
+
+  <p style="font-size: 1.1rem;">
+    Agora escreva o que você descobriu! 😊
+  </p>
+
+  <textarea id="respostaAluno" placeholder="Ex: Acho que cabem 12 árvores perto do muro da quadra..."
+    style="width:90%; height:120px; font-size:1.2rem; padding:10px; border-radius:12px; border:3px solid #28a745; resize:none; margin-top:10px;">
+  </textarea>
+
+  <br><br>
+
+  <button onclick="salvarResposta()" 
+    style="background:#1e88e5; color:white; padding:12px 18px; border-radius:10px; font-size:1.3rem; border:none;">
+    💾 Salvar Minha Resposta
+  </button>
+
+  <p id="confirmacao" style="margin-top:15px; font-weight:bold;"></p>
+
+  <hr style="margin: 2rem 0;">
+
+  <h2>💰 Quanto custaria comprar as mudas?</h2>
+
+  <div style="margin:2rem auto; max-width:400px; padding:1rem; background:#fff7d1; border-radius:12px;">
+    <label>💵 Preço de cada muda (R$):</label>
+    <input id="preco" type="number" placeholder="Ex: 18" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
+    
+    <br><br>
+
+    <button onclick="calcularPreco()" 
+      style="background:#e0b300; color:white; border:none; padding:12px; width:100%; font-size:1.3rem; border-radius:10px;">
+      💚 Ver valor total
+    </button>
+
+    <h3 id="resultadoPreco" style="margin-top:1.3rem; font-size:1.6rem;"></h3>
+  </div>
+
+</section>
+
+<script>
+function calcularArvores() {
+  const espaco = Number(document.getElementById("espaco").value);
+  const distancia = Number(document.getElementById("distancia").value);
+  const total = Math.floor(espaco / distancia);
+
+  document.getElementById("resultado").innerText =
+    total > 0 
+    ? `🌳 Cabem aproximadamente ${total} árvores!`
+    : "⚠️ Coloque números maiores!";
+}
+
+function calcularPreco() {
+  const preco = Number(document.getElementById("preco").value);
+  const espaco = Number(document.getElementById("espaco").value);
+  const distancia = Number(document.getElementById("distancia").value);
+  const total = Math.floor(espaco / distancia);
+  const totalPreco = total * preco;
+
+  document.getElementById("resultadoPreco").innerText =
+    preco > 0 && total > 0
+    ? `💰 Total: R$ ${totalPreco.toFixed(2)}`
+    : "⚠️ Preencha todos os valores!";
+}
+
+function salvarResposta() {
+  const resposta = document.getElementById("respostaAluno").value.trim();
+  if (!resposta) {
+    document.getElementById("confirmacao").innerText = "⚠️ Você precisa escrever algo primeiro!";
+    return;
+  }
+
+  localStorage.setItem("resposta_arvores", resposta);
+  document.getElementById("confirmacao").innerText = "✔ Sua resposta foi salva!";
+}
+</script>
+
 
 
   <footer>

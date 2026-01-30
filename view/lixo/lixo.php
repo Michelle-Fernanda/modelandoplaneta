@@ -269,18 +269,21 @@ $jsonFile = __DIR__ . '/lixo.json';
     </form>
 
     <h3>Resultados Anotados</h3>
-    <table id="tabelaResultados">
-      <thead>
-        <tr>
-          <th>Tipo de Lixo</th>
-          <th>Quantidade (kg)</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaUsuarios">
-        <?php echo $tabela_html; ?>
-      </tbody>
-    </table>
+    <div id="tabelaResultados">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Lixo</th>
+            <th>Quantidade (kg)</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+          <tbody id="tabelaUsuarios">
+            <?php echo $tabela_html; ?>
+          </tbody>
+      </table>
+    </div>
+    <button id="pdf">PDF</button>
   </section>
   <script src="script.js"></script>
   <script>document.addEventListener('DOMContentLoaded', () => {
@@ -474,7 +477,31 @@ $jsonFile = __DIR__ . '/lixo.json';
     submitButtonElement.addEventListener('click', handleSubmit);
     fileInput.addEventListener('change', handleFileChange);
 
-});</script>
+})
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="module">
+
+    document.getElementById("pdf").onclick = async function gerarPDF() {
+      const div = document.getElementById("tabelaResultados");
+      const canvas = await html2canvas(div);
+      const imgData = canvas.toDataURL("image/png");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let position = 0;
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.save("relatorio.pdf");
+   
+    }
+  </script>
 
 
   <footer>
