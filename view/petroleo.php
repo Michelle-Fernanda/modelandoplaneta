@@ -15,6 +15,18 @@
   <script type="module" src="Components/Elements/ferramentas.js"></script>
 </head>
 
+<style>
+  .leitura-destaque {
+    background: #e6f4ff;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    max-width: 850px;
+    border-radius: 16px;
+    text-align: center;
+  }
+
+</style>
+
 <body>
 
   <header>
@@ -46,9 +58,15 @@
         allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;">
       </iframe>
     </div>
-
-    <p>VAMOS LER UM POUCO SOBRE E DESCOBRIR ALGUNS IMPACTOS DO PETRÓLEO NOS MARES.</p>
   </section>
+
+  <section class="leitura-destaque">
+    <h2>📘 Vamos ler um pouco?</h2>
+    <p>
+      VAMOS LER UM POUCO SOBRE E DESCOBRIR ALGUNS IMPACTOS DO PETRÓLEO NOS MARES.
+    </p>
+  </section>
+
 
   <section class="intro">
     <div
@@ -152,10 +170,8 @@
         <li>Meçam <strong>1800 ml de água</strong> e coloquem em um recipiente transparente.</li>
         <li>Depois, adicionem <strong>200 ml de óleo de cozinha</strong> por cima da água.</li>
         <li>Observem: o que aconteceu com o óleo? Ele afundou ou ficou por cima?</li>
-        <li>Usem colher, papel-toalha ou algodão para tentar retirar o óleo.</li>
-        <li>Façam <strong>contas simples</strong>: quantos ml de óleo vocês conseguiram tirar da água? Quanto ainda
-          ficou?</li>
-        </ul>
+        <br>
+        <br>
         <p>Essa atividade une <strong>ciência, matemática e trabalho em equipe</strong> para ajudar vocês a pensarem em
           como cuidar melhor do nosso planeta!</p>
       </div>
@@ -182,24 +198,16 @@
         </ul>
       </div>
 
-      <!-- Coluna 2 -->
-      <div class="border border-gray-200 rounded-lg p-4">
-        <h3 class="font-semibold mb-2">📏 Medindo a área atingida</h3>
-        <ul class="list-disc pl-4 space-y-1">
-          <li>Use uma bandeja com água e gotas de óleo (ou corante).</li>
-          <li>Com uma régua, meça quantos centímetros o óleo se espalhou.</li>
-          <li>Desenhe num papel quadriculado a mancha do óleo.</li>
-          <li>Conte quantos quadradinhos ela ocupa.</li>
-        </ul>
-      </div>
-
       <!-- Coluna 3 -->
       <div class="border border-gray-200 rounded-lg p-4">
         <h3 class="font-semibold mb-2">📐 Fazendo estimativas e cálculos</h3>
         <ul class="list-disc pl-4 space-y-1">
-          <li>Se 1 gota cobre 4 quadradinhos, quantos quadradinhos seriam com 3 gotas?</li>
-          <li>O que acontece se o vento ou movimento da água espalhar ainda mais?</li>
-          <li>Crie um gráfico com a área ocupada por diferentes quantidades de óleo.</li>
+          <li>
+            Usem materiais que podem te auxiliar nas estimativas da quantidade de água poluido (colher, papel-toalha ou algodão). Seu professor irá fornecer!
+          </li>
+          <li>
+            Façam contas simples: quantos ml de óleo vocês conseguem tirar da água? Quanto ainda ficou? Hora de usar o que aprendeu
+          </li>
           <li>Discuta como esses números ajudam a entender o impacto ambiental.</li>
         </ul>
       </div>
@@ -230,71 +238,6 @@
   </div>
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
 
-  <section class="atividade-matematica" style="margin-top: 50px; background: #e6f4ff; padding: 30px; border-radius: 20px;">
-  <h2 style="text-align: center; font-size: 2rem;">🧮 Matemática do Petróleo no Mar</h2>
-  <p style="text-align: center; font-size: 1.2rem;">
-    Vamos descobrir, com a matemática, como o petróleo se espalha na água!
-  </p>
-
-  <div style="max-width: 600px; margin: auto; margin-top: 20px; background: white; padding: 20px; border-radius: 16px; border: 2px solid #66a3ff;">
-    <h3>🔢 Quantos quadradinhos o óleo ocupa?</h3>
-    <p>Sabemos que <strong>1 gota cobre 4 quadradinhos</strong> na água.</p>
-
-    <label for="qtdGotas"><strong>Quantas gotas você quer simular?</strong></label>
-    <input 
-      type="number" 
-      id="qtdGotas" 
-      min="1" 
-      placeholder="Ex: 3" 
-      style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #aaa; margin-top: 10px;"
-    >
-
-    <button onclick="calcularArea()" style="
-      margin-top: 15px;
-      padding: 10px 15px;
-      border: none;
-      background: #007bff;
-      color: white;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;">
-      📍 Calcular Área
-    </button>
-
-    <p id="resultadoArea" style="margin-top: 15px; font-size: 1.2rem; font-weight: bold;"></p>
-  </div>
-
-
-  <!-- Segunda parte -->
-  <div style="max-width: 700px; margin: 40px auto; background: #fff5e6; padding: 20px; border-radius: 16px; border: 2px solid #ffb84d;">
-    <h3>🌬 E se o vento espalhar mais?</h3>
-    <p>Quando o vento e as ondas agitam a água, o óleo cobre uma área maior!</p>
-    <p>Escolha um cenário e compare:</p>
-
-    <select id="cenario" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #aaa;">
-      <option value="4">🌊 Água parada (4 quadradinhos por gota)</option>
-      <option value="7">💨 Vento fraco (7 quadradinhos por gota)</option>
-      <option value="15">🌪 Mar agitado (15 quadradinhos por gota)</option>
-    </select>
-
-    <button onclick="calcularCenario()" style="
-      margin-top: 15px;
-      padding: 10px 15px;
-      border: none;
-      background: #ff9800;
-      color: white;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;">
-      🌡 Comparar Cenário
-    </button>
-
-    <p id="resultadoCenario" style="margin-top: 15px; font-size: 1.2rem; font-weight: bold;"></p>
-  </div>
-
-  <p style="text-align: center; margin-top: 30px; font-size: 1.3rem; font-weight: bold;">
-    A Matemática nos ajuda a proteger os animais e o oceano! 🌍💙
-  </p>
 </section>
 
 <script>

@@ -15,6 +15,7 @@
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
   <script type="module" src="Components/Elements/menu.js"></script>
   <script type="module" src="Components/Elements/ferramentas.js"></script>
+  <script type="module" src="Components/Elements/tabelatest.js"></script>
 </head>
 
 <body>
@@ -162,7 +163,8 @@ thead th{background:#e6f6f5;font-weight:700}
     <h2 class="text-2xl font-bold text-center mb-4">💧 Agora vamos usar a Matemática para Investigar o Uso da Água?</h2>
 
     <p class="mb-4 text-justify">
-      Observar, anotar, medir e calcular! A matemática pode ajudar a entender melhor como usamos (ou desperdiçamos!) a
+      Observar, anotar, medir e calcular! <br>
+      A matemática pode ajudar a entender melhor como usamos (ou desperdiçamos!) a
       água no dia a dia. Bora investigar?
     </p>
 
@@ -179,9 +181,9 @@ thead th{background:#e6f6f5;font-weight:700}
 
       <!-- Coluna 2: Registro e Coleta de Dados -->
       <div class="rounded-lg p-4 bg-blue-50 shadow-sm">
-        <h3 class="font-semibold mb-2">📅 Registro da Semana</h3>
+        <h3 class="font-semibold mb-2">📅 Registros</h3>
         <ul class="list-disc pl-4 space-y-1">
-          <li>Anote por 1 semana:</li>
+          <li>Anote por um periodo de tempo, isso pode te ajudar:</li>
           <ul class="list-circle pl-6">
             <li>💧 Quanta água foi usada</li>
             <li>🗑️ Quanta água foi desperdiçada</li>
@@ -193,12 +195,11 @@ thead th{background:#e6f6f5;font-weight:700}
 
       <!-- Coluna 3: Análise e Apresentação -->
       <div class="rounded-lg p-4 bg-blue-50 shadow-sm">
-        <h3 class="font-semibold mb-2">📊 Análise com Gráficos</h3>
+        <h3 class="font-semibold mb-2">📊 Análise os seus Dados:</h3>
         <ul class="list-disc pl-4 space-y-1">
-          <li>📈 Monte gráficos bem coloridos!</li>
           <li>➕ Conte tudo o que foi usado e jogado fora.</li>
-          <li>✖️ Faça continhas:
-            <br><em>“Se eu desperdiço 100ml por dia, quanto em 5 dias?”</em>
+          <li>✖️ Realize operações matemáticas:
+            <br><em>“Se eu desperdiço 100ml por dia, quanto em 2 ou 3 dias?”</em>
           </li>
           <li>🎤 Apresente o que descobriu para a turma!</li>
         </ul>
@@ -230,92 +231,8 @@ thead th{background:#e6f6f5;font-weight:700}
   </div>
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
 
-        <section class="form-card">
-<h2>Adicionar Resultado</h2>
-<form id="formAgua" method="post" action="<?php echo basename(__FILE__); ?>" autocomplete="off">
-<div class="grid-3">
-<div>
-<label for="dia">Dia / Observação</label>
-<input type="text" id="dia" name="dia" placeholder="Ex: Segunda / Refeição" required>
-</div>
 
-
-<div>
-<label for="ingerido">Quantidade ingerida (ml)</label>
-<input type="number" id="ingerido" name="ingerido" min="0" step="0.1" placeholder="Ex: 250" required>
-</div>
-
-
-<div>
-<label for="desperdicado">Quantidade desperdiçada (ml)</label>
-<input type="number" id="desperdicado" name="desperdicado" min="0" step="0.1" placeholder="Ex: 50" required>
-</div>
-
-
-<div>
-<label for="data">Data</label>
-<input type="date" id="data" name="data" required>
-</div>
-</div>
-
-
-<div style="margin-top:12px;display:flex;gap:12px;align-items:center">
-<button type="button" id="btnAdd" class="menu-toggle">Adicionar Resultado</button>
-<button type="button" id="btnExportPDF" class="menu-toggle" style="background:#2563eb">Exportar PDF</button>
-</div>
-</form>
-</section>
-
-
-<section style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start">
-<div class="form-card" id="tabelaResultados">
-<h3>Resultados Anotados</h3>
-<table>
-<thead>
-<tr><th>Dia</th><th>Ingerido (ml)</th><th>Desperdiçado (ml)</th><th>Data</th></tr>
-</thead>
-<tbody id="tabelaUsuarios">
-<?php echo $tabela_html; ?>
-</tbody>
-</table>
-</div>
-
-
-<div class="chart-card">
-<h3 style="margin-top:0">Gráfico: Ingerido x Desperdiçado</h3>
-<canvas id="chartAgua" width="400" height="300"></canvas>
-</div>
-</section>
-
-  <section class="atividade">
-    <h2>Registro de Uso da Água</h2>
-
-    <table id="tabela-agua" border="1" style="width:100%; text-align:center;">
-      <thead>
-        <tr>
-          <th>Dia</th>
-          <th>Quantidade ingerida (ml)</th>
-          <th>Quantidade desperdiçada (ml)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="text" placeholder="Segunda"></td>
-          <td><input type="number" min="0"></td>
-          <td><input type="number" min="0"></td>
-        </tr>
-        <tr>
-          <td><input type="text" placeholder="Terça"></td>
-          <td><input type="number" min="0"></td>
-          <td><input type="number" min="0"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <button id="add-row">+ Adicionar Linha</button>
-    <button id="baixar-pdf">📄 Baixar PDF</button>
-</section>
-
+  <water-tracker></water-tracker>
 
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>

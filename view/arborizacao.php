@@ -94,7 +94,7 @@
   </section>
 
   <section class="intro">
-    <h2>🌳 Exemplos de árvores da sua região:</h2>
+    <h2>🌳 Exemplos de árvores:</h2>
 
     <div class="gallery-images">
       <div class="activity">
@@ -138,7 +138,6 @@
             <li>Criar uma maquete da escola com árvores em miniatura.</li>
             <li>Fazer entrevistas com jardineiros ou paisagistas da região.</li>
             <li>Usar aplicativos de medição de espaço para planejar os plantios.</li>
-            <li>Organizar uma campanha "Adote uma Árvore" com a turma.</li>
           </ul>
         </div>
       </div>
@@ -171,11 +170,11 @@
   </section>
 
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-4">📐 Dicas Matemáticas para Planejar o Plantio</h2>
+    <h2 class="text-2xl font-bold text-center mb-4">📐 Dicas Matemáticas</h2>
 
     <p class="mb-4 text-justify">
       Vocês sabiam que a matemática pode ser uma grande aliada na hora de arborizar um lugar? Com ela, é possível medir,
-      calcular, planejar e até prever o crescimento das árvores. Bora aplicar o que aprenderam?
+      calcular, planejar e até prever o crescimento das árvores.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm md:text-base">
@@ -186,29 +185,21 @@
           <li>Meça os espaços ao redor da escola.</li>
           <li>Calcule quanto mede cada lado disponível.</li>
           <li>Use régua, trena ou aplicativo de medição.</li>
-          <li>Marquem no chão onde poderiam plantar.</li>
         </ul>
       </div>
 
       <!-- Coluna 2 -->
       <div class="rounded-lg p-4 bg-gray-50 shadow-sm">
-        <h3 class="font-semibold mb-2">🧠 Planejando com Criatividade</h3>
-        <ul class="list-disc pl-4 space-y-1">
-          <li>Façam desenhos e mapas de plantio.</li>
-          <li>Simulem com tampinhas ou blocos.</li>
-          <li>Montem maquetes ou linhas do tempo.</li>
-          <li>Compare a altura das árvores com a escola!</li>
-        </ul>
+        <h3 class="font-semibold mb-2">🧠 Planejando</h3>
+        <p>Pesquise informações sobre quais árvores são adequadas para arborização, serpa que é possível plantar qualquer árvore</p>
       </div>
 
       <!-- Coluna 3 -->
       <div class="rounded-lg p-4 bg-gray-50 shadow-sm">
         <h3 class="font-semibold mb-2">📊 Calculando e Analisando</h3>
         <ul class="list-disc pl-4 space-y-1">
-          <li>Quantas árvores cabem se cada uma precisa de 3m?</li>
-          <li>Monte tabelas com os dados coletados.</li>
-          <li>Crie gráficos com sombra, CO₂ ou espaço ocupado.</li>
-          <li>Simulem um orçamento de arborização.</li>
+          <li>As árvores podem ser plantadas lado a lado</li>
+          <li>Quantas árvores cabem se cada uma precisa de 3m</li>
         </ul>
       </div>
     </div>
@@ -243,16 +234,16 @@
   <img id="assistant-img" src="img/boneco.png" alt="Assistente">
   
   <section class="intro" style="margin-top: 3rem; text-align: center;">
-  <h2>🗺️ Vamos usar o Google Maps?</h2>
+  <h2>🗺️ Vamos usar o Google Earth?</h2>
 
   <p style="font-size: 1.2rem;">
     Descubra no mapa onde podemos plantar árvores na escola! 🌳  
     Depois, volte aqui e faça o cálculo!
   </p>
 
-  <a href="https://www.google.com/maps" target="_blank" 
+  <a href="https://earth.google.com/web/" target="_blank" 
      style="display:inline-block; background:#4CAF50; color:white; padding:12px 20px; border-radius:10px; font-size:1.4rem; text-decoration:none; margin:1rem;">
-    📍 Abrir Google Maps
+    📍 Abrir Google Earth
   </a>
 
   <hr style="margin: 2rem 0;">
@@ -304,21 +295,6 @@
   <p id="confirmacao" style="margin-top:15px; font-weight:bold;"></p>
 
   <hr style="margin: 2rem 0;">
-
-  <h2>💰 Quanto custaria comprar as mudas?</h2>
-
-  <div style="margin:2rem auto; max-width:400px; padding:1rem; background:#fff7d1; border-radius:12px;">
-    <label>💵 Preço de cada muda (R$):</label>
-    <input id="preco" type="number" placeholder="Ex: 18" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
-    
-    <br><br>
-
-    <button onclick="calcularPreco()" 
-      style="background:#e0b300; color:white; border:none; padding:12px; width:100%; font-size:1.3rem; border-radius:10px;">
-      💚 Ver valor total
-    </button>
-
-    <h3 id="resultadoPreco" style="margin-top:1.3rem; font-size:1.6rem;"></h3>
   </div>
 
 </section>

@@ -8,13 +8,15 @@ class Calculadora extends HTMLElement {
     this.current = "";
     this.previous = "";
     this.operator = null;
+    this.isOpen = false;
 
     this.shadowRoot.innerHTML = `
       <style>
-        .calc {
+        .calc-wrapper {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 8px;
+          outline: none;
         }
 
         .display {
@@ -30,16 +32,15 @@ class Calculadora extends HTMLElement {
           gap: 4px;
         }
 
-        .display .expr {
+        .expr {
           font-size: 12px;
           color: #8f8;
           min-height: 14px;
         }
 
-        .display .value {
+        .value {
           font-size: 22px;
         }
-
 
         button {
           padding: 12px;
@@ -51,45 +52,23 @@ class Calculadora extends HTMLElement {
           color: white;
         }
 
-        button:hover {
-          background: #0056b3;
-        }
+        button:hover { background: #0056b3; }
 
-        .op {
-          background: #ff9800;
-        }
+        .op { background: #ff9800; }
+        .op:hover { background: #e68900; }
 
-        .span2l {
-          grid-row: span 2;
-        }
+        .equal { background: #28a745; }
+        .equal:hover { background: #218a39; }
 
-        .span2c {
-          grid-column: span 2;
-        }
+        .clear { background: #dc3545; }
+        .clear:hover { background: #b42a38; }
 
-        .op:hover {
-          background: #e68900;
-        }
-
-        .equal {
-          background: #28a745;
-        }
-
-        .equal:hover {
-          background: #218a39;
-        }
-
-        .clear {
-          background: #dc3545;
-        }
-
-        .clear:hover {
-          background: #b42a38;
-        }
+        .span2l { grid-row: span 2; }
+        .span2c { grid-column: span 2; }
       </style>
 
       <menu-modal title="Calculadora">
-        <div class="calc">
+        <div class="calc-wrapper" tabindex="0">
           <div class="display">
             <div class="expr"></div>
             <div class="value">0</div>
@@ -108,7 +87,7 @@ class Calculadora extends HTMLElement {
           <button data-num="4">4</button>
           <button data-num="5">5</button>
           <button data-num="6">6</button>
-          
+
           <button data-num="1">1</button>
           <button data-num="2">2</button>
           <button data-num="3">3</button>
@@ -123,23 +102,25 @@ class Calculadora extends HTMLElement {
 
   connectedCallback() {
     const modal = this.shadowRoot.querySelector("menu-modal");
+    const wrapper = this.shadowRoot.querySelector(".calc-wrapper");
     const exprEl = this.shadowRoot.querySelector(".expr");
     const valueEl = this.shadowRoot.querySelector(".value");
 
+    /* ===== DISPLAY ===== */
     const updateValue = (v = this.current) => {
       valueEl.textContent = v || "0";
     };
 
     const updateExpr = () => {
-      exprEl.textContent = this.previous && this.operator
-        ? `${this.previous} ${this.operator}`
-        : "";
+      exprEl.textContent =
+        this.previous && this.operator ? `${this.previous} ${this.operator}` : "";
     };
 
+    /* ===== LÓGICA ===== */
     const compute = () => {
       const a = parseFloat(this.previous);
       const b = parseFloat(this.current);
-      if (isNaN(a) || isNaN(b)) return;
+      if (isNaN(a) || isNaN(b)) return null;
 
       switch (this.operator) {
         case "+": return a + b;
@@ -156,7 +137,6 @@ class Calculadora extends HTMLElement {
     };
 
     const inputOperator = (op) => {
-      // caso: trocar operador
       if (this.previous && !this.current) {
         this.operator = op;
         updateExpr();
@@ -167,27 +147,24 @@ class Calculadora extends HTMLElement {
 
       if (this.previous && this.current) {
         this.previous = compute().toString();
-      } else if (this.current) {
+      } else {
         this.previous = this.current;
       }
 
       this.current = "";
       this.operator = op;
-
-      updateExpr();        // ex: "12 +"
-      updateValue("0");    // limpa display inferior
+      updateExpr();
+      updateValue("0");
     };
 
-  const backspace = () => {
-    if (!this.current) return;
-    this.current = this.current.slice(0, -1);
-    updateValue(this.current || "0");
-  };
-
+    const backspace = () => {
+      if (!this.current) return;
+      this.current = this.current.slice(0, -1);
+      updateValue(this.current || "0");
+    };
 
     const equal = () => {
       if (!this.operator || !this.previous || !this.current) return;
-
       this.current = compute().toString();
       this.previous = "";
       this.operator = null;
@@ -203,38 +180,60 @@ class Calculadora extends HTMLElement {
       updateValue();
     };
 
-    // Botões
+    /* ===== BOTÕES ===== */
     this.shadowRoot.querySelectorAll("[data-num]").forEach(b =>
-      b.addEventListener("click", () => inputNumber(b.dataset.num))
+      b.addEventListener("click", () => {
+        inputNumber(b.dataset.num);
+        wrapper.focus();
+      })
     );
 
     this.shadowRoot.querySelectorAll("[data-op]").forEach(b =>
-      b.addEventListener("click", () => inputOperator(b.dataset.op))
+      b.addEventListener("click", () => {
+        inputOperator(b.dataset.op);
+        wrapper.focus();
+      })
     );
 
-    this.shadowRoot.querySelector(".equal").addEventListener("click", equal);
-    this.shadowRoot.querySelector(".clear").addEventListener("click", clear);
+    this.shadowRoot.querySelector(".equal").addEventListener("click", () => {
+      equal();
+      wrapper.focus();
+    });
 
-    // ⌨️ SUPORTE A TECLADO
-    this._keyHandler = (e) => {
-      if (modal.shadowRoot.querySelector(".modal").style.display !== "block") return;
+    this.shadowRoot.querySelector(".clear").addEventListener("click", () => {
+      clear();
+      wrapper.focus();
+    });
+
+    /* ===== ⌨️ TECLADO (FOCO REAL) ===== */
+    const onKeyDown = (e) => {
+      if (!this.isOpen) return;
 
       if (e.key >= "0" && e.key <= "9") inputNumber(e.key);
-      if (e.key === ".") inputNumber(".");
-      if (["+", "-", "*", "/"].includes(e.key)) inputOperator(e.key);
-      if (e.key === "Enter" || e.key === "=") equal();
-      if (e.key === "Backspace") backspace();
-      if (e.key === "Escape") clear();
+      else if (e.key === ".") inputNumber(".");
+      else if (["+", "-", "*", "/"].includes(e.key)) inputOperator(e.key);
+      else if (e.key === "Enter" || e.key === "=") {
+        e.preventDefault();
+        equal();
+      }
+      else if (e.key === "Backspace") backspace();
+      else if (e.key === "Escape") this.close();
     };
 
-    document.addEventListener("keydown", this._keyHandler);
+    /* ===== OPEN / CLOSE ===== */
+    this.open = () => {
+      modal.open();
+      this.isOpen = true;
+      wrapper.focus();
+      wrapper.addEventListener("keydown", onKeyDown);
+    };
 
-    // open / close
-    this.open = () => modal.open();
-    this.close = () => modal.close();
+    this.close = () => {
+      modal.close();
+      this.isOpen = false;
+      wrapper.removeEventListener("keydown", onKeyDown);
+    };
   }
-
-
 }
 
 customElements.define("calc-modal", Calculadora);
