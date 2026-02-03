@@ -1,3 +1,5 @@
+
+
 class FerramentasMenu extends HTMLElement {
   constructor() {
     super();
@@ -206,7 +208,7 @@ class FerramentasMenu extends HTMLElement {
     // Adiciona opções com ícones coloridos
     this.createOption(list, "🧮", "Calculadora", "#ffb300", () => document.querySelector("calc-modal")?.open());
     this.createOption(list, "🔄", "Conversor", "#29b6f6", () => document.querySelector("conversor-modal")?.open());
-    this.createOption(list, "❓", "Ajuda", "#ab47bc", () => alert("Ajuda"));
+    this.createOption(list, "❓", "Ajuda", "#ab47bc", () => window.location.href = "/sobre");
 
     // Toggle do menu
     this.toggleButton.addEventListener("click", () => {

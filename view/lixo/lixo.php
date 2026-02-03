@@ -5,46 +5,10 @@
 // Caminho do arquivo JSON
 $jsonFile = __DIR__ . '/lixo.json';
   // Funções para ler os dados do arquivo JSON
-  function lerUsuarios($jsonFile) {
-      if (!file_exists($jsonFile)) {
-          return [];
-      }
-      $json = file_get_contents($jsonFile);
-      return json_decode($json, true) ?: [];
-  }
 
   // -------------------------------------------------------------------------
   // LÓGICA PARA LER O JSON E GERAR AS LINHAS DA TABELA
   // -------------------------------------------------------------------------
-
-  $usuarios = lerUsuarios($jsonFile);
-  $tabela_html = '';
-
-  if (!empty($usuarios)) {
-      // Itera sobre cada registro no JSON
-      foreach ($usuarios as $registro) {
-          $tipoLixo = htmlspecialchars($registro['tipoLixo'] ?? 'N/A');
-          $quantidade = htmlspecialchars($registro['quantidade'] ?? 'N/A');
-          $data = htmlspecialchars($registro['data'] ?? 'N/A');
-
-          // Formata a data para exibir no formato DD/MM/AAAA, mas mantém o formato YYYY-MM-DD para o input type="date"
-          $dataDisplay = date('d/m/Y', strtotime($data));
-          
-          // Constrói a linha da tabela (tr)
-          // Nota: Removi os inputs da tabela de resultados, pois ela deve ser apenas para visualização. 
-          // Manter inputs em uma tabela gerada dinamicamente pelo PHP que não tem função de edição
-          // no frontend causa problemas de formatação e lógica. Se precisar de edição, o JS/PHP precisa ser mais complexo.
-          $tabela_html .= "
-              <tr>
-                  <td>{$tipoLixo}</td>
-                  <td>{$quantidade}</td>
-                  <td>{$dataDisplay}</td>
-              </tr>
-          ";
-      }
-  } else {
-      $tabela_html = '<tr><td colspan="3" style="text-align: center;">Nenhum resultado anotado ainda.</td></tr>';
-  }
 
 ?>
 
@@ -114,7 +78,6 @@ $jsonFile = __DIR__ . '/lixo.json';
         Vai entender o que são os <strong>resíduos sólidos</strong> e por que é importante cuidar deles com atenção.
         ♻️<br><br>
         🌱 Também vai conhecer ideias e projetos que já existem no Brasil e que ajudam a proteger o meio ambiente!
-        Quem sabe você e seus amigos não criam algo parecido na escola? 💡👧🧑
       </p>
 
     </div>
@@ -132,8 +95,8 @@ $jsonFile = __DIR__ . '/lixo.json';
       <li>Alguma parte desse lixo é reciclada?</li>
     </ul>
     <p>🕵️‍♀️🕵️‍♂️ Depois dessa investigação inicial, vocês terão uma missão muito importante:</p>
-    <p>Descobrir qual é a quantidade de lixo que a escola gera por dia ou por semana.</p>
-    <p>Usem a matemática para ajudar nessa tarefa, fazendo anotações, registros e até gráficos!</p>
+    <p>Descobrir qual é a quantidade de lixo gerado na sua escola!</p>
+    <p>Será que é possivel usar a matemática para ajudar nessa missão</p>
     <p>Vamos nessa? 💪🌱</p>
   </section>
 
@@ -151,7 +114,7 @@ $jsonFile = __DIR__ . '/lixo.json';
       <div class="border border-gray-200 rounded-lg p-4">
         <h3 class="font-semibold mb-2">🔍 Coletando dados</h3>
         <ul class="list-disc pl-4 space-y-1">
-          <li>Escolha um tipo de lixo para observar (orgânico, reciclável, do pátio ou das salas).</li>
+          <li>Escolha um tipo de lixo para observar (orgânico e recicláveis).</li>
           <li>Anote tudo o que conseguir: quantos sacos foram coletados? Qual o peso deles?</li>
           <li>Registre também o que descobriram nas entrevistas com funcionários ou colegas.</li>
         </ul>
@@ -165,17 +128,6 @@ $jsonFile = __DIR__ . '/lixo.json';
           <li>Ou usar um balde medidor para saber o volume (em litros).</li>
           <li>Quantos sacos de lixo cabem em uma lixeira da escola?</li>
           <li>Quantos sacos são cheios por dia?</li>
-        </ul>
-      </div>
-
-      <!-- Coluna 3 -->
-      <div class="border border-gray-200 rounded-lg p-4">
-        <h3 class="font-semibold mb-2">📐 Fazendo contas e descobertas</h3>
-        <ul class="list-disc pl-4 space-y-1">
-          <li>Quantos quilos de lixo são gerados por semana?</li>
-          <li>Qual o total por sala ou por grupo de alunos?</li>
-          <li>Se cada aluno produz X gramas por dia, quanto será no mês?</li>
-          <li>Façam um gráfico com os resultados para comparar os dias ou os tipos de lixo.</li>
         </ul>
       </div>
     </div>
@@ -268,8 +220,15 @@ $jsonFile = __DIR__ . '/lixo.json';
         </div>
     </form>
 
-    <h3>Resultados Anotados</h3>
-    <div id="tabelaResultados">
+    <h2>Resultados Anotados</h2>
+    
+    <div id="tabelaResultados" class="Tabela">
+      <center>
+        <div id="tituloWrapper" style="display: inline-flex; align-items: center; gap: 8px;">
+          <h1 id="titulotabela" style="margin: 0;">Sem título</h1>
+          <span id="editarTitulo" style="cursor: pointer;">✏️</span>
+        </div>
+      </center>
       <table>
         <thead>
           <tr>
@@ -283,7 +242,11 @@ $jsonFile = __DIR__ . '/lixo.json';
           </tbody>
       </table>
     </div>
-    <button id="pdf">PDF</button>
+
+    <center>
+      <button id="pdf">Baixar PDF</button>
+      <button id="envemail">Enviar por Email</button>
+    </center>
   </section>
   <script src="script.js"></script>
   <script>document.addEventListener('DOMContentLoaded', () => {
@@ -416,65 +379,61 @@ $jsonFile = __DIR__ . '/lixo.json';
         });
     }
 
-    /**
-     * Lida com a submissão assíncrona do formulário.
-     */
-    async function handleSubmit(event) {
-        event.preventDefault();
+    function adicionarLinhaTabela(dado) {
+      const tr = document.createElement("tr");
 
-        // 1. Validação
-        if(!form.reportValidity()) {
-            return;
-        }
-        
-        submitButtonElement.disabled = true;
-        submitButtonElement.textContent = 'Enviando...';
-        
-        // 3. Captura dos valores
-        const formsData = {
-            gmail: document.getElementById("gmail").value,
-            tipo: document.getElementById("tipoLixo").value,
-            quantidade: document.getElementById("quantidade").value,
-            data: document.getElementById("data").value
-        };
-        
-        const formData = new FormData(form);
+      tr.innerHTML = `
+        <td>${dado.tipo}</td>
+        <td>${dado.quantidade}</td>
+        <td>${dado.data}</td>
+      `;
 
-        try {
-            // 4. Envio Assíncrono
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
+      document.getElementById("tabelaUsuarios").appendChild(tr);
+    }
 
-            const result = await response.text(); 
-            
-            if (response.ok) {
-                // 5. Sucesso: Atualiza Tabela e Limpa Formulário
-                form.reset();
-                previsualizacoesContainer.innerHTML = '';
-                alert("Sucesso: " + result); 
+    let resultados = [];
 
-                window.location.reload();
-            } else {
-                // 6. Falha do Servidor
-                alert("Erro do Servidor PHP: " + result); 
-            }
+    function adicionarResultado() {
+      const tipo = document.getElementById("tipoLixo").value;
+      const quantidade = document.getElementById("quantidade").value;
+      const data = document.getElementById("data").value;
 
-        } catch (error) {
-            // 7. Erro de Rede
-            alert("❌ Erro de rede ou servidor: " + error.message);
-        } finally {
-            // 8. Desbloqueio e Restauração da Animação
-            submitButtonElement.disabled = false;
-            submitButtonElement.textContent = 'Adicionar Resultado';
-        }
+      if (!tipo || !quantidade || !data) {
+        alert("Preencha todos os campos");
+        return;
+      }
+
+      const novoResultado = {
+        tipo,
+        quantidade: parseFloat(quantidade),
+        data
+      };
+
+      // 1. Guarda no JS
+      resultados.push(novoResultado);
+
+      // 2. Atualiza a tabela visual
+      adicionarLinhaTabela(novoResultado);
+
+      // 3. Limpa o form
+      document.getElementById("formResultados").reset();
+
+      console.log("Tabela atual:", resultados);
+    }
+
+    const input = document.getElementById("titulotabelain")
+
+    input.onchange = () => {
+      document.getElementById("titulotabela").innerHTML = input.value;
     }
 
     labelAnexo.addEventListener('click', showClick);
 
     // --- Anexação de Listeners ---
-    submitButtonElement.addEventListener('click', handleSubmit);
+    submitButtonElement.addEventListener('click', (e) => {
+      e.preventDefault();
+      adicionarResultado();
+    });
     fileInput.addEventListener('change', handleFileChange);
 
 })
@@ -483,11 +442,50 @@ $jsonFile = __DIR__ . '/lixo.json';
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script type="module">
 
+    // Script do titulo
+    const titulo = document.getElementById("titulotabela");
+    const editarBtn = document.getElementById("editarTitulo");
+
+    editarBtn.addEventListener("click", () => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = titulo.innerText;
+      input.style.fontSize = "2rem";
+      input.style.fontWeight = "bold";
+      input.style.textAlign = "center";
+      input.style.border = "2px solid #4caf50";
+      input.style.borderRadius = "8px";
+      input.style.padding = "4px 8px";
+      input.style.width = "100%";
+
+      // Substitui o título pelo input
+      titulo.replaceWith(input);
+      editarBtn.style.display = "none";
+      input.focus();
+
+      function salvar() {
+        titulo.innerText = input.value.trim() || "Sem título";
+        input.replaceWith(titulo);
+        editarBtn.style.display = "inline";
+      }
+
+      // Saiu do foco → salva
+      input.addEventListener("blur", salvar);
+
+      // Enter também salva
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          input.blur();
+        }
+      });
+    });
+
     document.getElementById("pdf").onclick = async function gerarPDF() {
+      document.getElementById("editarTitulo").style.display = "none";
       const div = document.getElementById("tabelaResultados");
       const canvas = await html2canvas(div);
       const imgData = canvas.toDataURL("image/png");
-
+      
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF("p", "mm", "a4");
 
@@ -499,8 +497,11 @@ $jsonFile = __DIR__ . '/lixo.json';
       let position = 0;
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       pdf.save("relatorio.pdf");
-   
+      document.getElementById("editarTitulo").style.display = "inline";
     }
+
+    
+
   </script>
 
 

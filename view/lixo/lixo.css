@@ -8,6 +8,10 @@
       font-family: 'Fredoka One', cursive;
     }
 
+    .Tabela table {
+      width: 100%;
+    }
+
     .resultados h2,
     .resultados h3 {
       text-align: center;
@@ -77,6 +81,10 @@
       align-items: center;
       font-size: 120%;
       
+    }
+
+    #titulotabelain {
+      margin-left: 5px;
     }
     
     .labelAnexo {
@@ -186,4 +194,62 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Adiciona "..." ao nome longo */
     max-width: 150px; /* Limita a largura do nome para evitar que o item fique enorme */
+}
+
+/* Container dos botões */
+center {
+  margin-top: 2rem;
+}
+
+/* Estilo base dos botões */
+#pdf,
+#envemail {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.6rem;
+  margin: 0.5rem;
+  border-radius: 14px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: 
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+  min-width: 160px;
+}
+
+/* Hover */
+#pdf:hover,
+#envemail:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #388e3c, #4caf50);
+}
+
+/* Clique */
+#pdf:active,
+#envemail:active {
+  transform: scale(0.97);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Diferencia levemente cada botão */
+#pdf::before {
+  content: "📄 ";
+}
+
+#envemail::before {
+  content: "📧 ";
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  #pdf,
+  #envemail {
+    width: 90%;
+    margin: 0.4rem 0;
+  }
 }
