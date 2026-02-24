@@ -4,7 +4,7 @@
 
   # Bloqueia acesso direto a qualquer arquivo PHP (exceto index.php)
   RewriteCond %{THE_REQUEST} \s/+(.*/)?([^/]+\.php)[\s?] [NC]
-  RewriteCond %2 !^index\.php$ [NC]
+  RewriteCond %2 !^(index|enviar_email)\.php$ [NC]
   RewriteRule ^ - [F,L]
 
   # Redireciona tudo para index.php, exceto arquivos/diretórios existentes

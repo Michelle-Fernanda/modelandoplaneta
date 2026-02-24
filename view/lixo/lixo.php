@@ -1,34 +1,199 @@
-<?php
-  // Inclua o código das funções de manipulação de JSON do seu arquivo anterior (post.php)
-// Se você está incluindo este código dentro de uma estrutura maior, ajuste o include/require.
-
-// Caminho do arquivo JSON
-$jsonFile = __DIR__ . '/lixo.json';
-  // Funções para ler os dados do arquivo JSON
-
-  // -------------------------------------------------------------------------
-  // LÓGICA PARA LER O JSON E GERAR AS LINHAS DA TABELA
-  // -------------------------------------------------------------------------
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Lixo na Escola</title>
+
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+  <!-- Seus estilos existentes (mantive referências) -->
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="view/lixo/lixo.css">
 
+  <!-- Componentes (mantive suas imports) -->
   <script type="module" src="Components/Elements/calculadora.js"></script>
   <script type="module" src="Components/Elements/conversor.js"></script>
-
   <script type="module" src="Components/Elements/acessibilidade.js"></script>
   <script type="module" src="Components/Elements/menu.js"></script>
   <script type="module" src="Components/Elements/ferramentas.js"></script>
+
+  <style>
+    /* ---------- Modal Email ---------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 460px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+      border-radius: 14px;
+      padding: 20px 20px 18px 20px;
+      box-shadow: 0 10px 30px rgba(19,35,64,0.12);
+      transform: translateY(-10px) scale(.98);
+      opacity: 0;
+      animation: modalIn 250ms ease forwards;
+      font-family: "Fredoka One", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    @keyframes modalIn {
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .modal-box h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.15rem;
+      letter-spacing: 0.2px;
+    }
+
+    .modal-desc {
+      color: #444;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .modal-input-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .modal-box input[type="email"] {
+      width: 100%;
+      padding: 12px 12px;
+      font-size: 0.98rem;
+      border-radius: 10px;
+      border: 2px solid #e6e9ef;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .08s ease;
+      box-sizing: border-box;
+    }
+
+    .modal-box input[type="email"]:focus {
+      border-color: #4caf50;
+      box-shadow: 0 6px 18px rgba(76,175,80,0.12);
+    }
+
+    .invalid {
+      border-color: #f44336 !important;
+      box-shadow: 0 6px 18px rgba(244,67,54,0.10) !important;
+      animation: shake .28s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0) }
+      20% { transform: translateX(-6px) }
+      40% { transform: translateX(6px) }
+      60% { transform: translateX(-4px) }
+      80% { transform: translateX(4px) }
+      100% { transform: translateX(0) }
+    }
+
+    .error-text {
+      color: #b00020;
+      font-size: .85rem;
+      margin-top: 6px;
+      display: none;
+    }
+    .error-text.show { display: block; }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      transition: transform .08s ease, box-shadow .12s ease;
+    }
+
+    .modal-btn:active { transform: translateY(1px); }
+
+    .btn-cancel {
+      background: #f5f5f7;
+      color: #222;
+      box-shadow: 0 6px 16px rgba(10,10,10,0.03);
+    }
+
+    .btn-send {
+      background: linear-gradient(90deg, #4caf50, #2ea44f);
+      color: white;
+      box-shadow: 0 8px 18px rgba(46,164,79,0.18);
+    }
+
+    .btn-send[disabled] {
+      opacity: .7;
+      cursor: default;
+    }
+
+    /* ---------- Top Notification ---------- */
+    .top-notification {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      top: 12px;
+      z-index: 10001;
+      min-width: 260px;
+      max-width: calc(100% - 40px);
+      padding: 12px 16px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: white;
+      font-family: "Fredoka One", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .top-notification.success { background: linear-gradient(90deg,#4CAF50,#2EA44F); }
+    .top-notification.error   { background: linear-gradient(90deg,#f44336,#e53935); }
+
+    .top-notification.show {
+      display: flex;
+      animation: notifyIn .28s ease forwards;
+    }
+
+    @keyframes notifyIn {
+      from { transform: translateX(-50%) translateY(-20px) scale(.98); opacity: 0; }
+      to   { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+    }
+
+    /* small helper for loading spinner in button */
+    .spinner {
+      border: 2px solid rgba(255,255,255,0.25);
+      border-left-color: rgba(255,255,255,0.9);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Keep the rest of your page layout responsive */
+    @media (max-width: 420px) {
+      .modal-box { padding: 16px; border-radius: 12px; }
+    }
+  </style>
 </head>
 
 <body>
@@ -40,18 +205,14 @@ $jsonFile = __DIR__ . '/lixo.json';
   </header>
 
   <ferramentas-x></ferramentas-x>
-
   <menu-x></menu-x>
-
   <calc-modal></calc-modal>
-
   <conversor-modal></conversor-modal>
-
   <acessibilidade-x></acessibilidade-x>
 
   <section class="intro"
     style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; align-items: flex-start; text-align: justify;">
-    <!-- Coluna da imagem e texto -->
+    <!-- Conteúdo original (mantido) -->
     <div style="flex: 1; min-width: 300px; max-width: 450px;">
       <img src="img/Lixo.png" alt="Imagem ilustrativa de lixo na escola"
         style="width: 100%; border-radius: 12px; margin-bottom: 1rem;">
@@ -64,7 +225,6 @@ $jsonFile = __DIR__ . '/lixo.json';
       <p>Mas você já parou pra pensar o que acontece com ele depois disso? 🤔</p>
     </div>
 
-    <!-- Coluna do vídeo e perguntas -->
     <div style="flex: 1; min-width: 300px; max-width: 450px;">
       <div
         style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 1rem;">
@@ -79,9 +239,7 @@ $jsonFile = __DIR__ . '/lixo.json';
         ♻️<br><br>
         🌱 Também vai conhecer ideias e projetos que já existem no Brasil e que ajudam a proteger o meio ambiente!
       </p>
-
     </div>
-
   </section>
 
   <section class="desen" style="text-align: justify;">
@@ -110,7 +268,7 @@ $jsonFile = __DIR__ . '/lixo.json';
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm md:text-base">
-      <!-- Coluna 1 -->
+      <!-- ... mantive suas colunas originais ... -->
       <div class="border border-gray-200 rounded-lg p-4">
         <h3 class="font-semibold mb-2">🔍 Coletando dados</h3>
         <ul class="list-disc pl-4 space-y-1">
@@ -120,7 +278,6 @@ $jsonFile = __DIR__ . '/lixo.json';
         </ul>
       </div>
 
-      <!-- Coluna 2 -->
       <div class="border border-gray-200 rounded-lg p-4">
         <h3 class="font-semibold mb-2">📏 Como medir o lixo?</h3>
         <ul class="list-disc pl-4 space-y-1">
@@ -137,18 +294,6 @@ $jsonFile = __DIR__ . '/lixo.json';
     </p>
   </section>
 
-  <!-- <div class="floating-menu">
-    <div class="menu-options" id="menuOptions">
-      <a href="lixo" title="Lixo na Escola">🗑️</a>
-      <a href="petroleo" title="Petróleo">⛽</a>
-      <a href="agua" title="Desperdício de Água">💧</a>
-      <a href="arborizacao" title="Arborização">🌳</a>
-      <a href="sobre" title="Quem Somos">👩‍🏫</a>
-      <a href="." title="Início">🏠</a>
-    </div>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  </div> -->
-
   <div class="fala-container">
     <button id="close-assistant" onclick="closeAssistant()">×</button>
     <div class="fala">Oiê! Bora descobrir quanto lixo sua escola produz?</div>
@@ -159,13 +304,9 @@ $jsonFile = __DIR__ . '/lixo.json';
 
   <section class="math-tips bg-white p-6 rounded-xl shadow-md">
     <h2 class="font-semibold mb-2">📋 Anote seus Resultados</h2>
+
     <form id="formResultados" method="POST" action="enviar_email.php" enctype="multipart/form-data" rel="noopener">
-        
-        <section>
-            <label for="gmail">E-mail do Professor:</label>
-            <input type="text" name="gmail" id="gmail" placeholder="prof@gmail.com" required>
-        </section>
-    
+        <!-- OBS: removi o campo de e-mail daqui (agora via modal) -->
         <section>
             <label for="tipoLixo">Tipo de lixo:</label>
             <input type="text" name="tipoLixo" id="tipoLixo" placeholder="Orgânico" required>
@@ -182,46 +323,30 @@ $jsonFile = __DIR__ . '/lixo.json';
         </section>
 
         <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 1rem; margin-top: 1rem;" id="addResult">
-          <button class="menu-toggle" type="button" onclick="" id="btnSubmit">
+          <button class="menu-toggle" type="button" id="btnSubmit">
               Adicionar Resultado
           </button>
-          
-          <label for="file-upload" class="labelAnexo"
-          id="labelAnexo">
+
+          <label for="file-upload" class="labelAnexo" id="labelAnexo">
             <span id="anexoIcone" >
-              
               <div id="clipe-container">
-                <img id="clipe-aberto" class="clipe-icone" 
-                  src="img/clip-de-papel.png" 
-                  alt="Clipe com Olhos Abertos">
-                  
-                <img id="clipe-fechado" class="clipe-icone" 
-                  src="img/clip-de-papel-fechado.png" 
-                  alt="Clipe com Olhos Abertos">
-
-                <img id="clipe-espera-joinha" class="clipe-icone" 
-                  src="img/clip-de-papel-joia.png"  
-                  alt="Clipe com Joinha e Cara Engraçada">
-
-                <img id="clipe-click" class="clipe-icone" 
-                  src="img/clip-de-papel-click.png"  
-                  alt="Clipe Piscando">
-                <!-- <span class="emoji-fallback clipe-icone">📎</span> -->
+                <img id="clipe-aberto" class="clipe-icone" src="img/clip-de-papel.png" alt="Clipe com Olhos Abertos">
+                <img id="clipe-fechado" class="clipe-icone" src="img/clip-de-papel-fechado.png" alt="Clipe com Olhos Fechados">
+                <img id="clipe-espera-joinha" class="clipe-icone" src="img/clip-de-papel-joia.png" alt="Clipe Joinha">
+                <img id="clipe-click" class="clipe-icone" src="img/clip-de-papel-click.png" alt="Clipe Click">
               </div>
             </span>
- 
-
             <input name="anexo[]" id="file-upload" type="file" style="display: none;" multiple accept="image/*">
           </label>
-
         </div>
-        <div id="previsualizacoes" 
+
+        <div id="previsualizacoes"
           style="width: 100%; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center;">
         </div>
     </form>
 
     <h2>Resultados Anotados</h2>
-    
+
     <div id="tabelaResultados" class="Tabela">
       <center>
         <div id="tituloWrapper" style="display: inline-flex; align-items: center; gap: 8px;">
@@ -238,214 +363,187 @@ $jsonFile = __DIR__ . '/lixo.json';
           </tr>
         </thead>
           <tbody id="tabelaUsuarios">
-            <?php echo $tabela_html; ?>
+            <!-- Aqui o PHP poderia inserir linhas salvas (mantive placeholder) -->
+            <?php
+              // $jsonFile = __DIR__ . '/lixo.json';
+              // inclui a lógica de leitura do JSON e monta $tabela_html
+              // echo $tabela_html;
+            ?>
           </tbody>
       </table>
     </div>
 
-    <center>
+    <center style="margin-top: 12px;">
       <button id="pdf">Baixar PDF</button>
       <button id="envemail">Enviar por Email</button>
     </center>
   </section>
-  <script src="script.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', () => {
 
-    // Elementos do DOM do assistente visual
+  <!-- ---------- MODAL EMAIL ---------- -->
+  <div id="modalEmail" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">📧 Enviar relatório para o professor</h2>
+      <div class="modal-desc">Digite o e-mail do professor para enviar os resultados e os anexos.</div>
+
+      <div class="modal-input-wrap">
+        <input id="emailProfessorModal" type="email" placeholder="professor@escola.com" autocomplete="email" />
+        <div id="errorEmail" class="error-text">Digite um e-mail válido (ex: prof@escola.com).</div>
+      </div>
+
+      <div style="display:flex; justify-content:center;" class="modal-buttons">
+        <button id="cancelarEmail" class="modal-btn btn-cancel">Cancelar</button>
+        <button id="confirmarEnvio" class="modal-btn btn-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- NOTIFICAÇÃO TOPO ---------- -->
+  <div id="topNotification" class="top-notification success" role="status" aria-live="polite"></div>
+
+  <!-- Scripts externos -->
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+  // ---------- DOMContentLoaded ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    // Assistente CLIP - mantenho sua lógica visual (simplificada)
     const clipeAberto = document.getElementById('clipe-aberto');
     const clipeFechado = document.getElementById('clipe-fechado');
     const clipeJoinha = document.getElementById('clipe-espera-joinha');
     const clipeClick = document.getElementById('clipe-click');
     const labelAnexo = document.getElementById('labelAnexo');
 
-    // Elementos do DOM do formulário
-    const form = document.getElementById('formResultados');
-    const submitButtonElement = document.getElementById('btnSubmit'); 
-    const tabelaBody = document.getElementById("tabelaUsuarios");
+    function showState(aberto, fechado, joinha, click) {
+      if (clipeAberto) clipeAberto.style.opacity = aberto ? 1 : 0;
+      if (clipeFechado) clipeFechado.style.opacity = fechado ? 1 : 0;
+      if (clipeJoinha) clipeJoinha.style.opacity = joinha ? 1 : 0;
+      if (clipeClick) clipeClick.style.opacity = click ? 1 : 0;
+    }
+
+    let blinkTimeout;
+    function startBlinking() {
+      showState(true,false,false,false);
+      if (blinkTimeout) clearTimeout(blinkTimeout);
+      blink();
+    }
+    function blink(){
+      showState(false,true,false,false);
+      blinkTimeout = setTimeout(()=> {
+        showState(true,false,false,false);
+        const tempoEspera = Math.random()*4000 + 2000;
+        setTimeout(blink, tempoEspera);
+      },100);
+    }
+    function showJoinha(){ clearTimeout(blinkTimeout); showState(false,false,true,false); }
+    function showClick(){ clearTimeout(blinkTimeout); showState(false,false,false,true); setTimeout(startBlinking, 800); }
+
+    startBlinking();
+
+    // PREVIEW arquivos
     const fileInput = document.getElementById('file-upload');
     const previsualizacoesContainer = document.getElementById('previsualizacoes');
 
-    // Variável para controlar o loop de piscar
-    let blinkInterval;
+    fileInput.addEventListener('change', function handleFileChange() {
+      previsualizacoesContainer.innerHTML = '';
+      showJoinha();
+      setTimeout(startBlinking, 900);
 
+      Array.from(this.files).forEach(file => {
+        const itemDiv = document.createElement('div');
+        itemDiv.style.cssText = 'display:flex;align-items:center;gap:6px;border:1px solid #e6e9ef;padding:6px;border-radius:6px;max-width:180px;overflow:hidden;background:#fff';
 
-    // --- FUNÇÕES DO ASSISTENTE VISUAL (CLIP) ---
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = file.name;
+        nameSpan.style.cssText = 'font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
 
-    /**
-     * Define a opacidade dos três estados do clipe.
-     * @param {boolean} aberto - Se o clipe aberto deve ser visível.
-     * @param {boolean} fechado - Se o clipe fechado deve ser visível.
-     * @param {boolean} joinha - Se o clipe de joinha deve ser visível.
-     * * @param {boolean} click - Se o clipe de click deve ser visível.
-     */
-    function showState(aberto, fechado, joinha, click) {
-        clipeAberto.style.opacity = aberto ? 1 : 0;
-        clipeFechado.style.opacity = fechado ? 1 : 0;
-        clipeJoinha.style.opacity = joinha ? 1 : 0;
-        clipeClick.style.opacity = click ? 1 : 0;
-    }
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e){
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Miniatura';
+            img.style.cssText = 'width:48px;height:48px;object-fit:cover;border-radius:6px;flex-shrink:0';
+            itemDiv.appendChild(img);
+            itemDiv.appendChild(nameSpan);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          const iconSpan = document.createElement('span');
+          iconSpan.textContent = '📄';
+          iconSpan.style.cssText = 'font-size:1.4rem;flex-shrink:0';
+          itemDiv.appendChild(iconSpan);
+          itemDiv.appendChild(nameSpan);
+        }
+        previsualizacoesContainer.appendChild(itemDiv);
+      });
+    });
 
-    /**
-     * Inicia a animação de piscar do clipe.
-     */
-    function startBlinking() {
-        // Garante o estado inicial (aberto)
-        showState(true, false, false, false); 
-        clearInterval(blinkInterval); // Limpa qualquer loop anterior
-        blink(); // Inicia o novo loop
-    }
+    // Tabela & resultados
+    const btnAdd = document.getElementById('btnSubmit');
+    const tabelaBody = document.getElementById('tabelaUsuarios');
 
-    /**
-     * Realiza um único ciclo de piscar e agenda o próximo.
-     */
-    function blink() {
-        // 1. Fecha o olho
-        showState(false, true, false, false);
-        const tempoFechado = 100;
-
-        blinkInterval = setTimeout(() => {
-            // 2. Abre o olho
-            showState(true, false, false, false);
-            // 3. Define um tempo de espera aleatório antes do próximo piscar (2s a 6s)
-            const tempoEspera = Math.random() * 4000 + 2000;
-            setTimeout(blink, tempoEspera);
-        }, tempoFechado);
-    }
-
-    /**
-     * Exibe o clipe de joinha e agenda o retorno ao piscar.
-     */
-    function showJoinha() {
-        clearInterval(blinkInterval); // Para o piscar
-        showState(false, false, true, false); // Mostra o Joinha
-        // NOTA: O retorno ao piscar é feito no bloco 'finally' do handleSubmit.
-        // Se a chamada for feita aqui (setTimeout(startBlinking, 2000)), o clipe pode
-        // voltar a piscar antes do fetch() terminar. Mantenha a chamada no finally.
-    }
-
-    function showClick() {
-        clearInterval(blinkInterval); // Para o piscar
-        showState(false, false, false, true); // Mostra o Clipe de Click
-        
-        // Volta a piscar imediatamente após um micro-atraso, simulando o "soltar" o clique
-        // setTimeout(startBlinking, 2000); 
-    }
-
-    // Inicia a animação de piscar no carregamento
-    startBlinking();
-
-
-
-    /**
-     * Processa a pré-visualização de arquivos anexados.
-     */
-    function handleFileChange() {
-        previsualizacoesContainer.innerHTML = ''; // Limpa anterior
-
-          // 2. Feedback e Bloqueio
-        showJoinha(); // <-- GARANTE QUE O JOINHA É MOSTRADO
-
-        setTimeout(startBlinking, 1000);
-
-        Array.from(this.files).forEach(file => {
-            const itemDiv = document.createElement('div');
-            // Adiciona um estilo básico para visualização
-            itemDiv.style.cssText = 'display: flex; align-items: center; gap: 5px; border: 1px solid #ccc; padding: 5px; border-radius: 5px; max-width: 100%; overflow: hidden;';
-
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = file.name;
-            nameSpan.style.cssText = 'flex-shrink: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.alt = 'Miniatura de imagem';
-                    img.style.cssText = 'width: 40px; height: 40px; object-fit: cover; border-radius: 3px; flex-shrink: 0;';
-                    itemDiv.appendChild(img);
-                    itemDiv.appendChild(nameSpan);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                const iconSpan = document.createElement('span');
-                iconSpan.textContent = '📄';
-                iconSpan.style.cssText = 'font-size: 1.5rem; flex-shrink: 0;';
-                itemDiv.appendChild(iconSpan);
-                itemDiv.appendChild(nameSpan);
-            }
-
-            previsualizacoesContainer.appendChild(itemDiv);
-        });
-    }
+    let resultados = []; // vai conter os resultados adicionados na sessão
 
     function adicionarLinhaTabela(dado) {
       const tr = document.createElement("tr");
-
       tr.innerHTML = `
-        <td>${dado.tipo}</td>
-        <td>${dado.quantidade}</td>
-        <td>${dado.data}</td>
+        <td>${escapeHtml(String(dado.tipo))}</td>
+        <td>${escapeHtml(String(dado.quantidade))}</td>
+        <td>${escapeHtml(String(dado.data))}</td>
       `;
-
-      document.getElementById("tabelaUsuarios").appendChild(tr);
+      tabelaBody.appendChild(tr);
     }
 
-    let resultados = [];
+    function escapeHtml(text) {
+      return text.replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+          '/': '&#x2F;',
+          '`': '&#x60;',
+          '=': '&#x3D;'
+        })[s];
+      });
+    }
 
     function adicionarResultado() {
-      const tipo = document.getElementById("tipoLixo").value;
+      const tipo = document.getElementById("tipoLixo").value.trim();
       const quantidade = document.getElementById("quantidade").value;
       const data = document.getElementById("data").value;
 
       if (!tipo || !quantidade || !data) {
-        alert("Preencha todos os campos");
+        alert("Preencha todos os campos antes de adicionar.");
         return;
       }
+
+      const dataDigitada = new Date(data);
+      const dataFormatada = dataDigitada.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
       const novoResultado = {
         tipo,
         quantidade: parseFloat(quantidade),
-        data
+        data: dataFormatada
       };
 
-      // 1. Guarda no JS
       resultados.push(novoResultado);
-
-      // 2. Atualiza a tabela visual
       adicionarLinhaTabela(novoResultado);
 
-      // 3. Limpa o form
       document.getElementById("formResultados").reset();
-
-      console.log("Tabela atual:", resultados);
     }
 
-    const input = document.getElementById("titulotabelain")
-
-    input.onchange = () => {
-      document.getElementById("titulotabela").innerHTML = input.value;
-    }
-
-    labelAnexo.addEventListener('click', showClick);
-
-    // --- Anexação de Listeners ---
-    submitButtonElement.addEventListener('click', (e) => {
+    btnAdd.addEventListener('click', (e) => {
       e.preventDefault();
       adicionarResultado();
     });
-    fileInput.addEventListener('change', handleFileChange);
 
-})
-</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script type="module">
-
-    // Script do titulo
+    // TITULO EDITÁVEL (mantive sua lógica)
     const titulo = document.getElementById("titulotabela");
     const editarBtn = document.getElementById("editarTitulo");
-
     editarBtn.addEventListener("click", () => {
       const input = document.createElement("input");
       input.type = "text";
@@ -458,7 +556,6 @@ $jsonFile = __DIR__ . '/lixo.json';
       input.style.padding = "4px 8px";
       input.style.width = "100%";
 
-      // Substitui o título pelo input
       titulo.replaceWith(input);
       editarBtn.style.display = "none";
       input.focus();
@@ -469,48 +566,210 @@ $jsonFile = __DIR__ . '/lixo.json';
         editarBtn.style.display = "inline";
       }
 
-      // Saiu do foco → salva
       input.addEventListener("blur", salvar);
-
-      // Enter também salva
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          input.blur();
-        }
+        if (e.key === "Enter") input.blur();
       });
     });
 
+    // PDF - mantive seu código
     document.getElementById("pdf").onclick = async function gerarPDF() {
       document.getElementById("editarTitulo").style.display = "none";
       const div = document.getElementById("tabelaResultados");
       const canvas = await html2canvas(div);
       const imgData = canvas.toDataURL("image/png");
-      
+
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF("p", "mm", "a4");
 
       const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
       const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      let position = 0;
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
       pdf.save("relatorio.pdf");
       document.getElementById("editarTitulo").style.display = "inline";
     }
 
-    
+    // ---------- MODAL EMAIL ----------
+    const btnEnviar = document.getElementById("envemail");
+    const modal = document.getElementById("modalEmail");
+    const cancelar = document.getElementById("cancelarEmail");
+    const confirmar = document.getElementById("confirmarEnvio");
+    const emailInput = document.getElementById("emailProfessorModal");
+    const errorEmail = document.getElementById("errorEmail");
+    const topNotification = document.getElementById("topNotification");
 
+    function openModal() {
+      modal.style.display = "flex";
+      modal.setAttribute('aria-hidden', 'false');
+      emailInput.value = "";
+      errorEmail.classList.remove('show');
+      emailInput.classList.remove('invalid');
+      setTimeout(()=> emailInput.focus(), 120);
+    }
+    function closeModal() {
+      modal.style.display = "none";
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    btnEnviar.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    });
+
+    cancelar.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeModal();
+    });
+
+    // valida e envia via AJAX
+    function isValidEmail(email) {
+      // regex simples e robusta o suficiente para validação básica
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    }
+
+    function showTopNotification(message, type = 'success', timeout = 4200) {
+      topNotification.textContent = message;
+      topNotification.className = 'top-notification ' + (type === 'success' ? 'success' : 'error');
+      topNotification.classList.add('show');
+
+      clearTimeout(topNotification._hideTimer);
+      topNotification._hideTimer = setTimeout(() => {
+        topNotification.classList.remove('show');
+      }, timeout);
+    }
+
+    confirmar.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+
+      if (!isValidEmail(email)) {
+        emailInput.classList.add('invalid');
+        errorEmail.classList.add('show');
+        emailInput.focus();
+        return;
+      }
+
+      // Se não existir nenhum resultado, perguntar ao usuário se quer enviar mesmo assim
+      if (resultados.length === 0) {
+        const ok = confirm("Nenhum resultado foi adicionado. Deseja enviar o formulário vazio mesmo assim?");
+        if (!ok) {
+          return;
+        }
+      }
+
+      // Construir FormData
+      const formElement = document.getElementById('formResultados');
+      const fd = new FormData();
+
+      // Adiciona o email do professor
+      fd.append('gmail', email);
+
+      // Adiciona resultados em JSON
+      fd.append('resultados', JSON.stringify(resultados));
+
+      // Adiciona também os arquivos do input (se houver)
+      const files = document.getElementById('file-upload').files;
+      for (let i = 0; i < files.length; i++) {
+        fd.append('anexo[]', files[i]);
+      }
+
+      // Opcional: também enviar o título
+      const tituloTexto = document.getElementById('titulotabela').innerText || 'Sem título';
+      fd.append('titulo', tituloTexto);
+
+      // Feedback visual: desabilita botão e mostra spinner
+      confirmar.disabled = true;
+      const originalTxt = confirmar.innerHTML;
+      confirmar.innerHTML = '<span class="spinner" aria-hidden="true"></span> Enviando...';
+      showClick(); // animação do clipe
+
+      try {
+        const resp = await fetch(formElement.action || 'enviar_email.php', {
+          method: 'POST',
+          body: fd,
+        });
+
+        // tenta interpretar JSON
+        let json;
+        try { json = await resp.json(); } catch (err) { json = null; }
+
+        if (resp.ok) {
+          // se o backend retornar { success: true/false }
+          if (json && typeof json.success !== 'undefined') {
+            if (json.success) {
+              showTopNotification(json.message || 'E-mail enviado com sucesso!', 'success');
+              // limpa UI local apenas se envio deu certo (melhora UX)
+              resultados = [];
+              tabelaBody.innerHTML = '';
+              previsualizacoesContainer.innerHTML = '';
+              formElement.reset();
+            } else {
+              showTopNotification(json.message || 'O envio não foi concluído.', 'error');
+            }
+          } else {
+            // sem JSON estruturado - assume sucesso pelo código 2xx
+            showTopNotification('E-mail enviado com sucesso!', 'success');
+            resultados = [];
+            tabelaBody.innerHTML = '';
+            previsualizacoesContainer.innerHTML = '';
+            formElement.reset();
+          }
+        } else {
+          // resposta não-ok
+          const txt = (json && json.message) ? json.message : `Erro no envio (status ${resp.status})`;
+          showTopNotification(txt, 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao enviar:', err);
+        showTopNotification('Falha ao conectar com o servidor. Tente novamente.', 'error');
+      } finally {
+        confirmar.disabled = false;
+        confirmar.innerHTML = originalTxt;
+        closeModal();
+        startBlinking(); // volta ao piscar do clipe
+      }
+    });
+
+    // Fecha modal ao clicar fora da caixa
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Enter no input envia
+    emailInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        confirmar.click();
+      }
+    });
+
+    // Remove estado invalid quando digita
+    emailInput.addEventListener('input', () => {
+      if (emailInput.classList.contains('invalid')) {
+        if (isValidEmail(emailInput.value.trim())) {
+          emailInput.classList.remove('invalid');
+          errorEmail.classList.remove('show');
+        }
+      }
+    });
+
+    // Helper: função de voltar ao piscar (redefinição)
+    function startBlinking() {
+      // já definida acima — reutilizo
+      if (typeof window.startBlinking === 'function') window.startBlinking();
+      // se não, chamo localmente:
+      showState(true,false,false,false);
+    }
+
+  }); // DOMContentLoaded
   </script>
-
 
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
     <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
-
-  
 </body>
-
 </html>
