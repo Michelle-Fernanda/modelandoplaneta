@@ -306,7 +306,6 @@
     <h2 class="font-semibold mb-2">📋 Anote seus Resultados</h2>
 
     <form id="formResultados" method="POST" action="enviar_email.php" enctype="multipart/form-data" rel="noopener">
-        <!-- OBS: removi o campo de e-mail daqui (agora via modal) -->
         <section>
             <label for="tipoLixo">Tipo de lixo:</label>
             <input type="text" name="tipoLixo" id="tipoLixo" placeholder="Orgânico" required>

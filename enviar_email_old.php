@@ -146,15 +146,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Body    = "<h3>Dados enviados pelo formulário:</h3>" . $tabela;
         $mail->AltBody = "Tipo: $tipoLixo | Quantidade: $quantidade | Data: $data";
 
-        // Desabilita verificação SSL (manter, se necessário)
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true,
-            ],
-        ];
-
         $mail->send();
         echo '✅ E-mail enviado com sucesso!';
     } catch (Exception $e) {
