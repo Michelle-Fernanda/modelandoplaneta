@@ -112,6 +112,15 @@ try {
         }
     }
 
+    // Desabilita verificação SSL (manter, se necessário)
+    $mail->SMTPOptions = [
+    'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true,
+    ],
+        ];
+
     $mail->send();
 
     echo json_encode([
