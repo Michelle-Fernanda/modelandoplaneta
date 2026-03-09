@@ -1,4 +1,5 @@
-// Assistente
+// ── Assistente ────────────────────────────────────────────────────────────────
+
 function closeAssistant() {
   document.querySelector('.fala-container')?.style.setProperty('display', 'none');
 }
@@ -13,7 +14,8 @@ function mostrarFala() {
   index = (index + 1) % falas.length;
 }
 
-// Acessibilidade — expostas no window para que módulos ES possam acessar
+// ── Acessibilidade ────────────────────────────────────────────────────────────
+
 let tamanhoFonte = 100;
 
 window.aumentarFonte = () => {
@@ -28,7 +30,36 @@ window.alternarContraste = () => {
   document.body.classList.toggle('contraste');
 };
 
-// Inicialização
+// ── Gerenciador global de z-index ─────────────────────────────────────────────
+// e.composedPath() atravessa shadow DOMs e retorna o caminho completo do evento,
+// permitindo detectar cliques dentro de qualquer shadow DOM.
+
+let _zTop = 1000;
+
+Promise.all([
+  customElements.whenDefined('calc-modal'),
+  customElements.whenDefined('conversor-modal'),
+]).then(() => {
+  window.addEventListener('mousedown', (e) => {
+    const modals = ['calc-modal', 'conversor-modal'];
+    const path   = e.composedPath();
+
+    for (const selector of modals) {
+      const el = document.querySelector(selector);
+
+      el.style.zIndex = 1;
+
+      if (el && path.includes(el)) {
+        console.log(el.style.zIndex)
+        el.style.zIndex = 3;
+        break;
+      }
+    }
+  }, true);
+});
+
+// ── Inicialização ─────────────────────────────────────────────────────────────
+
 window.onload = () => {
   setTimeout(() => {
     document.getElementById('assistant-img')?.classList.add('show');

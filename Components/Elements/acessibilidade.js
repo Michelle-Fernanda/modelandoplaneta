@@ -38,7 +38,6 @@ class AcessibilidadeMenu extends FloatingMenu {
     super({ top: "20px", left: "20px", direction: "down" });
 
     this.addToggleButton("🧩");
-
     OPTIONS.forEach(({ label, action, closeOnClick }) =>
       this.#addOption(label, action, closeOnClick)
     );

@@ -1,10 +1,3 @@
-const DIRECTIONS = {
-  up:    { flex: "column-reverse", transform: "translateY(10px)"  },
-  down:  { flex: "column",         transform: "translateY(-10px)", optionsFlex: "column" },
-  left:  { flex: "row-reverse",    transform: "translateX(10px)",  optionsAlign: "flex-end" },
-  right: { flex: "row",            transform: "translateX(-10px)", optionsAlign: "flex-start" },
-};
-
 const BASE_STYLES = `
   :host {
     --main-bg:        #4CAF50;
@@ -16,7 +9,6 @@ const BASE_STYLES = `
 
   .floating-menu {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 10px;
   }
@@ -36,9 +28,7 @@ const BASE_STYLES = `
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     transition: transform 0.3s, background-color 0.3s, color 0.3s;
   }
-  .menu-toggle:hover {
-    transform: scale(1.1);
-  }
+  .menu-toggle:hover { transform: scale(1.1); }
 
   .menu-options {
     display: flex;
@@ -50,7 +40,7 @@ const BASE_STYLES = `
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-  .menu-options[data-direction="up"]    { transform: translateY(10px); }
+  .menu-options[data-direction="up"]    { transform: translateY(10px);  flex-direction: column; }
   .menu-options[data-direction="down"]  { transform: translateY(-10px); flex-direction: column; }
   .menu-options[data-direction="left"]  { transform: translateX(10px);  align-items: flex-end; }
   .menu-options[data-direction="right"] { transform: translateX(-10px); align-items: flex-start; flex-direction: row; }
@@ -79,7 +69,6 @@ const BASE_STYLES = `
     transform: scale(1.1);
   }
 
-  /* Alto contraste */
   .contraste-active .menu-toggle,
   .contraste-active .menu-options a {
     background-color: var(--contraste-bg)    !important;
@@ -93,14 +82,6 @@ const BASE_STYLES = `
 `;
 
 export class FloatingMenu extends HTMLElement {
-  /**
-   * @param {Object} config
-   * @param {string} [config.top]
-   * @param {string} [config.bottom]
-   * @param {string} [config.left]
-   * @param {string} [config.right]
-   * @param {"up"|"down"|"left"|"right"} [config.direction="up"]
-   */
   constructor(config = { bottom: "20px", right: "20px", direction: "up" }) {
     super();
     this.attachShadow({ mode: "open" });
@@ -112,8 +93,6 @@ export class FloatingMenu extends HTMLElement {
     this.#applyContraste(document.body.classList.contains("contraste"));
   }
 
-  // ─── Private ────────────────────────────────────────────────────────────────
-
   #buildShadowDOM(config) {
     const style = document.createElement("style");
     style.textContent = BASE_STYLES;
@@ -122,9 +101,11 @@ export class FloatingMenu extends HTMLElement {
     this.container.className = "floating-menu";
 
     const { top, bottom, left, right, direction } = config;
+    const flexMap = { up: "column-reverse", down: "column", left: "row-reverse", right: "row" };
     Object.assign(this.container.style, {
-      position: "fixed",
-      zIndex:   "1000",
+      position:      "fixed",
+      zIndex:        "1000",
+      flexDirection: flexMap[direction] ?? "column",
       ...(top    && { top }),
       ...(bottom && { bottom }),
       ...(left   && { left }),
@@ -136,6 +117,7 @@ export class FloatingMenu extends HTMLElement {
     this.optionsContainer.setAttribute("data-direction", direction);
     this.optionsContainer.setAttribute("aria-hidden", "true");
 
+    // optionsContainer sempre entra no DOM aqui — addToggleButton só reordena
     this.container.appendChild(this.optionsContainer);
     this.shadowRoot.append(style, this.container);
   }
@@ -150,18 +132,13 @@ export class FloatingMenu extends HTMLElement {
     this.container.classList.toggle("contraste-active", active);
   }
 
-  // ─── Public ─────────────────────────────────────────────────────────────────
-
   addToggleButton(iconText = "☰") {
     const btn = document.createElement("button");
     btn.className   = "menu-toggle";
     btn.textContent = iconText;
     btn.addEventListener("click", () => this.toggleMenu());
 
-    const insertBefore = ["up", "left"].includes(this.config.direction);
-    insertBefore
-      ? this.container.appendChild(btn)
-      : this.container.insertBefore(btn, this.optionsContainer);
+    this.container.insertBefore(btn, this.optionsContainer);
 
     this.toggleButton = btn;
     this.#applyContraste(document.body.classList.contains("contraste"));
