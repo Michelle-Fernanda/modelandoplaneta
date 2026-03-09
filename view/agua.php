@@ -260,6 +260,63 @@ thead th{background:#e6f6f5;font-weight:700}
       });
 });
 </script>
+<script src="script.js"></script>
+
+<!-- html2canvas necessário para gerar imagem da página -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+document.getElementById("add-row").addEventListener("click", () => {
+  const tbody = document.querySelector("#tabela-agua tbody");
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td><input type="text" placeholder="Dia"></td>
+    <td><input type="number" min="0"></td>
+    <td><input type="number" min="0"></td>
+  `;
+
+  tbody.appendChild(row);
+});
+
+
+// GERAR PDF MELHORADO
+document.getElementById("baixar-pdf").onclick = async function gerarPDF() {
+
+  const elemento = document.querySelector(".atividade");
+
+  const canvas = await html2canvas(elemento, {
+    scale: 2,
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgWidth = pageWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  pdf.save("relatorio_agua.pdf");
+};
+</script>
 
 </body>
 
