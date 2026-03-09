@@ -383,4 +383,4 @@ class WaterTracker extends HTMLElement {
   }
 }
 
-customElements.define('water-tracker', WaterTracker);
+customElements.define('tabela-agua', WaterTracker);

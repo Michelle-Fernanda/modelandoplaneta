@@ -15,4 +15,5 @@
 <script type="module" src="Components/Elements/acessibilidade.js"></script>
 <script type="module" src="Components/Elements/menu.js"></script>
 <script type="module" src="Components/Elements/ferramentas.js"></script>
-
+<script type="module" src="Components/Elements/ferramentas.js"></script>
+<script type="module" src="Components/Elements/tabela_agua.js"></script>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Página não encontrada</title>
-  <?php include 'Components/Elements/head.php'; ?>
+  <?php include 'Components/head.php'; ?>
 </head>
 
 <body>
