@@ -1,41 +1,21 @@
 <?php
 
-// Obtém a URL requisitada
-$request_uri = $_SERVER['REQUEST_URI'];
+$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
-// Remove a barra inicial e o qualquer parâmetro da query string
-$path = trim(parse_url($request_uri, PHP_URL_PATH), '/');
+$routes = [
+    ''           => 'view/home.php',
+    'agua'       => 'view/agua.php',
+    'arborizacao'=> 'view/arborizacao.php',
+    'lixo'       => 'view/lixo/lixo.php',
+    'petroleo'   => 'view/petroleo.php',
+    'sobre'      => 'view/sobre.php',
+    'contato'    => 'view/contato.php',
+    'teste'      => 'view/teste.php',
+];
 
-// Exemplo de roteamento manual
-switch ($path) {
-    case '': // Rota para a página inicial
-        require 'view/home.php';
-        break;
-    case 'agua':
-        require 'view/agua.php';
-        break;
-    case 'arborizacao':
-        require 'view/arborizacao.php';
-        break;
-    case 'lixo':
-        require 'view/lixo/lixo.php';
-        break;
-    case 'petroleo':
-        require 'view/petroleo.php';
-        break;
-    case 'sobre': // Rota para a página "Sobre Nós"
-        require 'view/sobre.php';
-        break;
-    case 'contato': // Rota para a página de contato
-        require 'view/contato.php';
-        break;
-    case 'teste':
-        require 'view/teste.php';
-        break;
-    default: // Se a rota não for encontrada
-        http_response_code(404);
-        require 'view/404.php';
-        break;
+if (array_key_exists($path, $routes)) {
+    require $routes[$path];
+} else {
+    http_response_code(404);
+    require 'view/404.php';
 }
-
-?>

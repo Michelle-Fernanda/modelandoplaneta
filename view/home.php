@@ -161,16 +161,10 @@
 
   <footer>
     <p>
-      Contato: mifeh25@gmail.com |
+      Contato: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f79a9e91929fc5c2b7909a969e9bd994989a">[email&#160;protected]</a> |
       Sobre: Este site foi criado para incentivar a criatividade matemática de crianças do Ensino Fundamental 1.
     </p>
     <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
 
-  <script src="script.js"></script>
-
-  <!-- Bootstrap JS (opcional, só necessário se for usar componentes como modal, alert, etc) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></scrip

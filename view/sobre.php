@@ -106,10 +106,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <footer>
-    <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
-    <a href="sobre" class="link-somos">Quem somos?</a>
-  </footer>
-  <script src="script.js"></script>
-</body>
-
-</html>
+    <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb86828d8e83d9deab8c868a8287c5888486">[email&#160;protected]</a></p>
+    

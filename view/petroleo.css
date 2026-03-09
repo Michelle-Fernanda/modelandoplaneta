@@ -1,0 +1,10 @@
+/* petroleo.css — estilos exclusivos da página de Petróleo */
+
+.leitura-destaque {
+  background: #e6f4ff;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  max-width: 850px;
+  border-radius: 16px;
+  text-align: center;
+}
