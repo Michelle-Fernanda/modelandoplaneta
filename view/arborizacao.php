@@ -250,27 +250,56 @@
 
   <h2>🧮 Quantas árvores cabem?</h2>
 
-  <p style="font-size: 1.2rem;">
-    Digite o tamanho do espaço que vocês mediram e escolha o espaço para cada árvore:
-  </p>
+<p>
+Digite o tamanho do espaço que vocês mediram e escolha o espaço para cada árvore
+</p>
 
-  <div style="margin: 2rem auto; max-width: 400px; padding: 1rem; background: #f0fff0; border-radius: 12px;">
-    <label>📏 Tamanho do espaço (em metros):</label>
-    <input id="espaco" type="number" placeholder="Ex: 30" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
-    
-    <br><br>
+<button onclick="toggleCalculadora()" style="
+background:#ffd54f;
+border:none;
+padding:10px 16px;
+border-radius:12px;
+font-size:1.4rem;
+cursor:pointer;">
+💡 Mostrar calculadora
+</button>
 
-    <label>🌳 Espaço para cada árvore (em metros):</label>
-    <input id="distancia" type="number" value="3" style="width:100%; font-size:1.3rem; padding:8px; border-radius:8px; margin-top:5px;">
-    
-    <br><br>
 
-    <button onclick="calcularArvores()" 
-      style="background:#28a745; color:white; border:none; padding:12px; width:100%; font-size:1.3rem; border-radius:10px;">
-      ✨ Calcular
-    </button>
+<div id="calculadoraArvores" style="
+display:none;
+margin:2rem auto;
+max-width:400px;
+padding:1rem;
+background:#f0fff0;
+border-radius:12px;
+">
 
-    <h3 id="resultado" style="margin-top:1.5rem; font-size:1.8rem;"></h3>
+<label>📏 Tamanho do espaço (em metros)</label>
+
+<input id="espaco" type="number" placeholder="Ex: 30"
+style="width:100%;font-size:1.3rem;padding:8px;border-radius:8px;margin-top:5px;">
+
+<br><br>
+
+<label>🌳 Espaço para cada árvore (em metros)</label>
+
+<input id="distancia" type="number" value="3"
+style="width:100%;font-size:1.3rem;padding:8px;border-radius:8px;margin-top:5px;">
+
+<br><br>
+
+<button onclick="calcularArvores()" style="
+background:#28a745;
+color:white;
+border:none;
+padding:12px;
+width:100%;
+font-size:1.3rem;
+border-radius:10px;">
+✨ Calcular
+</button>
+
+<h3 id="resultado" style="margin-top:1.5rem;font-size:1.8rem;"></h3>
   </div>
 
   <hr style="margin: 2rem 0;">
@@ -287,9 +316,9 @@
 
   <br><br>
 
-  <button onclick="salvarResposta()" 
-    style="background:#1e88e5; color:white; padding:12px 18px; border-radius:10px; font-size:1.3rem; border:none;">
-    💾 Salvar Minha Resposta
+  <button onclick="baixarPDF()" 
+    style="background:#1e88e5; color:white; padding:12px 18px; border-radius:10px; font-size:1.3rem; border:none; cursor:pointer">
+    💾 Baixar minha Resposta
   </button>
 
   <p id="confirmacao" style="margin-top:15px; font-weight:bold;"></p>
@@ -298,6 +327,8 @@
   </div>
 
 </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 function calcularArvores() {
@@ -311,28 +342,60 @@ function calcularArvores() {
     : "⚠️ Coloque números maiores!";
 }
 
-function calcularPreco() {
-  const preco = Number(document.getElementById("preco").value);
-  const espaco = Number(document.getElementById("espaco").value);
-  const distancia = Number(document.getElementById("distancia").value);
-  const total = Math.floor(espaco / distancia);
-  const totalPreco = total * preco;
+function toggleCalculadora(){
 
-  document.getElementById("resultadoPreco").innerText =
-    preco > 0 && total > 0
-    ? `💰 Total: R$ ${totalPreco.toFixed(2)}`
-    : "⚠️ Preencha todos os valores!";
-}
+  const calc = document.getElementById("calculadoraArvores")
 
-function salvarResposta() {
-  const resposta = document.getElementById("respostaAluno").value.trim();
-  if (!resposta) {
-    document.getElementById("confirmacao").innerText = "⚠️ Você precisa escrever algo primeiro!";
-    return;
+  if(calc.style.display === "none"){
+    calc.style.display = "block"
+  }else{
+    calc.style.display = "none"
   }
 
-  localStorage.setItem("resposta_arvores", resposta);
-  document.getElementById("confirmacao").innerText = "✔ Sua resposta foi salva!";
+}
+
+function baixarPDF(){
+
+const { jsPDF } = window.jspdf
+
+const resposta = document.getElementById("respostaAluno").value
+
+if(!resposta){
+  document.getElementById("confirmacao").innerText =
+"X Escreva sua resposta primeiro!"
+return
+}
+
+const pdf = new jsPDF()
+
+const data = new Date().toLocaleDateString("pt-BR")
+
+let y = 20
+
+pdf.setFontSize(18)
+pdf.text("Relatório de Arborização",20,y)
+
+y += 15
+
+pdf.setFontSize(12)
+pdf.text("Data: "+data,20,y)
+
+y += 20
+
+pdf.setFontSize(14)
+pdf.text("Resposta do aluno:",20,y)
+
+y += 10
+
+const linhas = pdf.splitTextToSize(resposta,170)
+
+pdf.text(linhas,20,y)
+
+pdf.save("resposta_arborizacao.pdf")
+
+document.getElementById("confirmacao").innerText =
+"✔ Sua resposta foi salva!"
+
 }
 </script>
 
