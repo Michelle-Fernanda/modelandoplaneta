@@ -1,255 +1,309 @@
-    .resultados {
-      max-width: 700px;
-      margin: 2rem auto;
-      background-color: #fff5e6;
-      border-radius: 16px;
-      padding: 1.5rem 2rem;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-      font-family: 'Fredoka One', cursive;
-    }
+/* ── Variáveis ───────────────────────────────────────────────────────────── */
+:root {
+  --green:        #4caf50;
+  --green-dark:   #388e3c;
+  --green-darker: #2e7d32;
+  --green-light:  #dcffcf;
+  --font:         'Fredoka One', cursive;
+}
 
-    .Tabela table {
-      width: 100%;
-    }
+/* ── Tabela ──────────────────────────────────────────────────────────────── */
+.Tabela table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
 
-    .resultados h2,
-    .resultados h3 {
-      text-align: center;
-      color: #4caf50;
-      margin-bottom: 1rem;
-    }
+#tabelaResultados th,
+#tabelaResultados td { border: 1px solid var(--green); padding: 0.5rem; text-align: center; }
+#tabelaResultados input  { width: 100%; }
+#tabelaResultados thead  { background-color: var(--green-light); color: var(--green-darker); }
 
-    #formResultados {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+/* ── Formulário ──────────────────────────────────────────────────────────── */
+#formResultados {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    #formResultados section label {
-      flex-basis: 100%;
-      font-weight: bold;
-      color: #289728;
-    }
+#formResultados section {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+}
 
-    #formResultados section {
-      width: 60%;
-      display: flex;
-      justify-content: space-between;
-    }
+#formResultados section label {
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+  font-weight: bold;
+  font-size: 120%;
+  color: #289728;
+}
 
-    #formResultados select,
-    #formResultados input[type="text"],
-    #formResultados input[type="number"],
-    #formResultados input[type="date"] {
-      width: 100%;
-      padding: 0.7rem 1rem;
-      border-radius: 10px;
-      border: 1px solid #4caf50;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
+#formResultados select,
+#formResultados input[type="text"],
+#formResultados input[type="number"],
+#formResultados input[type="date"] {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--green);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
 
-    #formsResultados input[type="number"] {
-      width: 200px;
-    }
+/* ── Botões de ação (submit + anexo) ─────────────────────────────────────── */
+#addResult {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 1rem 0;
+}
 
-    #tabelaResultados {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
+/* Base compartilhada */
+#btnSubmit,
+.labelAnexo {
+  height: 80px;
+  border-radius: 16px;
+  background-color: var(--green);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s, background-color 0.2s;
+  box-sizing: border-box; /* ← padding não aumenta a altura */
+}
 
-    #tabelaResultados th,
-    #tabelaResultados td {
-      border: 1px solid #4caf50;
-      padding: 0.5rem;
-      text-align: center;
-    }
+/* Clipe — quadrado fixo */
+.labelAnexo {
+  width: 80px; /* Mesmo valor da Base compartilhada */
+  padding: 10px;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
 
-    #tabelaResultados input {
-      width: 100%;
-    }
+/* Botão de Adicionar Resultado — largura automática pelo texto */
+#btnSubmit {
+  width: auto;
+  padding: 0 1.4rem; /* só padding horizontal — altura já controlada pelo height */
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
 
-    #tabelaResultados thead {
-      background-color: #dcffcf;
-      color: #2e7d32;
-    }
+#btnSubmit:hover,
+.labelAnexo:hover {
+  transform: scale(1.1);
+  background-color: var(--green-dark);
+}
 
-    #formResultados section label {
-      display: flex;
-      align-items: center;
-      font-size: 120%;
-      
-    }
+/* ── Clipe ───────────────────────────────────────────────────────────────── */
+.labelAnexo span { display: flex; justify-content: center; align-items: center; }
 
-    #titulotabelain {
-      margin-left: 5px;
-    }
-    
-    .labelAnexo {
-      flex-basis: 0px;
-      background-color: #4CAF50; 
-      color: white; 
-      cursor: pointer; 
-      border-radius: 16px; 
-      display: flex; 
-      width: 50px;
-      height: 50px;
-      align-items: center; 
-      justify-content: center; 
-      font-size: 2rem;
-      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-      white-space: nowrap; /* Impede que o texto quebre linha */  
-      padding: 0.55rem 0.55rem;
-  }
+#clipe-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
 
-  .labelAnexo span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.clipe-icone {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
 
-  #clipe-container {
-      position: relative;
-      width: 90px; /* Largura base do ícone */
-      height: 90px; /* Altura base do ícone */
-  }
+#clipe-fechado,
+#clipe-espera-joinha,
+#clipe-click { opacity: 0; }
 
-  .clipe-icone {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-  }
-
-  /* O clipe de olhos fechados começa invisível */
-  #clipe-fechado, #clipe-espera-joinha, #clipe-click {
-      opacity: 0;
-  }
-
-  /* Se usar o emoji como fallback */
-  .emoji-fallback {
-      font-size: 80px;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
-  }
-
-  
-
-  #btnSubmit {
-    background-color: #4caf50;
-      color: white;
-      border: none;
-      padding: 1.6rem 1.1rem;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-      width: 100%;
-      max-width: 160px;
-      margin: 0 auto;
-  }
-
-  #addResult {
-    display: flex;
-    /* background-color: red; *debug */ 
-    justify-content: center;
-    align-items: center;
-  }
-
-  .labelAnexo:hover, #btnSubmit:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-    background-color: #388e3c;
-  }
-
-  /* Estilo para cada miniatura (item individual de arquivo) */
+/* ── Miniaturas de arquivo ───────────────────────────────────────────────── */
 .miniatura-item {
-    display: flex;
-    align-items: center;
-    background-color: #e0ffe0; /* Fundo claro para destacar o item */
-    border: 1px solid #4caf50;
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 0.85rem;
-    color: #333;
-    max-width: 100%;
-    overflow: hidden; /* Garante que o texto seja cortado se for muito longo */
+  display: flex;
+  align-items: center;
+  background-color: #e0ffe0;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  color: #333;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-/* Estilo para a imagem dentro da miniatura */
 .miniatura-item img {
-    width: 30px;
-    height: 30px;
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
-    border-radius: 4px;
-    margin-right: 8px;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
 }
 
-/* Estilo para o nome do arquivo */
 .miniatura-item span.nome-arquivo {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adiciona "..." ao nome longo */
-    max-width: 150px; /* Limita a largura do nome para evitar que o item fique enorme */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
-/* Container dos botões */
-center {
-  margin-top: 2rem;
-}
+/* ── Botões PDF / Email ──────────────────────────────────────────────────── */
+center { margin-top: 2rem; }
 
-/* Estilo base dos botões */
 #pdf,
 #envemail {
-  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  background: linear-gradient(135deg, var(--green), #66bb6a);
   color: white;
   border: none;
   padding: 0.9rem 1.6rem;
   margin: 0.5rem;
   border-radius: 14px;
-  font-family: 'Fredoka One', cursive;
+  font-family: var(--font);
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
-  transition: 
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
   min-width: 160px;
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
 }
 
-/* Hover */
+#pdf::before      { content: "📄 "; }
+#envemail::before { content: "📧 "; }
+
 #pdf:hover,
 #envemail:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(135deg, #388e3c, #4caf50);
+  box-shadow: 4px 6px 14px rgba(0,0,0,0.25);
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
 }
 
-/* Clique */
 #pdf:active,
 #envemail:active {
   transform: scale(0.97);
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Diferencia levemente cada botão */
-#pdf::before {
-  content: "📄 ";
+/* ── Modal Email ─────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(2px);
 }
 
-#envemail::before {
-  content: "📧 ";
+.modal-box {
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(180deg, #fff 0%, #f7f9fc 100%);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(19,35,64,0.12);
+  opacity: 0;
+  transform: translateY(-10px) scale(.98);
+  animation: modalIn 250ms ease forwards;
+  font-family: var(--font);
 }
 
-/* Responsivo */
+@keyframes modalIn {
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-box h2  { margin: 0 0 8px; font-size: 1.15rem; }
+.modal-desc    { color: #444; font-size: 0.95rem; margin-bottom: 12px; }
+
+.modal-box input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.98rem;
+  border-radius: 10px;
+  border: 2px solid #e6e9ef;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.modal-box input[type="email"]:focus {
+  border-color: var(--green);
+  box-shadow: 0 6px 18px rgba(76,175,80,0.12);
+}
+
+.invalid {
+  border-color: #f44336 !important;
+  box-shadow: 0 6px 18px rgba(244,67,54,0.10) !important;
+  animation: shake .28s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60%  { transform: translateX(-6px); }
+  40%,80%  { transform: translateX(6px); }
+}
+
+.error-text      { color: #b00020; font-size: .85rem; margin-top: 6px; display: none; }
+.error-text.show { display: block; }
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.modal-btn         { flex: 1; padding: 10px 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; transition: transform .08s, box-shadow .12s; }
+.modal-btn:active  { transform: translateY(1px); }
+.btn-cancel        { background: #f5f5f7; color: #222; }
+.btn-send          { background: linear-gradient(90deg, var(--green), #2ea44f); color: #fff; box-shadow: 0 8px 18px rgba(46,164,79,0.18); }
+.btn-send:disabled { opacity: .7; cursor: default; }
+
+/* ── Notificação topo ────────────────────────────────────────────────────── */
+.top-notification {
+  position: fixed;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%) translateY(-10px);
+  z-index: 10001;
+  min-width: 260px;
+  max-width: calc(100% - 40px);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font);
+}
+
+.top-notification.success { background: linear-gradient(90deg, var(--green), #2EA44F); }
+.top-notification.error   { background: linear-gradient(90deg, #f44336, #e53935); }
+.top-notification.show    { display: flex; animation: notifyIn .28s ease forwards; }
+
+@keyframes notifyIn {
+  from { transform: translateX(-50%) translateY(-20px) scale(.98); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+/* ── Spinner ─────────────────────────────────────────────────────────────── */
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-left-color: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  animation: spin .8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsivo ──────────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  #pdf,
-  #envemail {
-    width: 90%;
-    margin: 0.4rem 0;
-  }
+  .modal-box              { padding: 16px; border-radius: 12px; }
+  #formResultados section { width: 90%; }
+  #pdf, #envemail         { width: 90%; margin: 0.4rem 0; }
 }
