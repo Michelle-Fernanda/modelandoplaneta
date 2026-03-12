@@ -103,7 +103,7 @@
   <section class="math-tips">
     <h2>📋 Anote seus Resultados</h2>
 
-    <form id="formResultados" method="POST" action="enviar_email.php" enctype="multipart/form-data">
+    <form id="formResultados" enctype="multipart/form-data">
       <section>
         <label for="tipoLixo">Tipo de lixo:</label>
         <input type="text" name="tipoLixo" id="tipoLixo" placeholder="Orgânico" required>
@@ -238,12 +238,17 @@
     const fileInput = document.getElementById('file-upload');
     const previews  = document.getElementById('previsualizacoes');
 
+    // CORREÇÃO: guarda os arquivos numa variável separada para não perder
+    // referência quando o formulário for resetado via reset()
+    let arquivosSelecionados = [];
+
     fileInput.addEventListener('change', function () {
+      arquivosSelecionados = Array.from(this.files); // salva antes de qualquer reset
       previews.innerHTML = '';
       showJoinha();
       setTimeout(startBlinking, 900);
 
-      Array.from(this.files).forEach(file => {
+      arquivosSelecionados.forEach(file => {
         const wrap = document.createElement('div');
         wrap.style.cssText = 'display:flex;align-items:center;gap:6px;border:1px solid #e6e9ef;padding:6px;border-radius:6px;max-width:180px;overflow:hidden;background:#fff';
 
@@ -301,6 +306,8 @@
       resultados.push(novo);
       adicionarLinha(novo);
       document.getElementById('formResultados').reset();
+      // NOTA: o reset() limpa o input de arquivo, mas arquivosSelecionados
+      // ainda mantém a referência aos arquivos escolhidos pelo usuário.
     });
 
     // ── Título editável ───────────────────────────────────────────────────
@@ -409,7 +416,11 @@
       fd.append('gmail',      email);
       fd.append('resultados', JSON.stringify(resultados));
       fd.append('titulo',     document.getElementById('titulotabela').innerText || 'Sem título');
-      Array.from(document.getElementById('file-upload').files).forEach(f => fd.append('anexo[]', f));
+
+      // CORREÇÃO: usa arquivosSelecionados em vez de fileInput.files,
+      // pois o reset() do form pode ter zerado o input mas a variável
+      // ainda mantém os arquivos escolhidos pelo usuário.
+      arquivosSelecionados.forEach(f => fd.append('anexo[]', f));
 
       confirmar.disabled  = true;
       const original      = confirmar.innerHTML;
@@ -422,9 +433,10 @@
 
         if (resp.ok && json?.success !== false) {
           showNotif(json?.message || 'E-mail enviado com sucesso!', 'success');
-          resultados = [];
-          tabelaBody.innerHTML = '';
-          previews.innerHTML   = '';
+          resultados            = [];
+          arquivosSelecionados  = []; // limpa após envio bem-sucedido
+          tabelaBody.innerHTML  = '';
+          previews.innerHTML    = '';
           document.getElementById('formResultados').reset();
         } else {
           showNotif(json?.message || `Erro no envio (status ${resp.status})`, 'error');
