@@ -32,7 +32,7 @@ if (!$emailProfessor) {
 
 if (!is_array($resultados)) $resultados = [];
 
-
+$cabecalho = '';
 $linhas    = '';
 
 if (!empty($resultados)) {
@@ -126,5 +126,6 @@ try {
     echo json_encode(['success' => true, 'message' => 'E-mail enviado com sucesso!']);
 
 } catch (Exception $e) {
+    error_log('SMTP ERRO: ' . $mail->ErrorInfo);
     echo json_encode(['success' => false, 'message' => 'Erro ao enviar: ' . $mail->ErrorInfo]);
 }
