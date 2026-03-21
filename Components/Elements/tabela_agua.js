@@ -76,7 +76,6 @@ class WaterTracker extends HTMLElement {
         
         th { background: #f1f5f9; color: #475569; }
 
-        /* Estilo dos inputs gerais */
         input {
           width: 100%;
           padding: 8px;
@@ -85,7 +84,6 @@ class WaterTracker extends HTMLElement {
           box-sizing: border-box;
         }
 
-        /* Estilo específico para o Título do Relatório */
         .input-titulo {
           font-size: 1.2rem;
           padding: 10px;
@@ -159,8 +157,7 @@ class WaterTracker extends HTMLElement {
                   <th width="50" class="no-print">Ação</th>
                 </tr>
               </thead>
-              <tbody id="tbody-resumo">
-                </tbody>
+              <tbody id="tbody-resumo"></tbody>
             </table>
             <p id="msg-vazio" style="text-align:center; color:#94a3b8; font-style:italic; padding:10px;">
               A lista está vazia. Use o formulário abaixo para adicionar itens.
@@ -235,21 +232,18 @@ class WaterTracker extends HTMLElement {
       shadow.getElementById('view-tabela').classList.add('hidden');
     });
 
-    // ==========================================
-    // LÓGICA DO QUADRO (ACUMULADOR)
-    // ==========================================
-    
-    // Adicionar linha
-    shadow.getElementById('btn-adicionar').addEventListener('click', () => {
-      const dia = shadow.getElementById('q-dia').value;
-      const ing = shadow.getElementById('q-ing').value;
-      const desp = shadow.getElementById('q-desp').value;
-      const obs = shadow.getElementById('q-obs').value;
+    // ── Modo Lançamento ────────────────────────────────────────────────────
 
-      if (!dia && !ing && !desp) return alert("Preencha pelo menos um dado!");
+    shadow.getElementById('btn-adicionar').addEventListener('click', () => {
+      const dia  = shadow.getElementById('q-dia').value;
+      const ing  = shadow.getElementById('q-ing').value;
+      const desp = shadow.getElementById('q-desp').value;
+      const obs  = shadow.getElementById('q-obs').value;
+
+      if (!dia && !ing && !desp) return alert('Preencha pelo menos um dado!');
 
       const tbody = shadow.getElementById('tbody-resumo');
-      const row = document.createElement('tr');
+      const row   = document.createElement('tr');
       row.innerHTML = `
         <td>${dia}</td>
         <td>${ing || 0} ml</td>
@@ -260,125 +254,108 @@ class WaterTracker extends HTMLElement {
 
       row.querySelector('.btn-remove').addEventListener('click', () => {
         row.remove();
-        if(tbody.children.length === 0) shadow.getElementById('msg-vazio').style.display = 'block';
+        if (tbody.children.length === 0)
+          shadow.getElementById('msg-vazio').style.display = 'block';
       });
 
       tbody.appendChild(row);
       shadow.getElementById('msg-vazio').style.display = 'none';
-
-      // Limpar formulário
       ['q-dia', 'q-ing', 'q-desp', 'q-obs'].forEach(id => shadow.getElementById(id).value = '');
       shadow.getElementById('q-dia').focus();
     });
 
-    // PDF Quadro
     shadow.getElementById('btn-pdf-quadro').addEventListener('click', () => {
       const element = shadow.getElementById('area-impressao-quadro').cloneNode(true);
-      // Remove elementos marcados com no-print (coluna de ação)
       element.querySelectorAll('.no-print').forEach(el => el.remove());
-      
-      // Ajuste visual pro PDF
       const titulo = element.querySelector('input');
       const h3 = document.createElement('h3');
-      h3.innerText = titulo.value || "Relatório sem Título";
+      h3.innerText = titulo.value || 'Relatório sem Título';
       titulo.parentNode.replaceChild(h3, titulo);
-
-      this.generatePDF(element, "relatorio_quadro.pdf");
+      this.generatePDF(element, 'relatorio_quadro.pdf');
     });
 
-    // Email Quadro
+    // CORREÇÃO: dispara evento customizado em vez de abrir mailto
     shadow.getElementById('btn-email-quadro').addEventListener('click', () => {
-      const titulo = shadow.getElementById('titulo-quadro').value || "Relatório de Água";
-      const rows = shadow.querySelectorAll('#tbody-resumo tr');
-      
-      if (rows.length === 0) return alert("Lista vazia!");
+      const titulo = shadow.getElementById('titulo-quadro').value || 'Relatório de Água';
+      const rows   = shadow.querySelectorAll('#tbody-resumo tr');
 
-      let body = `RELATÓRIO: ${titulo}\n\n`;
-      rows.forEach(row => {
+      if (rows.length === 0) return alert('Lista vazia!');
+
+      const resultados = Array.from(rows).map(row => {
         const cols = row.querySelectorAll('td');
-        body += `📅 ${cols[0].innerText} | 💧 ${cols[1].innerText} | 🗑️ ${cols[2].innerText} | 📝 ${cols[3].innerText}\n`;
+        return {
+          dia:          cols[0].innerText,
+          ingerida:     cols[1].innerText,
+          desperdicada: cols[2].innerText,
+          obs:          cols[3].innerText,
+        };
       });
-      
-      this.sendEmail(titulo, body);
+
+      this.dispatchEvent(new CustomEvent('solicitaremail', {
+        bubbles:  true,
+        composed: true, // atravessa o shadow DOM
+        detail:   { titulo, resultados, arquivos: [] },
+      }));
     });
 
+    // ── Modo Tabela Simples ────────────────────────────────────────────────
 
-    // ==========================================
-    // LÓGICA DA TABELA SIMPLES
-    // ==========================================
-
-    // Adicionar Linha
     shadow.getElementById('add-row-simple').addEventListener('click', () => {
-      const tbody = shadow.querySelector("#tabela-simples tbody");
-      const row = document.createElement("tr");
+      const tbody = shadow.querySelector('#tabela-simples tbody');
+      const row   = document.createElement('tr');
       row.innerHTML = `<td><input type="text"></td><td><input type="number"></td><td><input type="number"></td>`;
       tbody.appendChild(row);
     });
 
-    // PDF Tabela
     shadow.getElementById('btn-pdf-simple').addEventListener('click', () => {
       const element = shadow.getElementById('area-impressao-tabela').cloneNode(true);
-      
-      // Converte inputs em texto estático para o PDF ficar bonito
-      const inputs = element.querySelectorAll('input');
-      inputs.forEach(input => {
-        const span = document.createElement('span');
-        span.innerText = input.value;
-        if(input.classList.contains('input-titulo')) {
-             const h3 = document.createElement('h3');
-             h3.innerText = input.value || "Tabela sem Título";
-             input.parentNode.replaceChild(h3, input);
+      element.querySelectorAll('input').forEach(input => {
+        if (input.classList.contains('input-titulo')) {
+          const h3 = document.createElement('h3');
+          h3.innerText = input.value || 'Tabela sem Título';
+          input.parentNode.replaceChild(h3, input);
         } else {
-             input.parentNode.replaceChild(span, input);
+          const span = document.createElement('span');
+          span.innerText = input.value;
+          input.parentNode.replaceChild(span, input);
         }
       });
-
-      this.generatePDF(element, "tabela_simples.pdf");
+      this.generatePDF(element, 'tabela_simples.pdf');
     });
 
-    // Email Tabela (Lógica Nova)
+    // CORREÇÃO: dispara evento customizado em vez de abrir mailto
     shadow.getElementById('btn-email-simple').addEventListener('click', () => {
-       const titulo = shadow.getElementById('titulo-tabela').value || "Tabela de Consumo";
-       const rows = shadow.querySelectorAll('#tabela-simples tbody tr');
-       
-       let body = `RELATÓRIO: ${titulo}\n\n`;
-       let hasData = false;
+      const titulo = shadow.getElementById('titulo-tabela').value || 'Tabela de Consumo';
+      const rows   = shadow.querySelectorAll('#tabela-simples tbody tr');
 
-       rows.forEach(row => {
-         const inputs = row.querySelectorAll('input');
-         // Pega valores dos inputs (Dia, Ingerida, Desperdiçada)
-         const d = inputs[0].value;
-         const i = inputs[1].value;
-         const w = inputs[2].value;
+      const resultados = Array.from(rows).map(row => {
+        const inputs = row.querySelectorAll('input');
+        return {
+          dia:          inputs[0].value,
+          ingerida_ml:  inputs[1].value || '0',
+          desperdicado_ml: inputs[2].value || '0',
+        };
+      }).filter(d => d.dia || d.ingerida_ml !== '0' || d.desperdicado_ml !== '0');
 
-         if(d || i || w) {
-           body += `📅 Dia: ${d} | 💧 Ingerido: ${i}ml | 🗑️ Desperdício: ${w}ml\n`;
-           hasData = true;
-         }
-       });
+      if (resultados.length === 0) return alert('Preencha a tabela antes de enviar.');
 
-       if(!hasData) return alert("Preencha a tabela antes de enviar.");
-       
-       this.sendEmail(titulo, body);
+      this.dispatchEvent(new CustomEvent('solicitaremail', {
+        bubbles:  true,
+        composed: true, // atravessa o shadow DOM
+        detail:   { titulo, resultados, arquivos: [] },
+      }));
     });
   }
 
-  // --- Funções Auxiliares ---
-
-  sendEmail(subject, body) {
-    const encodedSubject = encodeURIComponent(subject);
-    const encodedBody = encodeURIComponent(body + "\n\nGerado via Web App.");
-    window.location.href = `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
-  }
+  // ── Auxiliares ─────────────────────────────────────────────────────────────
 
   generatePDF(element, filename) {
-    if (!window.jspdf) return alert("Erro: jsPDF não carregado.");
+    if (!window.jspdf) return alert('Erro: jsPDF não carregado.');
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    
     pdf.html(element, {
       callback: (doc) => doc.save(filename),
-      x: 10, y: 10, width: 190, windowWidth: 900
+      x: 10, y: 10, width: 190, windowWidth: 900,
     });
   }
 }

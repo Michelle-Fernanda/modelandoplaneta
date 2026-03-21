@@ -166,47 +166,25 @@
 
   <tabela-agua></tabela-agua>
 
+  <enviar-email id="emailSender" endpoint="enviar_email.php"></enviar-email>
+
   <footer>
     <p>© 2025 - Projeto Educacional de Modelagem Matemática | Contato: mifeh25@gmail.com</p>
     <a href="sobre" class="link-somos">Quem somos?</a>
   </footer>
 
   <?php include 'Components/scripts.php'; ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
-    document.getElementById("add-row").addEventListener("click", () => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" placeholder="Dia"></td>
-        <td><input type="number" min="0"></td>
-        <td><input type="number" min="0"></td>
-      `;
-      document.querySelector("#tabela-agua tbody").appendChild(row);
+    // Quando <tabela-agua> dispara 'solicitaremail', repassa os dados
+    // para o <enviar-email> e abre o modal.
+    document.addEventListener('solicitaremail', (e) => {
+      const emailSender = document.getElementById('emailSender');
+      emailSender.setDados(e.detail);
+      emailSender.abrir();
     });
-
-    document.getElementById("baixar-pdf").onclick = async () => {
-      const canvas    = await html2canvas(document.querySelector(".atividade"), { scale: 2, useCORS: true });
-      const imgData   = canvas.toDataURL("image/png");
-      const { jsPDF } = window.jspdf;
-      const pdf       = new jsPDF("p", "mm", "a4");
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgHeight  = (canvas.height * pageWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position   = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save("relatorio_agua.pdf");
-    };
   </script>
 
 </body>

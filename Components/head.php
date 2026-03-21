@@ -17,3 +17,6 @@
 <script type="module" src="Components/Elements/ferramentas.js"></script>
 <script type="module" src="Components/Elements/ferramentas.js"></script>
 <script type="module" src="Components/Elements/tabela_agua.js"></script>
+
+<!-- Scripts -->
+<script src="Components/enviar-email.js"></script>
