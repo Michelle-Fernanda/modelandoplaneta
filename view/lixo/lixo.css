@@ -58,7 +58,6 @@
   margin: 1rem 0;
 }
 
-/* Base compartilhada */
 #btnSubmit,
 .labelAnexo {
   height: 80px;
@@ -72,21 +71,19 @@
   justify-content: center;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
   transition: transform 0.2s, background-color 0.2s;
-  box-sizing: border-box; /* ← padding não aumenta a altura */
+  box-sizing: border-box;
 }
 
-/* Clipe — quadrado fixo */
 .labelAnexo {
-  width: 80px; /* Mesmo valor da Base compartilhada */
+  width: 80px;
   padding: 10px;
   font-size: 2rem;
   flex-shrink: 0;
 }
 
-/* Botão de Adicionar Resultado — largura automática pelo texto */
 #btnSubmit {
   width: auto;
-  padding: 0 1.4rem; /* só padding horizontal — altura já controlada pelo height */
+  padding: 0 1.4rem;
   font-size: 1rem;
   font-weight: bold;
   white-space: nowrap;
@@ -307,3 +304,50 @@ center { margin-top: 2rem; }
   #formResultados section { width: 90%; }
   #pdf, #envemail         { width: 90%; margin: 0.4rem 0; }
 }
+
+/* ================================================= */
+/* ALTO CONTRASTE                                    */
+/* ================================================= */
+
+/* Tabela */
+body.contraste #tabelaResultados th,
+body.contraste #tabelaResultados td       { border-color: #0ff !important; color: #fff !important; }
+body.contraste #tabelaResultados thead    { background-color: #002222 !important; color: #0ff !important; }
+body.contraste #tabelaResultados tbody tr { background-color: #111 !important; }
+body.contraste .Tabela                    { background-color: #111 !important; }
+body.contraste #titulotabela              { color: #fff !important; }
+
+/* Formulário */
+body.contraste #formResultados section label { color: #0f0 !important; }
+body.contraste #formResultados input         { background-color: #111 !important; color: #fff !important; border-color: #0f0 !important; }
+
+/* Botões submit e clipe */
+body.contraste #btnSubmit,
+body.contraste .labelAnexo { background-color: #004400 !important; border: 1px solid #0f0 !important; }
+
+/* Botões PDF / Email */
+body.contraste #pdf,
+body.contraste #envemail {
+  background: #003300 !important;
+  border: 1px solid #0f0 !important;
+  color: #fff !important;
+}
+
+/* Modal */
+body.contraste .modal-box {
+  background: #111 !important;
+  color: #fff !important;
+  border: 1px solid #0ff !important;
+}
+body.contraste .modal-box h2,
+body.contraste .modal-desc              { color: #fff !important; }
+body.contraste .modal-box input[type="email"] {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #0ff !important;
+}
+body.contraste .btn-cancel              { background: #222 !important; color: #fff !important; border: 1px solid #aaa !important; }
+body.contraste .btn-send                { background: #004400 !important; border: 1px solid #0f0 !important; }
+
+/* Miniaturas */
+body.contraste .miniatura-item          { background-color: #002200 !important; border-color: #0f0 !important; color: #fff !important; }

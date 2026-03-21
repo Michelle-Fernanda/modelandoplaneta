@@ -7,29 +7,90 @@ class WaterTracker extends HTMLElement {
   connectedCallback() {
     this.render();
     this.setupEvents();
+    this._observeContraste();
+    this._applyContraste(document.body.classList.contains('contraste'));
   }
+
+  // ── Contraste ──────────────────────────────────────────────────────────────
+
+  _observeContraste() {
+    new MutationObserver(() =>
+      this._applyContraste(document.body.classList.contains('contraste'))
+    ).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  _applyContraste(active) {
+    const host = this.shadowRoot.host;
+    if (active) {
+      host.setAttribute('data-contraste', '');
+    } else {
+      host.removeAttribute('data-contraste');
+    }
+  }
+
+  // ── Estilos ────────────────────────────────────────────────────────────────
 
   getStyles() {
     return `
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-        
+
         :host {
           display: block;
           font-family: Inter, system-ui, Arial, sans-serif;
-          --accent: #0ea5a4;
-          --bg: #f8fafc;
-          --text: #0f172a;
+
+          --accent:  #0ea5a4;
+          --bg:      #f8fafc;
+          --text:    #0f172a;
           --success: #16a34a;
           --primary: #2563eb;
-          --danger: #ef4444;
+          --danger:  #ef4444;
+          --card-bg: #fff;
+          --th-bg:   #f1f5f9;
+          --th-color:#475569;
+          --td-border:#e5e7eb;
+          --input-border: #cbd5e1;
+          --grid-bg: #f8fafc;
+          --grid-border: #cbd5e1;
+          --hr-color: #e2e8f0;
+          --label-color: inherit;
+          --msg-color: #94a3b8;
+
           color: var(--text);
           background: var(--bg);
           padding: 1rem;
         }
 
+        /* ── Alto contraste ── */
+        :host([data-contraste]) {
+          --accent:       #00e5e5;
+          --bg:           #000;
+          --text:         #fff;
+          --card-bg:      #111;
+          --th-bg:        #222;
+          --th-color:     #fff;
+          --td-border:    #444;
+          --input-border: #666;
+          --grid-bg:      #111;
+          --grid-border:  #555;
+          --hr-color:     #555;
+          --label-color:  #fff;
+          --msg-color:    #aaa;
+        }
+
+        :host([data-contraste]) .btn-success { background: #005500; border: 1px solid #0f0; }
+        :host([data-contraste]) .btn-accent  { background: #004444; border: 1px solid #0ff; }
+        :host([data-contraste]) .btn-primary { background: #000066; border: 1px solid #66f; }
+        :host([data-contraste]) input        { background: #111; color: #fff; }
+        :host([data-contraste]) table        { background: #111; }
+        :host([data-contraste]) td           { color: #fff; }
+        :host([data-contraste]) h2           { color: var(--accent); }
+        :host([data-contraste]) h3           { color: #aaa; }
+        :host([data-contraste]) label        { color: var(--label-color); }
+
+        /* ── Estilos normais ── */
         .form-card {
-          background: #fff;
+          background: var(--card-bg);
           border-radius: 12px;
           padding: 16px;
           box-shadow: 0 6px 18px rgba(2,6,23,0.06);
@@ -52,36 +113,38 @@ class WaterTracker extends HTMLElement {
           align-items: center;
           gap: 6px;
         }
-        .btn:hover { opacity: 0.9; }
+        .btn:hover  { opacity: 0.9; }
         .btn:active { transform: scale(0.98); }
 
-        .btn-accent { background: var(--accent); }
+        .btn-accent  { background: var(--accent); }
         .btn-success { background: var(--success); }
         .btn-primary { background: var(--primary); }
-        .btn-danger { background: var(--danger); }
+        .btn-danger  { background: var(--danger); }
 
         table {
           width: 100%;
           border-collapse: collapse;
           margin-top: 12px;
-          background: #fff;
+          background: var(--card-bg);
           font-size: 0.95rem;
         }
 
         th, td {
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--td-border);
           padding: 10px;
           text-align: center;
         }
-        
-        th { background: #f1f5f9; color: #475569; }
+
+        th { background: var(--th-bg); color: var(--th-color); }
 
         input {
           width: 100%;
           padding: 8px;
-          border: 1px solid #cbd5e1;
+          border: 1px solid var(--input-border);
           border-radius: 6px;
           box-sizing: border-box;
+          background: var(--card-bg);
+          color: var(--text);
         }
 
         .input-titulo {
@@ -98,10 +161,10 @@ class WaterTracker extends HTMLElement {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 16px;
-          background: #f8fafc;
+          background: var(--grid-bg);
           padding: 16px;
           border-radius: 8px;
-          border: 1px dashed #cbd5e1;
+          border: 1px dashed var(--grid-border);
         }
 
         .action-bar {
@@ -113,14 +176,14 @@ class WaterTracker extends HTMLElement {
 
         .lista-acumulada {
           margin-top: 20px;
-          border-top: 2px solid #e2e8f0;
+          border-top: 2px solid var(--hr-color);
           padding-top: 10px;
         }
 
         @media (max-width: 600px) {
           .grid-quadro { grid-template-columns: 1fr; }
-          .action-bar { flex-direction: column; }
-          .btn { width: 100%; justify-content: center; }
+          .action-bar  { flex-direction: column; }
+          .btn         { width: 100%; justify-content: center; }
         }
 
         .hidden { display: none; }
@@ -128,10 +191,12 @@ class WaterTracker extends HTMLElement {
     `;
   }
 
+  // ── Render ─────────────────────────────────────────────────────────────────
+
   render() {
     this.shadowRoot.innerHTML = `
       ${this.getStyles()}
-      
+
       <section class="form-card">
         <h2>📌 Escolha o Modo</h2>
         <div style="display:flex; gap:12px;">
@@ -142,10 +207,10 @@ class WaterTracker extends HTMLElement {
 
       <section id="view-quadro" class="form-card">
         <h2>🧾 Lançamento de Dados</h2>
-        
+
         <div id="area-impressao-quadro">
           <input type="text" id="titulo-quadro" class="input-titulo" placeholder="Dê um título ao relatório (Ex: Turma 5B)">
-          
+
           <div class="lista-acumulada">
             <table id="tabela-resumo">
               <thead>
@@ -159,13 +224,13 @@ class WaterTracker extends HTMLElement {
               </thead>
               <tbody id="tbody-resumo"></tbody>
             </table>
-            <p id="msg-vazio" style="text-align:center; color:#94a3b8; font-style:italic; padding:10px;">
+            <p id="msg-vazio" style="text-align:center; font-style:italic; padding:10px; color:var(--msg-color)">
               A lista está vazia. Use o formulário abaixo para adicionar itens.
             </p>
           </div>
         </div>
 
-        <hr style="border:0; border-top:1px dashed #ccc; margin: 20px 0;">
+        <hr style="border:0; border-top:1px dashed var(--hr-color); margin: 20px 0;">
 
         <h3>Adicionar Novo Item:</h3>
         <div class="grid-quadro">
@@ -174,9 +239,9 @@ class WaterTracker extends HTMLElement {
           <div><label>🗑️ Desperdiçada (ml)</label><br><input type="number" id="q-desp" placeholder="0"></div>
           <div><label>📝 Observações</label><br><input type="text" id="q-obs" placeholder="..."></div>
         </div>
-        
+
         <div style="margin-top:12px; text-align:right;">
-           <button id="btn-adicionar" class="btn btn-success">➕ Adicionar à Lista</button>
+          <button id="btn-adicionar" class="btn btn-success">➕ Adicionar à Lista</button>
         </div>
 
         <div class="action-bar">
@@ -187,10 +252,10 @@ class WaterTracker extends HTMLElement {
 
       <section id="view-tabela" class="form-card hidden">
         <h2>📋 Tabela de Edição Direta</h2>
-        
+
         <div id="area-impressao-tabela">
           <input type="text" id="titulo-tabela" class="input-titulo" placeholder="Título da Tabela (Ex: Consumo Semanal)">
-          
+
           <table id="tabela-simples">
             <thead>
               <tr>
@@ -218,10 +283,11 @@ class WaterTracker extends HTMLElement {
     `;
   }
 
+  // ── Eventos ────────────────────────────────────────────────────────────────
+
   setupEvents() {
     const shadow = this.shadowRoot;
 
-    // --- Navegação ---
     shadow.getElementById('nav-tabela').addEventListener('click', () => {
       shadow.getElementById('view-tabela').classList.remove('hidden');
       shadow.getElementById('view-quadro').classList.add('hidden');
@@ -231,8 +297,6 @@ class WaterTracker extends HTMLElement {
       shadow.getElementById('view-quadro').classList.remove('hidden');
       shadow.getElementById('view-tabela').classList.add('hidden');
     });
-
-    // ── Modo Lançamento ────────────────────────────────────────────────────
 
     shadow.getElementById('btn-adicionar').addEventListener('click', () => {
       const dia  = shadow.getElementById('q-dia').value;
@@ -274,7 +338,6 @@ class WaterTracker extends HTMLElement {
       this.generatePDF(element, 'relatorio_quadro.pdf');
     });
 
-    // CORREÇÃO: dispara evento customizado em vez de abrir mailto
     shadow.getElementById('btn-email-quadro').addEventListener('click', () => {
       const titulo = shadow.getElementById('titulo-quadro').value || 'Relatório de Água';
       const rows   = shadow.querySelectorAll('#tbody-resumo tr');
@@ -292,13 +355,10 @@ class WaterTracker extends HTMLElement {
       });
 
       this.dispatchEvent(new CustomEvent('solicitaremail', {
-        bubbles:  true,
-        composed: true, // atravessa o shadow DOM
-        detail:   { titulo, resultados, arquivos: [] },
+        bubbles: true, composed: true,
+        detail:  { titulo, resultados, arquivos: [] },
       }));
     });
-
-    // ── Modo Tabela Simples ────────────────────────────────────────────────
 
     shadow.getElementById('add-row-simple').addEventListener('click', () => {
       const tbody = shadow.querySelector('#tabela-simples tbody');
@@ -323,7 +383,6 @@ class WaterTracker extends HTMLElement {
       this.generatePDF(element, 'tabela_simples.pdf');
     });
 
-    // CORREÇÃO: dispara evento customizado em vez de abrir mailto
     shadow.getElementById('btn-email-simple').addEventListener('click', () => {
       const titulo = shadow.getElementById('titulo-tabela').value || 'Tabela de Consumo';
       const rows   = shadow.querySelectorAll('#tabela-simples tbody tr');
@@ -331,8 +390,8 @@ class WaterTracker extends HTMLElement {
       const resultados = Array.from(rows).map(row => {
         const inputs = row.querySelectorAll('input');
         return {
-          dia:          inputs[0].value,
-          ingerida_ml:  inputs[1].value || '0',
+          dia:             inputs[0].value,
+          ingerida_ml:     inputs[1].value || '0',
           desperdicado_ml: inputs[2].value || '0',
         };
       }).filter(d => d.dia || d.ingerida_ml !== '0' || d.desperdicado_ml !== '0');
@@ -340,9 +399,8 @@ class WaterTracker extends HTMLElement {
       if (resultados.length === 0) return alert('Preencha a tabela antes de enviar.');
 
       this.dispatchEvent(new CustomEvent('solicitaremail', {
-        bubbles:  true,
-        composed: true, // atravessa o shadow DOM
-        detail:   { titulo, resultados, arquivos: [] },
+        bubbles: true, composed: true,
+        detail:  { titulo, resultados, arquivos: [] },
       }));
     });
   }

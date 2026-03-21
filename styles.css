@@ -5,6 +5,7 @@
 body {
   margin: 0;
   font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem;
   background: linear-gradient(to bottom, #d0f4f5, #fceabb);
   color: #333;
 }

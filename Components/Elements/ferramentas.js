@@ -1,8 +1,8 @@
 const STYLES = `
   .menu-container {
     position: fixed;
-    top: 32px;
-    right: 32px;
+    top: 20px;
+    right: 20px;
     z-index: 1200;
     display: flex;
     flex-direction: column;
@@ -141,12 +141,23 @@ const STYLES = `
     transform: scale(0.98);
   }
 
-  /* Alto contraste */
-  .contraste .menu-toggle,
-  .contraste .menu-box,
+  /* ── Alto contraste ── */
+  .contraste .menu-toggle {
+    background: #222 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 2px 2px 8px rgba(255,255,255,0.2) !important;
+  }
+
+  .contraste .menu-box {
+    background: #222 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 2px 2px 8px rgba(255,255,255,0.2) !important;
+  }
+
   .contraste .menu-option {
     background: #222 !important;
     color: #fff !important;
+    border: 1px solid #fff !important;
     box-shadow: 2px 2px 8px rgba(255,255,255,0.2) !important;
   }
 
@@ -190,7 +201,6 @@ class FerramentasMenu extends HTMLElement {
   }
 
   connectedCallback() {
-    // Opções
     OPTIONS.forEach(({ icon, label, color, action }) => {
       const btn = document.createElement("button");
       btn.className = "menu-option";
@@ -202,12 +212,10 @@ class FerramentasMenu extends HTMLElement {
       this._list.appendChild(btn);
     });
 
-    // Toggle
     this._toggle.addEventListener("click", () =>
       this._menuBox.classList.toggle("open")
     );
 
-    // Alto contraste
     const syncContraste = () =>
       this._container.classList.toggle("contraste", document.body.classList.contains("contraste"));
 
