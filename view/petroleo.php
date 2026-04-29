@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Derramamento de Petróleo no Mar</title>
+  <title>Petróleo no Mar</title>
   <?php include 'Components/head.php'; ?>
   <link rel="stylesheet" href="view/petroleo.css">
 </head>
@@ -15,7 +15,7 @@
     <a href=".">
       <img src="img/3.gif" width="1300" alt="Imagem animada de boas-vindas">
     </a>
-    <h1>Derramamento de Petróleo no Mar</h1>
+    <h1>Petróleo no Mar</h1>
   </header>
 
   <ferramentas-x></ferramentas-x>

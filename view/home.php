@@ -34,8 +34,8 @@
       <p class="section-title">Lixo na Escola</p>
     </div>
     <div class="activity" onclick="window.location.href='petroleo'">
-      <div class="section"><img src="img/Petróleo.png" alt="Problemas com Petróleo"></div>
-      <p class="section-title">Problemas com Petróleo</p>
+      <div class="section"><img src="img/Petróleo.png" alt="Petróleo no Mar"></div>
+      <p class="section-title">Petróleo no Mar</p>
     </div>
     <div class="activity" onclick="window.location.href='agua'">
       <div class="section"><img src="img/Desperdício.png" alt="Desperdício de Água"></div>
