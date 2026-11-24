@@ -6,21 +6,22 @@ require __DIR__ . '/vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
+use Google\Client;
+use Google\Service\Gmail;
+use Google\Service\Gmail\Message;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-$dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM', 'SMTP_FROM_NAME']);
-
+$dotenv->required(['GMAIL_USER', 'GMAIL_FROM_NAME', 'GOOGLE_KEY_FILE']);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Método inválido.']);
     exit;
 }
 
-// ── Receber dados ─────────────────────────────────────────────────────────────
+// ── Receber dados (igual ao seu) ──────────────────────────────────────────────
 $emailProfessor = filter_input(INPUT_POST, 'gmail', FILTER_VALIDATE_EMAIL);
 $titulo         = htmlspecialchars($_POST['titulo'] ?? 'Relatório');
-
 
 $rawResultados  = $_POST['resultados'] ?? $_POST['dados'] ?? '[]';
 $resultados     = json_decode($rawResultados, true);
@@ -66,27 +67,20 @@ $corpo = "
     <p>Atenciosamente,<br>Projeto Educacional</p>
 ";
 
-
+// ── Montar o email com PHPMailer (SEM SMTP) ───────────────────────────────────
 $mail = new PHPMailer(true);
 
 try {
-    $mail->isSMTP();
-    $mail->Host       = $_ENV['SMTP_HOST'];
-    $mail->SMTPAuth   = true;
-    $mail->Username   = $_ENV['SMTP_USER'];
-    $mail->Password   = $_ENV['SMTP_PASS'];
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = (int) $_ENV['SMTP_PORT'];
-    $mail->CharSet    = 'UTF-8';
-
-    $mail->setFrom($_ENV['SMTP_FROM'], $_ENV['SMTP_FROM_NAME']);
+    $mail->CharSet = 'UTF-8';
+    $mail->setFrom($_ENV['GMAIL_USER'], $_ENV['GMAIL_FROM_NAME']); // mesmo email do setSubject
     $mail->addAddress($emailProfessor);
     $mail->isHTML(true);
     $mail->Subject = $titulo;
     $mail->Body    = $corpo;
 
+    // ── Anexos (igual ao seu) ─────────────────────────────────────────────────
     if (!empty($_FILES['anexo']['name'][0])) {
-        $tamanhoMaximo = 5 * 1024 * 1024; // 5 MB por arquivo
+        $tamanhoMaximo = 5 * 1024 * 1024;
 
         foreach ($_FILES['anexo']['name'] as $i => $nome) {
             $erro    = $_FILES['anexo']['error'][$i];
@@ -122,10 +116,28 @@ try {
         }
     }
 
-    $mail->send();
+    // ── Gera o MIME sem enviar ────────────────────────────────────────────────
+    $mail->preSend();
+    $raw = rtrim(strtr(base64_encode($mail->getSentMIMEMessage()), '+/', '-_'), '=');
+
+    // ── Autenticar com a conta de serviço ─────────────────────────────────────
+    $client = new Client();
+    $client->setAuthConfig($_ENV['GOOGLE_KEY_FILE']);
+    $client->setScopes([Gmail::GMAIL_SEND]);
+    $client->setSubject($_ENV['GMAIL_USER']);
+
+    // ── Enviar pela Gmail API ─────────────────────────────────────────────────
+    $gmail = new Gmail($client);
+    $msg   = new Message();
+    $msg->setRaw($raw);
+    $gmail->users_messages->send('me', $msg);
+
     echo json_encode(['success' => true, 'message' => 'E-mail enviado com sucesso!']);
 
 } catch (Exception $e) {
-    error_log('SMTP ERRO: ' . $mail->ErrorInfo);
-    echo json_encode(['success' => false, 'message' => 'Erro ao enviar: ' . $mail->ErrorInfo]);
+    error_log('PHPMAILER ERRO: ' . $mail->ErrorInfo);
+    echo json_encode(['success' => false, 'message' => 'Erro ao montar o e-mail: ' . $mail->ErrorInfo]);
+} catch (\Throwable $e) {
+    error_log('GMAIL API ERRO: ' . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Erro ao enviar pelo Gmail.']);
 }
